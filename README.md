@@ -225,11 +225,11 @@ router.route("/chat").get(viewController.showChat);
 ---
 
 | Method | Endpoint                     | Description                                            |
-| ------ | -----------------------------| ------------------------------------------------------ |
-| GET    | `/password`                  | Displays the "Forgot Password" page                    |
-| POST   | `/password`                  | Sends password reset email with secure token           |
-| GET    | `/reset-password/:token`     | Shows the password reset form for a valid token        |
-| POST   | `/reset-password/:token`     | Validates user input and updates the password          |
+| ------ | -----------------------------------| ------------------------------------------------ |
+| GET    | `/password`                        | Displays the "Forgot Password" page              |
+| POST   | `/password`                        | Sends password reset email with secure token     |
+| GET    | `/reset-password/:resetLink`       | Shows the password reset form for a valid token  |
+| POST   | `/reset-password/:selector/:token` | Validates user input and updates the password    |
 
 
 ## Chat Router (`/chat`)
@@ -343,15 +343,16 @@ The password_resets table stores secure password-reset tokens generated when a u
 | Column Name | Data Type    | Constraints               | Description                                                      |
 | ----------- | ------------ | ------------------------- | ---------------------------------------------------------------- |
 | id          | SERIAL       | PRIMARY KEY               | Unique identifier for each password reset entry                  |
-| email       | VARCHAR(255) | NOT NULL, UNIQUE          | Email address associated with the password reset request         |
-| token       | VARCHAR(255) | NOT NULL                  | **Hashed** reset token (raw token is never stored in plain text) |
+| email       | VARCHAR(255) | NOT NULL                  | Email address associated with the password reset request         |
+| token_hash  | VARCHAR(255) | NOT NULL                  | **Hashed** reset token (raw token is never stored in plain text) |
+| selector    | VARCHAR(32)  | NOT NULL, UNIQUE          | **Hashed** reset token (raw token is never stored in plain text) |
 | expires_at  | TIMESTAMP    | NOT NULL                  | Exact time when the reset token expires and becomes invalid      |
 | created_at  | TIMESTAMP    | DEFAULT CURRENT_TIMESTAMP | Timestamp indicating when the reset entry was created            |
 
 - Tokens are always hashed before being stored, ensuring secure password recovery.
-- Each email can only have one active reset token, enforced via the UNIQUE(email) constraint.
+- Each password reset can only have one selector, enforced via the UNIQUE constraint - used for indexing
 - expires_at ensures old or leaked tokens cannot be reused.
-- An index (idx_password_resets_email) speeds up lookups during reset validation.
+- An index (idx_password_resets_email,idx_password_resets_selector) speeds up lookups during reset validation.
 
 ## Table: files (Files)
 
