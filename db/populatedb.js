@@ -72,13 +72,18 @@ CREATE INDEX IF NOT EXISTS idx_otps_email ON otps(email);
 
 CREATE TABLE IF NOT EXISTS password_resets (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  token VARCHAR(255) NOT NULL, 
+  email VARCHAR(255) NOT NULL,
+  selector VARCHAR(32) NOT NULL UNIQUE,
+  token_hash VARCHAR(255) NOT NULL, 
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_password_resets_email ON password_resets(email);
+CREATE INDEX IF NOT EXISTS idx_password_resets_selector 
+  ON password_resets(selector);
+
+CREATE INDEX IF NOT EXISTS idx_password_resets_email 
+  ON password_resets(email);
     
 -- Insert default data
 
