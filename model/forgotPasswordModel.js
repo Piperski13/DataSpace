@@ -1,38 +1,28 @@
 const pool = require("../db/pool");
 
 class ForgotPassword {
-  static async addPasswordReset(email, hashedToken, expiresAt) {
+  static async addPasswordReset(email, selector, hashedToken, expiresAt) {
     try {
       await pool.query(
-        `INSERT INTO password_resets (email, token, expires_at)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (email) DO UPDATE SET token = $2, expires_at = $3`,
-        [email, hashedToken, expiresAt]
+        `INSERT INTO password_resets (email, selector, token_hash, expires_at)
+     VALUES ($1, $2, $3, $4)`,
+        [email, selector, hashedToken, expiresAt]
       );
     } catch (err) {
       throw err;
     }
   }
-  static async validPasswordResetToken() {
-    try {
-      const { rows } = await pool.query(
-        `SELECT * FROM password_resets WHERE expires_at > NOW()`
-      );
-      return rows;
-    } catch (error) {
-      console.error(error);
-    }
+  static async findBySelector(selector) {
+    const result = await pool.query(
+      `SELECT * FROM password_resets WHERE selector = $1`,
+      [selector]
+    );
+    return result.rows[0] || null;
   }
-  static async removeToken(email) {
-    try {
-      const { rows } = await pool.query(
-        `DELETE FROM password_resets WHERE email=$1`,
-        [email]
-      );
-      return rows;
-    } catch (error) {
-      console.error(error);
-    }
+  static async removeBySelector(selector) {
+    await pool.query(`DELETE FROM password_resets WHERE selector = $1`, [
+      selector,
+    ]);
   }
 }
 
