@@ -1,5 +1,6 @@
 const Otp = require("../model/otpModel");
 const Login = require("../model/loginModel.js");
+const bcrypt = require("bcryptjs");
 const otpGenerator = require("otp-generator");
 const sendOTPEmail = require("../utils/sendEmail");
 const { registerPendingUser } = require("../services/userService");
@@ -52,7 +53,14 @@ const generateOtp = async (req, res) => {
     await Otp.storeOtp(email, otp);
     await sendOTPEmail(email, otp);
 
-    req.session.pendingUser = { email, surname, lastname, password };
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    req.session.pendingUser = {
+      email,
+      surname,
+      lastname,
+      password: hashedPassword,
+    };
 
     res.render("otp", {
       user: req.user || "",
@@ -69,6 +77,12 @@ const verifyOtp = async (req, res) => {
   const { otp } = req.body;
   const otpString = otp.join("");
   const pendingUser = req.session.pendingUser;
+
+  if (!pendingUser) {
+    return showSignIn(req, res, null, [
+      { msg: "Session expired. Please register again." },
+    ]);
+  }
 
   try {
     const { email } = pendingUser;
