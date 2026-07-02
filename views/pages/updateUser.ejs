@@ -13,60 +13,68 @@
     <link rel="icon" href="/assets/icons/favicon.png" type="image/svg+xml" />
 
     <!-- Local Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/addRecord.css" />
 
     <title>Update User</title>
   </head>
   <body>
-    <div id="main-box">
-      <%- include("../partials/sidebar.ejs") %>
-      <section id="header-section-form">
-        <h2>User Update</h2>
-        <form
-          action="<%='/users/update/' + profile.id %>"
-          method="POST"
-          class="form-style"
-        >
-          <label for="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="user@mail.domen"
-            value="<%= profile ? profile.email : '' %>"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-            required
-          />
-          <label for="surname">Surname</label>
-          <input
-            type="text"
-            name="surname"
-            placeholder="John"
-            value="<%= profile ? profile.surname : '' %>"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-            required
-          />
-          <label for="lastname">Lastname</label>
-          <input
-            type="text"
-            name="lastname"
-            placeholder="Doe"
-            value="<%= profile ? profile.lastname : '' %>"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-            required
-          />
-          <label for="is_admin">Admin Status</label>
-          <input type="checkbox" id="is_admin" name="is_admin" value="true" <%=
-          profile && profile.is_admin ? 'checked' : '' %> class="<%=
-          locals.errors.length > 0 ? 'input-error' : '' %>" >
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <%- include("../partials/sidebar.ejs") %>
+      </aside>
 
-          <div class="submit-row">
-            <%- include("../partials/errors.ejs") %>
-            <button type="submit" class="form-submit-button">
-              Update User
-            </button>
-          </div>
-        </form>
-      </section>
+      <div class="app-main">
+        <main class="app-content update-user-page">
+          <section class="form-header">
+            <h2>User Update</h2>
+            <form
+              action="<%='/users/update/' + profile.id %>"
+              method="POST"
+              class="form"
+            >
+              <label for="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="user@mail.domen"
+                value="<%= profile ? profile.email : '' %>"
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                required
+              />
+              <label for="surname">Surname</label>
+              <input
+                type="text"
+                name="surname"
+                placeholder="John"
+                value="<%= profile ? profile.surname : '' %>"
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                required
+              />
+              <label for="lastname">Lastname</label>
+              <input
+                type="text"
+                name="lastname"
+                placeholder="Doe"
+                value="<%= profile ? profile.lastname : '' %>"
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                required
+              />
+              <label for="is_admin">Admin Status</label>
+              <input type="checkbox" id="is_admin" name="is_admin" value="true" <%=
+              profile && profile.is_admin ? 'checked' : '' %> class="<%=
+              locals.errors.length > 0 ? 'input-error' : '' %>" >
+
+              <div class="submit-row">
+                <%- include("../partials/errors.ejs") %>
+                <button type="submit" class="form-submit-button">
+                  Update User
+                </button>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
     </div>
 
     <script src="/scripts/hamburger_menu/toggleMenu.js"></script>
