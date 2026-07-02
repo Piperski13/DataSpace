@@ -17,11 +17,24 @@ dropZone.addEventListener("drop", (e) => {
   dropZone.classList.remove("dragover");
 
   const files = e.dataTransfer.files;
+
+  if (files.length > 3) {
+    alert("You can only upload a maximum of 3 files.");
+    return;
+  }
+
   fileInput.files = files;
   showFileName(files);
 });
 
 fileInput.addEventListener("change", () => {
+  if (fileInput.files.length > 3) {
+    alert("You can only upload a maximum of 3 files.");
+    fileInput.value = ""; 
+    dropZone.textContent = "Drop files here or click to upload"; 
+    return;
+  }
+
   if (fileInput.files.length > 0) {
     showFileName(fileInput.files);
   }

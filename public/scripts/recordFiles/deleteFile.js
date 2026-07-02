@@ -1,5 +1,5 @@
 document.addEventListener("click", async (e) => {
-  if (!e.target.classList.contains("delete-file-btn")) return;
+  if (!e.target.classList.contains("file-list__delete")) return;
 
   const fileId = e.target.dataset.fileId;
   if (!fileId) return;

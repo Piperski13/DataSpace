@@ -20,15 +20,17 @@
 
   <body>
     <div id="main-box">
-      <%- include("../partials/navbar.ejs") %>
+      <%- include("../partials/sidebar.ejs") %>
       <div id="chat-box">
         <h1 class="chat-title">Global Power Plant Chat</h1>
         <% if (messages.length>0) { %> <% messages.forEach(msg => { %>
 
-        <div class="single-message"><span class="username"><%= msg.username %>:</span> <%= msg.message %> (<%= formatDate(msg.created_at) %>)</div>
+        <div class="single-message">
+          <span class="username"><%= msg.username %>:</span> <%= msg.message %>
+          (<%= formatDate(msg.created_at) %>)
+        </div>
 
-        <% }) %>
-        <% } %>
+        <% }) %> <% } %>
         <p id="noMsg" class="hidden">No messages</p>
       </div>
       <div class="input-div">
@@ -43,7 +45,7 @@
             maxlength="500"
           />
           <% if (user.is_admin) { %>
-            <button id="btnDeleteAll">Clear Chat</button>
+          <button id="btnDeleteAll">Clear Chat</button>
           <% } %>
           <button
             id="btnSend"
