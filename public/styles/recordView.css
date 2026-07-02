@@ -1,21 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  background-color: #0e152f;
-  color: #0e152f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
 table {
   width: 60%;
   border-collapse: collapse;
@@ -106,11 +88,6 @@ caption {
   height: 80vh; /* fixed viewport portion */
   display: flex;
   flex-direction: column;
-}
-
-.records-scroll-wrapper {
-  flex: 1;
-  overflow-y: auto;
 }
 
 .div-tables-section {
