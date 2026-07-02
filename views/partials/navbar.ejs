@@ -15,21 +15,16 @@
       <% } %>
     </div>
 
-    <div class="logout-style">
-      <div class="user-dropdown">
-        <span class="username-logged">
-          <span class="material-symbols-outlined icon"> account_circle </span>
-          <span id="logged-user-js" class="logged-user">
-            <%= `${user.surname} ${user.lastname}` %>
-          </span>
-        </span>
+    <div class="user-menu">
+      <button class="user-menu-trigger" type="button">
+        <span class="material-symbols-outlined icon">account_circle</span>
+        <span> <%= `${user.surname} ${user.lastname}` %> </span>
+      </button>
 
-        <div class="dropdown-content">
-          <a href="/logout" id="logout-js">Logout</a>
-        </div>
+      <div class="user-menu-dropdown">
+        <a href="/logout">Logout</a>
       </div>
     </div>
-    
   </div>
 </nav>
 <script src="/scripts/hamburger_menu/toggleMenu.js"></script>
