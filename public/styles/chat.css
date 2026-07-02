@@ -1,23 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  background: #f4f6f8;
-  background-color: #0e152f;
-  color: #0e152f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100dvh;
-}
-#main-box {
+.chat-page {
   display: flex;
   flex-direction: column;
 }
