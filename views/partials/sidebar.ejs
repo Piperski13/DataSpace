@@ -3,6 +3,8 @@
 <aside class="sidebar">
   <div id="menu" class="menu">
     <a href="/viewPage/welcome">Home</a>
+    <a href="/viewPage/welcome">Dashboard</a>
+    <a href="/viewPage/welcome">Workspaces</a>
     <a href="/viewPage/recordsViewPage" id="view-records-js"
       >View All Records</a
     >
@@ -16,8 +18,12 @@
 
   <div class="user-menu">
     <button class="user-menu-trigger" type="button">
-      <span class="material-symbols-outlined icon user-menu-icon">account_circle</span>
-      <span class="user-menu-username"> <%= `${user.surname} ${user.lastname}` %> </span>
+      <span class="material-symbols-outlined icon user-menu-icon"
+        >account_circle</span
+      >
+      <span class="user-menu-username">
+        <%= `${user.surname} ${user.lastname}` %>
+      </span>
     </button>
 
     <div class="user-menu-dropdown">
