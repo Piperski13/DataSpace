@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/styles/partials/sidebar.css" />
+<span class="material-symbols-outlined hamburger">menu</span>
+<aside class="sidebar">
+  <div id="menu" class="menu">
+    <a href="/viewPage/welcome">Home</a>
+    <a href="/viewPage/recordsViewPage" id="view-records-js"
+      >View All Records</a
+    >
+    <a href="/viewPage/addRecord" id="add-record-js">Add Record</a>
+    <a href="/viewPage/chat">Global Chat</a>
+
+    <% if (user.is_admin) { %>
+    <a href="/viewPage/users">Users</a>
+    <% } %>
+  </div>
+
+  <div class="user-menu">
+    <button class="user-menu-trigger" type="button">
+      <span class="material-symbols-outlined icon user-menu-icon">account_circle</span>
+      <span class="user-menu-username"> <%= `${user.surname} ${user.lastname}` %> </span>
+    </button>
+
+    <div class="user-menu-dropdown">
+      <a href="/logout">Logout</a>
+    </div>
+  </div>
+</aside>
+<script src="/scripts/hamburger_menu/toggleMenu.js"></script>

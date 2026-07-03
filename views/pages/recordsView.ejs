@@ -13,17 +13,21 @@
     <link rel="icon" href="/assets/icons/favicon.png" type="image/svg+xml" />
 
     <!-- Local Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/recordView.css" />
 
     <title>CRUD</title>
   </head>
 
   <body>
-    <div id="main-box">
-      <%- include("../partials/navbar.ejs") %>
-      
-      <div class="records-scroll-wrapper">
-        <div class="div-tables-section">
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <%- include("../partials/sidebar.ejs") %>
+      </aside>
+
+      <div class="app-main">
+        <main class="app-content records-view-page">
+          <div class="div-tables-section">
           <table id="small-table">
             <caption class="small-table-caption">
               Ukupan Broj Evidencija
@@ -149,9 +153,9 @@
               <% } %>
             </tbody>
           </table>
-        </div>
+          </div>
+        </main>
       </div>
-    </div>
-    <script src="/scripts/hamburger_menu/toggleMenu.js"></script>
+    </div> 
   </body>
 </html>

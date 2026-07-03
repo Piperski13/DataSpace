@@ -13,16 +13,32 @@
     <link rel="icon" href="/assets/icons/favicon.png" type="image/svg+xml" />
 
     <!-- Local Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/welcome.css" />
 
     <title>Welcome <%= user.surname %></title>
   </head>
 
   <body>
-    <div id="main-box">
-      <%- include("../partials/navbar.ejs") %>
-      <h1><%= `Welcome, ${user.surname}` %></h1>
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <%- include("../partials/sidebar.ejs") %>
+      </aside>
+
+      <div class="app-main">
+        <main class="app-content welcome-page">
+          <div class="welcome-card">
+            <h1>Welcome <%= user.surname %></h1>
+
+            <div class="welcome-actions">
+              <a href="/workspaces" class="btn">Choose Workspace</a>
+              <a href="/workspaces/create" class="btn secondary"
+                >Create Workspace</a
+              >
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-    <script src="/scripts/hamburger_menu/toggleMenu.js"></script>
   </body>
 </html>

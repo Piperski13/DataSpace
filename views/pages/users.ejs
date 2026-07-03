@@ -13,86 +13,98 @@
     <link rel="icon" href="/assets/icons/favicon.png" type="image/svg+xml" />
 
     <!-- Local Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/recordView.css" />
 
     <title>CRUD</title>
   </head>
 
   <body>
-    <div id="main-box">
-      <%- include("../partials/navbar.ejs") %>
-      <div class="div-tables-section">
-        <h1>Lista Korisnika</h1>
-        <p>Filter users by email:</p>
-        <div id="div-filter-form">
-          <form action="/viewPage/users" method="GET" id="filter-form">
-            <input
-              id="email"
-              name="email"
-              type="text"
-              placeholder="Search by Email"
-              value="<%= email || '' %>"
-            />
-            <div class="filter-submit">
-              <button
-                type="submit"
-                id="submit-filter"
-                class="form-submit-filter"
-              >
-                Filter
-              </button>
-            </div>
-          </form>
-        </div>
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <%- include("../partials/sidebar.ejs") %>
+      </aside>
 
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Surename</th>
-              <th>Lastname</th>
-              <th>Admin Status</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (data && data.length > 0) { %> <% data.forEach(user => { %>
-            <tr>
-              <td><%= user.id %></td>
-              <td><%= user.email %></td>
-              <td><%= user.surname %></td>
-              <td><%= user.lastname %></td>
-              <td><%= user.is_admin %></td>
-              <td>
-                <form
-                  action="/viewPage/updateUser/<%= user.id %>"
-                  method="GET"
-                  style="display: inline"
-                >
-                  <button type="submit" class="update-record">Update</button>
-                </form>
-              </td>
-              <td>
-                <form
-                  action="/users/delete/<%= user.id %>"
-                  method="POST"
-                  style="display: inline"
-                >
-                  <button type="submit" class="delete-record">Delete</button>
-                </form>
-              </td>
-            </tr>
-            <% }) %> <% } else { %>
-            <tr>
-              <td colspan="8">No records found.</td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
+      <div class="app-main">
+        <main class="app-content users-page">
+          <div class="div-tables-section">
+            <h1>Lista Korisnika</h1>
+            <p>Filter users by email:</p>
+            <div id="div-filter-form">
+              <form action="/viewPage/users" method="GET" id="filter-form">
+                <input
+                  id="email"
+                  name="email"
+                  type="text"
+                  placeholder="Search by Email"
+                  value="<%= email || '' %>"
+                />
+                <div class="filter-submit">
+                  <button
+                    type="submit"
+                    id="submit-filter"
+                    class="form-submit-filter"
+                  >
+                    Filter
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Email</th>
+                  <th>Surename</th>
+                  <th>Lastname</th>
+                  <th>Admin Status</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (data && data.length > 0) { %> <% data.forEach(user => {
+                %>
+                <tr>
+                  <td><%= user.id %></td>
+                  <td><%= user.email %></td>
+                  <td><%= user.surname %></td>
+                  <td><%= user.lastname %></td>
+                  <td><%= user.is_admin %></td>
+                  <td>
+                    <form
+                      action="/viewPage/updateUser/<%= user.id %>"
+                      method="GET"
+                      style="display: inline"
+                    >
+                      <button type="submit" class="update-record">
+                        Update
+                      </button>
+                    </form>
+                  </td>
+                  <td>
+                    <form
+                      action="/users/delete/<%= user.id %>"
+                      method="POST"
+                      style="display: inline"
+                    >
+                      <button type="submit" class="delete-record">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %> <% } else { %>
+                <tr>
+                  <td colspan="8">No records found.</td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </main>
       </div>
     </div>
-    <script src="/scripts/hamburger_menu/toggleMenu.js"></script>
   </body>
 </html>
