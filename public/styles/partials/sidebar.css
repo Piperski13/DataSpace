@@ -68,7 +68,7 @@
   position: absolute;
 
   bottom: 60px; /* logout above */
-  left: 12px;
+  left: 47px;
 
   min-width: 160px;
 
@@ -91,6 +91,14 @@
 
 .user-menu-dropdown a:hover {
   background: #00abed;
+}
+
+.user-menu-username {
+  font-size: medium;
+}
+
+.user-menu-icon {
+  font-size: 30px;
 }
 /* logout user end */
 
