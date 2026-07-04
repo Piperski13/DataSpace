@@ -27,7 +27,7 @@
       <section id="form-section">
         <div class="login-div">
           <p class="login-div-text">
-            <%= user ? "HELLO " + user.surname +"!" : "HELLO USER!" %>
+            <%= user ? "HELLO " + user.first_name +"!" : "HELLO USER!" %>
           </p>
         </div>
 
@@ -44,15 +44,15 @@
           <span class="material-symbols-outlined icon"> account_circle </span>
           <%- include("../partials/errors.ejs") %>
           <input
-            id="surname"
-            name="surname"
+            id="first_name"
+            name="first_name"
             type="text"
             class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-            placeholder="Surname"
+            placeholder="Firstname"
           />
           <input
-            id="lastname"
-            name="lastname"
+            id="last_name"
+            name="last_name"
             type="text"
             class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
             placeholder="Lastname"
@@ -77,8 +77,8 @@
         </form>
         <% } %>
       </section>
-      <%- include("../partials/spinner.ejs") %>
-      <%- include("../partials/footer.ejs") %>
+      <%- include("../partials/spinner.ejs") %> <%-
+      include("../partials/footer.ejs") %>
     </main>
     <script src="/scripts/spinner.js"></script>
   </body>

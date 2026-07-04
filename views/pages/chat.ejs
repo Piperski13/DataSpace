@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/chat.css" />
 
-    <title>Chat room page - <%= user.surname %></title>
+    <title>Chat room page - <%= user.first_name %></title>
   </head>
 
   <body>
@@ -44,7 +44,7 @@
               <p id="rate-limit"></p>
               <input
                 id="msgInput"
-                data-surname="<%= user.surname %>"
+                data-first_name="<%= user.first_name %>"
                 data-id="<%= user.id %>"
                 placeholder="Send message"
                 type="text"
@@ -55,7 +55,7 @@
               <% } %>
               <button
                 id="btnSend"
-                data-surname="<%= user.surname %>"
+                data-first_name="<%= user.first_name %>"
                 data-id="<%= user.id %>"
               >
                 Send

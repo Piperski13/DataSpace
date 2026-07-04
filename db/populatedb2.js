@@ -152,8 +152,8 @@ async function main() {
         [
           adminEmail,
           hashedPassword,
-          process.env.ADMIN_SURNAME,
-          process.env.ADMIN_LASTNAME,
+          process.env.ADMIN_FIRST_NAME,
+          process.env.ADMIN_LAST_NAME,
         ],
       );
 

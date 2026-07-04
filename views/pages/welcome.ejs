@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/welcome.css" />
 
-    <title>Welcome <%= user.surname %></title>
+    <title>Welcome <%= user.first_name %></title>
   </head>
 
   <body>
@@ -28,7 +28,7 @@
       <div class="app-main">
         <main class="app-content welcome-page">
           <div class="welcome-card">
-            <h1>Welcome <%= user.surname %></h1>
+            <h1>Welcome <%= user.first_name %></h1>
 
             <div class="welcome-actions">
               <a href="/workspaces" class="btn">Choose Workspace</a>
