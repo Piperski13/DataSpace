@@ -15,6 +15,8 @@ const otpRouter = require("./routes/otpRoutes.js");
 const forgotPassword = require("./routes/forgotPassword.js");
 const chatRouter = require("./routes/chatRoutes.js");
 
+const workspaceRouter = require("./routes/workspace.routes.js");
+
 require("./config/passportConfig");
 require("dotenv").config("./.env");
 
@@ -45,7 +47,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60, // 1 hour
     },
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -63,6 +65,9 @@ app.set("view engine", "ejs");
 
 // Routes
 app.use("/", loginRouter);
+
+app.use("/workspaces", isAuthenticated, workspaceRouter);
+
 app.use("/viewPage", isAuthenticated, viewRouter);
 app.use("/records", isAuthenticated, recordRouter);
 app.use("/users", isAuthenticated, usersRouter);
