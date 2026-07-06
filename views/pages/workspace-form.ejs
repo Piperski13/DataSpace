@@ -29,12 +29,11 @@
           <section class="form-header">
             <h2><%= workspace ? "Update Workspace" : "Create Workspace" %></h2>
             <form
-              action="<%= workspace ? '/workspaces/' + workspace.id : '/workspaces' %>"
+              action="<%= workspace ? '/workspaces/' + workspace.id + '/update' : '/workspaces/create' %>"
               method="POST"
-              enctype="multipart/form-data"
               class="form"
             >
-              <label for="name">Workspace name</label>
+              <label for="name">Workspace name : </label>
               <input
                 type="text"
                 name="name"
@@ -43,6 +42,14 @@
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />
+
+              <label for="description">Description : </label>
+              <textarea
+                name="description"
+                placeholder="Short description about this workspace..."
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+              >
+              <%= workspace ? workspace.description : '' %></textarea>
 
               <div class="submit-row">
                 <%- include("../partials/errors.ejs") %>
