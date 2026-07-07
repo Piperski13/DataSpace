@@ -76,10 +76,10 @@ const edit = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    let workspace = null;
+    const workspace = await Workspace.get(workspaceId);
 
-    if (workspaceId) {
-      workspace = await Workspace.get(workspaceId);
+    if (!workspace) {
+      return res.status(404).render("pages/404");
     }
 
     res.render("workspace-form", {
@@ -96,14 +96,18 @@ const edit = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { workspaceId } = req.params;
-    // const workspaceId = parseInt(req.params.workspaceId);
     const { name, description } = req.body;
 
-    await Workspace.update(workspaceId, name, description);
+    const workspace = await Workspace.update(workspaceId, name, description);
+
+    if (!workspace) {
+      return res.status(404).render("pages/404");
+    }
 
     res.redirect("/workspaces");
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Workspace controller (update):", error.message);
+    res.status(500).send("Internal Server Error");
   }
 };
 
