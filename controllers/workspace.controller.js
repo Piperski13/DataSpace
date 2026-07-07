@@ -99,11 +99,7 @@ const update = async (req, res) => {
     // const workspaceId = parseInt(req.params.workspaceId);
     const { name, description } = req.body;
 
-    await Workspace.update({
-      workspaceId,
-      name,
-      description,
-    });
+    await Workspace.update(workspaceId, name, description);
 
     res.redirect("/workspaces");
   } catch (error) {
@@ -116,12 +112,12 @@ const remove = async (req, res) => {
     const { workspaceId } = req.params;
     // const workspaceId = parseInt(req.params.workspaceId);
 
-    const results = await Workspace.remove(workspaceId);
+    const workspace = await Workspace.remove(workspaceId);
 
-    if (results.rowCount === 0) {
-      res
-        .status(404)
-        .json({ message: `Record with ${workspaceId} was not found ` });
+    if (!workspace) {
+      return res.status(404).json({
+        message: `Workspace ${workspaceId} was not found`,
+      });
     }
     res.redirect("/workspaces");
   } catch (error) {
