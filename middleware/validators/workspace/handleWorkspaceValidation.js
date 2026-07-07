@@ -1,11 +1,14 @@
 const { validationResult } = require("express-validator");
 
-const handleValidation = (req, res, next) => {
+const handleWorkspaceValidation = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(400).render("workspace-form", {
-      workspace: req.body,
+      workspace: {
+        id: req.params.workspaceId,
+        ...req.body,
+      },
       errors: errors.array(),
       user: req.user,
     });
@@ -14,4 +17,4 @@ const handleValidation = (req, res, next) => {
   next();
 };
 
-module.exports = handleValidation;
+module.exports = handleWorkspaceValidation;

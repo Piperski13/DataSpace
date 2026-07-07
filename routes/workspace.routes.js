@@ -2,8 +2,8 @@ const express = require("express");
 const {
   validateWorkspaceBody,
   validateWorkspaceIdParam,
-} = require("../middleware/validators/workspace.validator");
-const handleValidation = require("../middleware/handleValidation");
+} = require("../middleware/validators/workspace/workspace.validator");
+const handleWorkspaceValidation = require("../middleware/validators/workspace/handleWorkspaceValidation");
 
 const {
   index,
@@ -22,27 +22,37 @@ router.get("/dashboard", showDashboard);
 
 router.get("/", index);
 router.get("/new", newWorkspace);
-router.post("/create", validateWorkspaceBody, handleValidation, create);
+router.post(
+  "/create",
+  validateWorkspaceBody,
+  handleWorkspaceValidation,
+  create,
+);
 
 router.get(
   "/:workspaceId/edit",
   validateWorkspaceIdParam,
-  handleValidation,
+  handleWorkspaceValidation,
   edit,
 );
-router.get("/:workspaceId", validateWorkspaceIdParam, handleValidation, show);
+router.get(
+  "/:workspaceId",
+  validateWorkspaceIdParam,
+  handleWorkspaceValidation,
+  show,
+);
 
 router.post(
   "/:workspaceId/update",
   validateWorkspaceBody,
   validateWorkspaceIdParam,
-  handleValidation,
+  handleWorkspaceValidation,
   update,
 );
 router.post(
   "/:workspaceId/delete",
   validateWorkspaceIdParam,
-  handleValidation,
+  handleWorkspaceValidation,
   remove,
 );
 

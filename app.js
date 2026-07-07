@@ -6,7 +6,7 @@ const passport = require("passport");
 const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
-const isAuthenticated = require("./middleware/isAuthenticated.js");
+const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const recordRouter = require("./routes/recordRoutes.js");
 const usersRouter = require("./routes/usersRoutes.js");
 const loginRouter = require("./routes/loginRoutes.js");
