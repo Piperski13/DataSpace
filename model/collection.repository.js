@@ -40,10 +40,11 @@ class Collection {
     //done
     try {
       const query =
-        "UPDATE collections Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE workspace_id = $3 AND id=$4";
+        "UPDATE collections Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE workspace_id = $3 AND id=$4 RETURNING *";
       const values = [name, description, workspaceId, collectionId];
 
-      await pool.query(query, values);
+      const { rows } = await pool.query(query, values);
+      return rows[0] || null;
     } catch (error) {
       console.error(
         "collection.repository - Error database query (update): ",
