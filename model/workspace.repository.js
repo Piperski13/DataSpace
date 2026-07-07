@@ -57,7 +57,9 @@ class Workspace {
         "UPDATE workspaces Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3";
       const values = [name, description, workspaceId];
 
-      await pool.query(query, values);
+      const { rows } = await pool.query(query, values);
+
+      return rows[0] || null;
     } catch (error) {
       console.error(
         "workspace.repository - Error database query (update): ",
