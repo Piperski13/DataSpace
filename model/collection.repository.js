@@ -1,0 +1,74 @@
+const pool = require("../db/pool");
+
+class Collection {
+  static async create(workspace_id, name, description) {
+    //done
+    try {
+      const query = `INSERT INTO collections (workspace_id, name, description) VALUES ($1,$2,$3) RETURNING *`;
+
+      const value = [workspace_id, name, description];
+
+      const { rows } = await pool.query(query, value);
+
+      return rows[0] || null; // return new record
+    } catch (error) {
+      console.error(
+        "collection.repository - Database query failed (create):",
+        error.message,
+      );
+      throw error;
+    }
+  }
+
+  static async get(workspaceId, collectionId) {
+    //done
+    try {
+      const query = `SELECT * FROM collections WHERE workspace_id=$1 AND id=$2;`;
+      const value = [workspaceId, collectionId];
+
+      const { rows } = await pool.query(query, value);
+      return rows[0] || null;
+    } catch (error) {
+      console.error(
+        "collection.repository- Error database query (get): ",
+        error.message,
+      );
+      throw error;
+    }
+  }
+  static async update(name, description, workspaceId, collectionId) {
+    //done
+    try {
+      const query =
+        "UPDATE collections Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE workspace_id = $3 AND id=$4";
+      const values = [name, description, workspaceId, collectionId];
+
+      await pool.query(query, values);
+    } catch (error) {
+      console.error(
+        "collection.repository - Error database query (update): ",
+        error.message,
+      );
+      throw error;
+    }
+  }
+  static async remove(workspaceId, collectionId) {
+    //done
+    try {
+      const query =
+        "DELETE FROM collections WHERE workspace_id=$1 AND id=$2 RETURNING *";
+      const values = [workspaceId, collectionId];
+
+      const { rows } = await pool.query(query, values);
+      return rows[0] || null;
+    } catch (error) {
+      console.error(
+        "collection.repository - Error database query (remove): ",
+        error.message,
+      );
+      throw error;
+    }
+  }
+}
+
+module.exports = Collection;

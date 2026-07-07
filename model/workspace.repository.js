@@ -1,7 +1,7 @@
 const pool = require("../db/pool");
 
 class Workspace {
-  static async create({ name, description, owner_id }) {
+  static async create(name, description, owner_id) {
     try {
       const query = `INSERT INTO workspaces (name, description, owner_id) VALUES ($1,$2,$3) RETURNING *`;
 
@@ -12,7 +12,7 @@ class Workspace {
       return rows[0]; // return new record
     } catch (error) {
       console.error(
-        "Workspace Model - Database query failed (create):",
+        "workspace.repository - Database query failed (create):",
         error.message,
       );
     }
@@ -51,7 +51,7 @@ class Workspace {
       );
     }
   }
-  static async update({ workspaceId, name, description }) {
+  static async update(workspaceId, name, description) {
     try {
       const query =
         "UPDATE workspaces Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3";
@@ -71,7 +71,7 @@ class Workspace {
       const value = [id];
 
       const { rows } = await pool.query(query, value);
-      return rows;
+      return rows[0] || null;
     } catch (error) {
       console.error(
         "workspace.repository - Error database query (remove): ",
