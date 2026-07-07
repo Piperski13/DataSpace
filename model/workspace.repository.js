@@ -1,7 +1,7 @@
 const pool = require("../db/pool");
 
 class Workspace {
-  static async create({ name, description, owner_id }) {
+  static async create(name, description, owner_id) {
     try {
       const query = `INSERT INTO workspaces (name, description, owner_id) VALUES ($1,$2,$3) RETURNING *`;
 

@@ -64,11 +64,7 @@ const create = async (req, res) => {
 
     const owner_id = req.user.id;
 
-    const workspace = await Workspace.create({
-      name,
-      description,
-      owner_id,
-    }); // remove unecesserty () {}
+    const workspace = await Workspace.create(name, description, owner_id);
 
     res.redirect("/workspaces");
   } catch (error) {
