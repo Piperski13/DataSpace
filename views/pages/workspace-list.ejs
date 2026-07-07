@@ -72,14 +72,17 @@
               <tbody>
                 <% if (workspaces && workspaces.length > 0) { %> <%
                 workspaces.forEach(workspace => { %>
-                <tr>
+                <tr
+                  class="clickable-row"
+                  data-href="/workspaces/<%= workspace.id %>"
+                >
                   <td><%= workspace.id %></td>
                   <td><%= workspace.name %></td>
                   <td><%= workspace.collectionsCount || 0 %></td>
 
                   <td>
                     <form
-                      action="/workspaces/<%= workspace.id %>"
+                      action="/workspaces/<%= workspace.id %>/edit"
                       method="GET"
                       style="display: inline"
                     >
@@ -90,7 +93,7 @@
                   </td>
                   <td>
                     <form
-                      action="/workspaces/<%= workspace.id %>"
+                      action="/workspaces/<%= workspace.id %>/delete"
                       method="POST"
                       style="display: inline"
                     >
@@ -111,5 +114,6 @@
         </main>
       </div>
     </div>
+    <script src="/scripts/table-row-navigation.js"></script>
   </body>
 </html>

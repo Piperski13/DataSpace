@@ -2,13 +2,9 @@
 <span class="material-symbols-outlined hamburger">menu</span>
 <aside class="sidebar">
   <div id="menu" class="menu">
-    <a href="/viewPage/welcome">Home</a>
-    <a href="/viewPage/welcome">Dashboard</a>
-    <a href="/viewPage/welcome">Workspaces</a>
-    <a href="/viewPage/recordsViewPage" id="view-records-js"
-      >View All Records</a
-    >
-    <a href="/viewPage/addRecord" id="add-record-js">Add Record</a>
+    <a href="/workspaces/dashboard">Dashboard</a>
+    <a href="/workspaces">Workspaces</a>
+
     <a href="/viewPage/chat">Global Chat</a>
 
     <% if (user.is_admin) { %>
@@ -22,7 +18,7 @@
         >account_circle</span
       >
       <span class="user-menu-username">
-        <%= `${user.surname} ${user.lastname}` %>
+        <%= `${user.first_name} ${user.last_name}` %>
       </span>
     </button>
 

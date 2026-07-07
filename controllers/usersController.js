@@ -6,13 +6,13 @@ const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 2 and 15 characters.";
 
 const validateUser = [
-  body("surname")
+  body("first_name")
     .trim()
     .isAlpha()
-    .withMessage(`Surname ${alphaErr}`)
+    .withMessage(`first_name ${alphaErr}`)
     .isLength({ min: 2, max: 12 })
-    .withMessage(`Surname ${lengthErr}`),
-  body("lastname")
+    .withMessage(`first_name ${lengthErr}`),
+  body("last_name")
     .trim()
     .isAlpha()
     .withMessage(`Lastname ${alphaErr}`)
@@ -44,15 +44,15 @@ const updateUser = async (req, res) => {
     }
 
     const id = parseInt(req.params.id);
-    const { email, surname, lastname } = req.body;
+    const { email, first_name, last_name } = req.body;
 
     const is_admin = req.body.is_admin ? true : false;
 
     await Users.updateById({
       id,
       email,
-      surname,
-      lastname,
+      first_name,
+      last_name,
       is_admin,
     });
 

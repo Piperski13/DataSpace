@@ -21,7 +21,7 @@ const login = async (req, res, next) => {
 
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.redirect("/viewPage/welcome");
+      return res.redirect("/workspaces/dashboard");
     });
   })(req, res, next);
 };

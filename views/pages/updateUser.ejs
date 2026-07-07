@@ -42,21 +42,21 @@
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />
-              <label for="surname">Surname</label>
+              <label for="first_name">Firstname</label>
               <input
                 type="text"
-                name="surname"
+                name="first_name"
                 placeholder="John"
-                value="<%= profile ? profile.surname : '' %>"
+                value="<%= profile ? profile.first_name : '' %>"
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />
-              <label for="lastname">Lastname</label>
+              <label for="last_name">Lastname</label>
               <input
                 type="text"
-                name="lastname"
+                name="last_name"
                 placeholder="Doe"
-                value="<%= profile ? profile.lastname : '' %>"
+                value="<%= profile ? profile.last_name : '' %>"
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />

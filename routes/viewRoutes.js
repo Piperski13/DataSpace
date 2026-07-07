@@ -1,6 +1,6 @@
 const express = require("express");
 const viewController = require("../controllers/viewController.js");
-const isAdmin = require("../middleware/isAdmin");
+const isAdmin = require("../middleware/auth/isAdmin.js");
 const router = express.Router();
 
 router.route("/recordsViewPage").get(viewController.generateView);

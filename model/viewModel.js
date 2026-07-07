@@ -15,7 +15,7 @@ class View {
     } catch (error) {
       console.error(
         "viewModel - Database error (filterRecords):",
-        error.message
+        error.message,
       );
       throw error;
     }
@@ -57,14 +57,14 @@ class View {
     } catch (error) {
       console.error(
         "viewModel - Database error (getAllPlants):",
-        error.message
+        error.message,
       );
       throw error;
     }
   }
   static async getUsers() {
     try {
-      const { rows } = await pool.query(`SELECT * FROM korisnici`);
+      const { rows } = await pool.query(`SELECT * FROM users`);
 
       return rows;
     } catch (error) {
@@ -74,7 +74,7 @@ class View {
   }
   static async filterUsers(filter) {
     try {
-      const query = `SELECT * FROM korisnici WHERE email ILIKE $1;`;
+      const query = `SELECT * FROM users WHERE email ILIKE $1;`;
       const value = [`${filter}%`];
 
       const { rows } = await pool.query(query, value);
@@ -82,7 +82,7 @@ class View {
     } catch (error) {
       console.error(
         "viewModel - Error database query (filterUsers): ",
-        error.message
+        error.message,
       );
     }
   }

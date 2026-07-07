@@ -12,13 +12,13 @@ const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
 
 const validateUser = [
-  body("surname")
+  body("first_name")
     .trim()
     .isAlpha()
-    .withMessage(`Surname ${alphaErr}`)
+    .withMessage(`Firstname ${alphaErr}`)
     .isLength({ min: 2, max: 12 })
-    .withMessage(`Surname ${lengthErr}`),
-  body("lastname")
+    .withMessage(`Firstname ${lengthErr}`),
+  body("last_name")
     .trim()
     .isAlpha()
     .withMessage(`Lastname ${alphaErr}`)
@@ -30,7 +30,7 @@ const validateUser = [
 
 const generateOtp = async (req, res) => {
   const errors = validationResult(req);
-  const { email, surname, lastname, password } = req.body;
+  const { email, first_name, last_name, password } = req.body;
 
   let allErrors = errors.array();
 
@@ -57,8 +57,8 @@ const generateOtp = async (req, res) => {
 
     req.session.pendingUser = {
       email,
-      surname,
-      lastname,
+      first_name,
+      last_name,
       password: hashedPassword,
     };
 
