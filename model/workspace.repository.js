@@ -19,14 +19,30 @@ class Workspace {
   }
   static async showList(filter, user_id) {
     try {
-      const baseQuery = `SELECT * FROM workspaces WHERE name ILIKE $1`;
+      let query = `
+      SELECT
+        w.*,
+        COUNT(c.id) AS collections_count
+      FROM workspaces w
+      LEFT JOIN collections c
+        ON c.workspace_id = w.id
+      WHERE w.name ILIKE $1
+    `;
+
       const values = [`${filter}%`];
 
-      const query = user_id ? `${baseQuery} AND owner_id = $2` : baseQuery;
+      if (user_id) {
+        query += ` AND w.owner_id = $2`;
+        values.push(user_id);
+      }
 
-      if (user_id) values.push(user_id);
+      query += `
+      GROUP BY w.id
+      ORDER BY w.id;
+    `;
 
       const { rows } = await pool.query(query, values);
+
       return rows;
     } catch (error) {
       console.error(
@@ -36,7 +52,6 @@ class Workspace {
       throw error;
     }
   }
-  q;
   static async get(id) {
     try {
       const query = `SELECT * FROM workspaces WHERE id=$1;`;

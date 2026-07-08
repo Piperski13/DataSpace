@@ -1,4 +1,5 @@
 const Workspace = require("../model/workspace.repository.js");
+const Collection = require("../model/collection.repository.js");
 
 const index = async (req, res) => {
   try {
@@ -8,7 +9,6 @@ const index = async (req, res) => {
     const effectiveUserId = is_admin ? null : user_id;
 
     const workspaces = await Workspace.showList(name, effectiveUserId);
-    //we const collections = await Workspace.getCollections(workspaceId);
 
     res.render("workspace-list", {
       name,
@@ -27,13 +27,18 @@ const show = async (req, res) => {
     const { workspaceId } = req.params;
 
     const workspace = await Workspace.get(workspaceId);
-    //const collections = await Workspace.getCollections(workspaceId);
+
+    if (!workspace) {
+      return res.status(404).render("pages/404");
+    }
+
+    const collections = await Collection.findMany(workspaceId);
 
     res.render("workspace-details", {
       workspace,
+      collections,
       user: req.user,
       name,
-      collections: null,
     });
   } catch (error) {
     console.error("Error processing request:", error.message);
@@ -114,7 +119,6 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const { workspaceId } = req.params;
-    // const workspaceId = parseInt(req.params.workspaceId);
 
     const workspace = await Workspace.remove(workspaceId);
 
