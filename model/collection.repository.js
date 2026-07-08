@@ -44,7 +44,7 @@ class Collection {
       const value = [workspaceId];
 
       const { rows } = await pool.query(query, value);
-      return rows[0] || null;
+      return rows || null;
     } catch (error) {
       console.error(
         "collection.repository- Error database query (findMany): ",
