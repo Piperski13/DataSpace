@@ -46,6 +46,14 @@
                 required
               />
 
+              <label for="description">Description : </label>
+              <textarea
+                name="description"
+                placeholder="Short description about this workspace..."
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+              >
+              <%= collection ? collection.description : '' %></textarea>
+
               <div class="submit-row">
                 <%- include("../partials/errors.ejs") %>
                 <button type="submit" class="button button--primary">

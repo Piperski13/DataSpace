@@ -1,6 +1,6 @@
 const { body, param } = require("express-validator");
 
-const validateWorkspaceBody = [
+const validateCollectionBody = [
   body("name")
     .trim()
     .notEmpty()
@@ -15,15 +15,14 @@ const validateWorkspaceBody = [
     .withMessage("Description must be max 200 characters"),
 ];
 
-const validateWorkspaceIdParam = [
-  param("workspaceId")
+const validateCollectionIdParam = [
+  param("collectionId")
     .isInt()
-    .withMessage("Workspace ID must be a number")
+    .withMessage("Collection ID must be a number")
     .toInt(),
 ];
 
-
 module.exports = {
-  validateWorkspaceBody,
-  validateWorkspaceIdParam,
+  validateCollectionBody,
+  validateCollectionIdParam,
 };
