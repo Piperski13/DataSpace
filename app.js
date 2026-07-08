@@ -16,6 +16,7 @@ const forgotPassword = require("./routes/forgotPassword.js");
 const chatRouter = require("./routes/chatRoutes.js");
 
 const workspaceRouter = require("./routes/workspace.routes.js");
+const collectionRouter = require("./routes/collection.routes.js");
 
 require("./config/passportConfig");
 require("dotenv").config("./.env");
@@ -67,6 +68,8 @@ app.set("view engine", "ejs");
 app.use("/", loginRouter);
 
 app.use("/workspaces", isAuthenticated, workspaceRouter);
+
+app.use("/workspaces/:workspaceId", isAuthenticated, collectionRouter);
 
 app.use("/viewPage", isAuthenticated, viewRouter);
 app.use("/records", isAuthenticated, recordRouter);

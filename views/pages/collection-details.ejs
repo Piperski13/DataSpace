@@ -27,7 +27,19 @@
 
       <div class="app-main">
         <main class="app-content records-view-page">
-          <h2>Collection: <%= collection.name %></h2>
+          <section class="workspace-details">
+            <h2><%= collection.name %></h2>
+
+            <p><%= collection.description %></p>
+
+            <dl>
+              <dt>Created</dt>
+              <dd><%= collection.created_at %></dd>
+
+              <dt>Updated</dt>
+              <dd><%= collection.updated_at %></dd>
+            </dl>
+          </section>
           <div class="div-tables-section">
             <div id="div-filter-form">
               <form

@@ -19,9 +19,9 @@ const {
 const router = express.Router();
 
 router.get("/dashboard", showDashboard);
-
 router.get("/", index);
 router.get("/new", newWorkspace);
+
 router.post(
   "/create",
   validateWorkspaceBody,
@@ -29,31 +29,16 @@ router.post(
   create,
 );
 
-router.get(
-  "/:workspaceId/edit",
-  validateWorkspaceIdParam,
-  handleWorkspaceValidation,
-  edit,
-);
-router.get(
-  "/:workspaceId",
-  validateWorkspaceIdParam,
-  handleWorkspaceValidation,
-  show,
-);
+router.get("/:workspaceId", validateWorkspaceIdParam, show);
+router.get("/:workspaceId/edit", validateWorkspaceIdParam, edit);
 
 router.post(
   "/:workspaceId/update",
-  validateWorkspaceBody,
   validateWorkspaceIdParam,
+  validateWorkspaceBody,
   handleWorkspaceValidation,
   update,
 );
-router.post(
-  "/:workspaceId/delete",
-  validateWorkspaceIdParam,
-  handleWorkspaceValidation,
-  remove,
-);
+router.post("/:workspaceId/delete", validateWorkspaceIdParam, remove);
 
 module.exports = router;

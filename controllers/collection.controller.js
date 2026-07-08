@@ -15,12 +15,14 @@ const show = async (req, res) => {
     const collection = await Collection.findOne(workspaceId, collectionId);
 
     if (!collection) {
-      return res.status(404).render("pages/404");
+      return res.status(404).render("pages/404"); //incorrect
     }
     //const records = await Records.getRecords(workspaceId,collectionId);
 
     res.render("collection-details", {
-      workspace, // records
+      workspace,
+      collection,
+      records: null, // not null
       user: req.user,
       name,
       collections: null,
@@ -33,6 +35,7 @@ const show = async (req, res) => {
 
 const newCollection = async (req, res) => {
   try {
+    const { workspaceId } = req.params;
     const workspace = await Workspace.get(workspaceId);
 
     if (!workspace) {
@@ -41,6 +44,7 @@ const newCollection = async (req, res) => {
 
     res.render("collection-form", {
       user: req.user,
+      workspace,
       collection: null,
       errors: [],
     });
@@ -88,6 +92,7 @@ const edit = async (req, res) => {
     res.render("collection-form", {
       user: req.user,
       collection,
+      workspace,
       errors: [],
     });
   } catch (error) {
