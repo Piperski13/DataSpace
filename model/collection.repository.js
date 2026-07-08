@@ -20,7 +20,7 @@ class Collection {
     }
   }
 
-  static async get(workspaceId, collectionId) {
+  static async findOne(workspaceId, collectionId) {
     //done
     try {
       const query = `SELECT * FROM collections WHERE workspace_id=$1 AND id=$2;`;
@@ -30,12 +30,30 @@ class Collection {
       return rows[0] || null;
     } catch (error) {
       console.error(
-        "collection.repository- Error database query (get): ",
+        "collection.repository- Error database query (findOne): ",
         error.message,
       );
       throw error;
     }
   }
+
+  static async findMany(workspaceId) {
+    //done
+    try {
+      const query = `SELECT * FROM collections WHERE workspace_id=$1;`;
+      const value = [workspaceId];
+
+      const { rows } = await pool.query(query, value);
+      return rows[0] || null;
+    } catch (error) {
+      console.error(
+        "collection.repository- Error database query (findMany): ",
+        error.message,
+      );
+      throw error;
+    }
+  }
+
   static async update(name, description, workspaceId, collectionId) {
     //done
     try {

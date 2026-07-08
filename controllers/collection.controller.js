@@ -12,7 +12,7 @@ const show = async (req, res) => {
       return res.status(404).render("pages/404");
     }
 
-    const collection = await Collection.get(workspaceId, collectionId);
+    const collection = await Collection.findOne(workspaceId, collectionId);
 
     if (!collection) {
       return res.status(404).render("pages/404");
@@ -79,7 +79,7 @@ const edit = async (req, res) => {
       return res.status(404).render("pages/404");
     }
 
-    const collection = await Collection.get(workspaceId, collectionId);
+    const collection = await Collection.findOne(workspaceId, collectionId);
 
     if (!collection) {
       return res.status(404).render("pages/404");
@@ -107,7 +107,7 @@ const update = async (req, res) => {
       return res.status(404).render("pages/404");
     }
 
-    const collection = await Collection.get(workspaceId, collectionId);
+    const collection = await Collection.findOne(workspaceId, collectionId);
 
     if (!collection) {
       return res.status(404).render("pages/404");
@@ -131,7 +131,7 @@ const remove = async (req, res) => {
       return res.status(404).render("pages/404");
     }
 
-    const collection = Collection.get(workspaceId, collectionId);
+    const collection = Collection.findOne(workspaceId, collectionId);
 
     if (!collection) {
       return res.status(404).render("pages/404");
