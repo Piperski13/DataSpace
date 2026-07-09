@@ -1,5 +1,3 @@
-const Workspace = require("../model/workspace.repository.js");
-const Collection = require("../model/collection.repository.js");
 const WorkspaceService = require("../services/workspace/workspace.service.js");
 
 const index = async (req, res) => {
