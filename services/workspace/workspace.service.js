@@ -26,5 +26,26 @@ class WorkspaceService {
       collections,
     };
   }
+  static async create({ name, description, user }) {
+    return Workspace.create(name, description, user.id);
+  }
+  static async update({ workspaceId, name, description }) {
+    const workspace = await Workspace.update(workspaceId, name, description);
+
+    if (!workspace) {
+      throw new Error("Workspace not found");
+    }
+
+    return workspace;
+  }
+  static async remove({ workspaceId }) {
+    const workspace = await Workspace.remove(workspaceId);
+
+    if (!workspace) {
+      throw new Error("Workspace not found");
+    }
+
+    return workspace;
+  }
 }
 module.exports = WorkspaceService;
