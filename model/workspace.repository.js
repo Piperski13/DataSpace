@@ -1,11 +1,11 @@
 const pool = require("../db/pool");
 
 class Workspace {
-  static async create(name, description, owner_id) {
+  static async create({ name, description, user }) {
     try {
       const query = `INSERT INTO workspaces (name, description, owner_id) VALUES ($1,$2,$3) RETURNING *`;
 
-      const value = [name, description, owner_id];
+      const value = [name, description, user.id];
 
       const { rows } = await pool.query(query, value);
 
@@ -17,7 +17,7 @@ class Workspace {
       );
     }
   }
-  static async showList(filter, user_id) {
+  static async showList({ filter, user_id }) {
     try {
       let query = `
       SELECT
@@ -52,10 +52,10 @@ class Workspace {
       throw error;
     }
   }
-  static async get(id) {
+  static async get({ workspaceId }) {
     try {
       const query = `SELECT * FROM workspaces WHERE id=$1;`;
-      const value = [id];
+      const value = [workspaceId];
 
       const { rows } = await pool.query(query, value);
       return rows[0] || null;
@@ -66,7 +66,7 @@ class Workspace {
       );
     }
   }
-  static async update(workspaceId, name, description) {
+  static async update({ workspaceId, name, description }) {
     try {
       const query =
         "UPDATE workspaces Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *;";
@@ -82,10 +82,10 @@ class Workspace {
       );
     }
   }
-  static async remove(id) {
+  static async remove({ workspaceId }) {
     try {
       const query = "DELETE FROM workspaces WHERE id=$1 RETURNING *";
-      const value = [id];
+      const value = [workspaceId];
 
       const { rows } = await pool.query(query, value);
       return rows[0] || null;

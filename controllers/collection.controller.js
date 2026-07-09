@@ -1,27 +1,22 @@
-const Workspace = require("../model/workspace.repository.js");
-const Collection = require("../model/collection.repository.js");
+const WorkspaceService = require("../services/workspace/workspace.service.js");
+const CollectionService = require("../services/collection/collection.service.js");
 
 const show = async (req, res) => {
+  //works
   try {
     const name = req.query.name || "";
     const { workspaceId, collectionId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
+    const details = await CollectionService.getDetails({
+      workspaceId,
+      collectionId,
+    });
 
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    const collection = await Collection.findOne(workspaceId, collectionId);
-
-    if (!collection) {
-      return res.status(404).render("pages/404"); //incorrect
-    }
     //const records = await Records.getRecords(workspaceId,collectionId);
 
     res.render("collection-details", {
-      workspace,
-      collection,
+      workspace: details.workspace,
+      collection: details.collection,
       records: null, // not null
       user: req.user,
       name,
@@ -36,11 +31,8 @@ const show = async (req, res) => {
 const newCollection = async (req, res) => {
   try {
     const { workspaceId } = req.params;
-    const workspace = await Workspace.get(workspaceId);
 
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
+    const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
     res.render("collection-form", {
       user: req.user,
@@ -59,13 +51,7 @@ const create = async (req, res) => {
     const { workspaceId } = req.params;
     const { name, description } = req.body;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    await Collection.create(workspaceId, name, description);
+    await CollectionService.create({ workspaceId, name, description });
 
     res.redirect(`/workspaces/${workspaceId}`);
   } catch (error) {
@@ -77,22 +63,15 @@ const edit = async (req, res) => {
   try {
     const { workspaceId, collectionId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    const collection = await Collection.findOne(workspaceId, collectionId);
-
-    if (!collection) {
-      return res.status(404).render("pages/404");
-    }
+    const details = await CollectionService.getDetails({
+      workspaceId,
+      collectionId,
+    });
 
     res.render("collection-form", {
       user: req.user,
-      collection,
-      workspace,
+      collection: details.collection,
+      workspace: details.workspace,
       errors: [],
     });
   } catch (error) {
@@ -106,19 +85,12 @@ const update = async (req, res) => {
     const { workspaceId, collectionId } = req.params;
     const { name, description } = req.body;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    const collection = await Collection.findOne(workspaceId, collectionId);
-
-    if (!collection) {
-      return res.status(404).render("pages/404");
-    }
-
-    await Collection.update(name, description, workspaceId, collectionId);
+    await CollectionService.update({
+      name,
+      description,
+      workspaceId,
+      collectionId,
+    });
 
     res.redirect(`/workspaces/${workspaceId}`);
   } catch (error) {
@@ -130,21 +102,10 @@ const remove = async (req, res) => {
   try {
     const { workspaceId, collectionId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    const collection = Collection.findOne(workspaceId, collectionId);
-
-    if (!collection) {
-      return res.status(404).render("pages/404");
-    }
-    const collectionRemoved = await Collection.remove(
+    const collectionRemoved = await CollectionService.remove({
       workspaceId,
       collectionId,
-    );
+    });
 
     res.redirect(`/workspaces/${workspaceId}`);
   } catch (error) {

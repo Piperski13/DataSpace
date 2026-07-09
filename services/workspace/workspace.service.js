@@ -5,10 +5,10 @@ class WorkspaceService {
   static async list({ filter, user }) {
     const userId = user.is_admin ? null : user.id;
 
-    return Workspace.showList(filter, userId);
+    return Workspace.showList({ filter, userId });
   }
-  static async requireWorkspace(workspaceId) {
-    const workspace = await Workspace.get(workspaceId);
+  static async requireWorkspace(data) {
+    const workspace = await Workspace.get(data);
 
     if (!workspace) {
       throw new Error("Workspace not found");
@@ -16,21 +16,21 @@ class WorkspaceService {
 
     return workspace;
   }
-  static async getDetails(id) {
-    const workspace = await this.requireWorkspace(id);
+  static async getDetails(data) {
+    const workspace = await this.requireWorkspace(data);
 
-    const collections = await Collection.findMany(id);
+    const collections = await Collection.findMany(data);
 
     return {
       workspace,
       collections,
     };
   }
-  static async create({ name, description, user }) {
-    return Workspace.create(name, description, user.id);
+  static async create(data) {
+    return Workspace.create(data);
   }
-  static async update({ workspaceId, name, description }) {
-    const workspace = await Workspace.update(workspaceId, name, description);
+  static async update(data) {
+    const workspace = await Workspace.update(data);
 
     if (!workspace) {
       throw new Error("Workspace not found");
@@ -38,8 +38,8 @@ class WorkspaceService {
 
     return workspace;
   }
-  static async remove({ workspaceId }) {
-    const workspace = await Workspace.remove(workspaceId);
+  static async remove(data) {
+    const workspace = await Workspace.remove(data);
 
     if (!workspace) {
       throw new Error("Workspace not found");

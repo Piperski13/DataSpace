@@ -25,7 +25,7 @@ const show = async (req, res) => {
     const name = req.query.name || "";
     const { workspaceId } = req.params;
 
-    const details = await WorkspaceService.getDetails(workspaceId);
+    const details = await WorkspaceService.getDetails({ workspaceId });
 
     res.render("workspace-details", {
       workspace: details.workspace,
@@ -76,7 +76,7 @@ const edit = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    const workspace = await WorkspaceService.requireWorkspace(workspaceId);
+    const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
     res.render("workspace-form", {
       user: req.user,
