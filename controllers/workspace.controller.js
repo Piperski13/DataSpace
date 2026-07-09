@@ -1,14 +1,15 @@
 const Workspace = require("../model/workspace.repository.js");
 const Collection = require("../model/collection.repository.js");
+const WorkspaceService = require("../services/workspace/workspace.service.js");
 
 const index = async (req, res) => {
   try {
     const name = req.query.name || "";
-    const { id: user_id, is_admin } = req.user;
 
-    const effectiveUserId = is_admin ? null : user_id;
-
-    const workspaces = await Workspace.showList(name, effectiveUserId);
+    const workspaces = await WorkspaceService.list({
+      filter: name,
+      user: req.user,
+    });
 
     res.render("workspace-list", {
       name,
@@ -26,13 +27,13 @@ const show = async (req, res) => {
     const name = req.query.name || "";
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
+    const workspace = await Workspace.get(workspaceId); //bussiness logic -> service layer
 
     if (!workspace) {
-      return res.status(404).render("pages/404");
+      return res.status(404).render("pages/404"); //bussiness logic -> service layer
     }
 
-    const collections = await Collection.findMany(workspaceId);
+    const collections = await Collection.findMany(workspaceId); //bussiness logic -> service layer
 
     res.render("workspace-details", {
       workspace,
@@ -69,7 +70,7 @@ const create = async (req, res) => {
 
     const owner_id = req.user.id;
 
-    const workspace = await Workspace.create(name, description, owner_id);
+    const workspace = await Workspace.create(name, description, owner_id); //bussiness logic -> service layer
 
     res.redirect("/workspaces");
   } catch (error) {
@@ -81,10 +82,10 @@ const edit = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
+    const workspace = await Workspace.get(workspaceId); //bussiness logic -> service layer
 
     if (!workspace) {
-      return res.status(404).render("pages/404");
+      return res.status(404).render("pages/404"); //bussiness logic -> service layer
     }
 
     res.render("workspace-form", {
@@ -103,10 +104,10 @@ const update = async (req, res) => {
     const { workspaceId } = req.params;
     const { name, description } = req.body;
 
-    const workspace = await Workspace.update(workspaceId, name, description);
+    const workspace = await Workspace.update(workspaceId, name, description); //bussiness logic -> service layer
 
     if (!workspace) {
-      return res.status(404).render("pages/404");
+      return res.status(404).render("pages/404"); //bussiness logic -> service layer
     }
 
     res.redirect("/workspaces");
@@ -120,13 +121,13 @@ const remove = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.remove(workspaceId);
+    const workspace = await Workspace.remove(workspaceId); //bussiness logic -> service layer
 
     if (!workspace) {
       return res.status(404).json({
         message: `Workspace ${workspaceId} was not found`,
       });
-    }
+    } //bussiness logic -> service layer
     res.redirect("/workspaces");
   } catch (error) {
     res.status(500).json({ error: error.message });
