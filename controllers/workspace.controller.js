@@ -1,14 +1,13 @@
-const Workspace = require("../model/workspace.repository.js");
-const Collection = require("../model/collection.repository.js");
+const WorkspaceService = require("../services/workspace/workspace.service.js");
 
 const index = async (req, res) => {
   try {
     const name = req.query.name || "";
-    const { id: user_id, is_admin } = req.user;
 
-    const effectiveUserId = is_admin ? null : user_id;
-
-    const workspaces = await Workspace.showList(name, effectiveUserId);
+    const workspaces = await WorkspaceService.list({
+      filter: name,
+      user: req.user,
+    });
 
     res.render("workspace-list", {
       name,
@@ -26,17 +25,11 @@ const show = async (req, res) => {
     const name = req.query.name || "";
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
-
-    const collections = await Collection.findMany(workspaceId);
+    const details = await WorkspaceService.getDetails({ workspaceId });
 
     res.render("workspace-details", {
-      workspace,
-      collections,
+      workspace: details.workspace,
+      collections: details.collections,
       user: req.user,
       name,
     });
@@ -67,9 +60,11 @@ const create = async (req, res) => {
   try {
     const { name, description } = req.body;
 
-    const owner_id = req.user.id;
-
-    const workspace = await Workspace.create(name, description, owner_id);
+    const workspace = await WorkspaceService.create({
+      name,
+      description,
+      user: req.user,
+    });
 
     res.redirect("/workspaces");
   } catch (error) {
@@ -81,11 +76,7 @@ const edit = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
+    const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
     res.render("workspace-form", {
       user: req.user,
@@ -103,11 +94,11 @@ const update = async (req, res) => {
     const { workspaceId } = req.params;
     const { name, description } = req.body;
 
-    const workspace = await Workspace.update(workspaceId, name, description);
-
-    if (!workspace) {
-      return res.status(404).render("pages/404");
-    }
+    const workspace = await WorkspaceService.update({
+      workspaceId,
+      name,
+      description,
+    });
 
     res.redirect("/workspaces");
   } catch (error) {
@@ -120,13 +111,8 @@ const remove = async (req, res) => {
   try {
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.remove(workspaceId);
+    const workspace = await WorkspaceService.remove({ workspaceId });
 
-    if (!workspace) {
-      return res.status(404).json({
-        message: `Workspace ${workspaceId} was not found`,
-      });
-    }
     res.redirect("/workspaces");
   } catch (error) {
     res.status(500).json({ error: error.message });
