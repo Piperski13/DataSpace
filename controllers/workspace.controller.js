@@ -27,17 +27,11 @@ const show = async (req, res) => {
     const name = req.query.name || "";
     const { workspaceId } = req.params;
 
-    const workspace = await Workspace.get(workspaceId); //bussiness logic -> service layer
-
-    if (!workspace) {
-      return res.status(404).render("pages/404"); //bussiness logic -> service layer
-    }
-
-    const collections = await Collection.findMany(workspaceId); //bussiness logic -> service layer
+    const details = await WorkspaceService.getDetails(workspaceId);
 
     res.render("workspace-details", {
-      workspace,
-      collections,
+      workspace: details.workspace,
+      collections: details.collections,
       user: req.user,
       name,
     });
