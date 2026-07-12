@@ -14,6 +14,7 @@ const viewRouter = require("./routes/viewRoutes.js");
 const otpRouter = require("./routes/otpRoutes.js");
 const forgotPassword = require("./routes/forgotPassword.js");
 const chatRouter = require("./routes/chatRoutes.js");
+const errorHandler = require("./middleware/errors/errorHandler.js");
 
 const workspaceRouter = require("./routes/workspace.routes.js");
 const collectionRouter = require("./routes/collection.routes.js");
@@ -78,8 +79,10 @@ app.use("/otp", otpRouter);
 app.use("/forgot", forgotPassword);
 app.use("/chat", isAuthenticated, chatRouter);
 
-app.use((req, res) => {
-  res.status(404).render("404");
-});
+app.use(errorHandler);
+
+// app.use((req, res) => {
+//   res.status(404).render("404");
+// });
 
 module.exports = app;

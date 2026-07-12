@@ -1,6 +1,8 @@
 const Workspace = require("../../model/workspace.repository");
 const Collection = require("../../model/collection.repository.js");
 
+const NotFoundError = require("../../errors/not-found.error.js");
+
 class WorkspaceService {
   static async list({ filter, user }) {
     const userId = user.is_admin ? null : user.id;
@@ -11,7 +13,7 @@ class WorkspaceService {
     const workspace = await Workspace.get(data);
 
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;
@@ -33,7 +35,7 @@ class WorkspaceService {
     const workspace = await Workspace.update(data);
 
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;
@@ -42,7 +44,7 @@ class WorkspaceService {
     const workspace = await Workspace.remove(data);
 
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;

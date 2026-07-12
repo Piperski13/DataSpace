@@ -1,12 +1,14 @@
 const Collection = require("../../model/collection.repository.js");
 const WorkspaceService = require("../workspace/workspace.service.js");
 
+const NotFoundError = require("../../errors/not-found.error.js");
+
 class CollectionService {
   static async requireCollection(data) {
     const collection = await Collection.findOne(data);
 
     if (!collection) {
-      throw new Error("Collection not found");
+      throw new NotFoundError("Collection not found");
     }
     return collection;
   }
@@ -31,7 +33,7 @@ class CollectionService {
     const collection = await Collection.update(data);
 
     if (!collection) {
-      throw new Error("Collection not found");
+      throw new NotFoundError("Collection not found");
     }
 
     return collection;
@@ -42,7 +44,7 @@ class CollectionService {
     const collection = await Collection.remove(data);
 
     if (!collection) {
-      throw new Error("Collection not found");
+      throw new NotFoundError("Collection not found");
     }
 
     return collection;

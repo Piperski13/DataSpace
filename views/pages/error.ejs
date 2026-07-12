@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/styles/partials/404.css" />
 <div class="main-section">
-  <h1>404 - Page Not Found</h1>
-  <p>Sorry, the page you’re looking for doesn’t exist.</p>
+  <h1><%= statusCode %></h1>
+  <p><%= message %></p>
   <a href="/">Go back to the login page</a>
 </div>
 <%- include('../partials/footer') %>
