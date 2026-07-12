@@ -1,117 +1,92 @@
 const WorkspaceService = require("../services/workspace/workspace.service.js");
 const CollectionService = require("../services/collection/collection.service.js");
 
-const show = async (req, res) => {
+const asyncHandler = require("../middleware/errors/asyncHandler.js");
+
+const show = asyncHandler(async (req, res) => {
   //works
-  try {
-    const name = req.query.name || "";
-    const { workspaceId, collectionId } = req.params;
+  const name = req.query.name || "";
+  const { workspaceId, collectionId } = req.params;
 
-    const details = await CollectionService.getDetails({
-      workspaceId,
-      collectionId,
-    });
+  const details = await CollectionService.getDetails({
+    workspaceId,
+    collectionId,
+  });
 
-    //const records = await Records.getRecords(workspaceId,collectionId);
+  //const records = await Records.getRecords(workspaceId,collectionId);
 
-    res.render("collection-details", {
-      workspace: details.workspace,
-      collection: details.collection,
-      records: null, // not null
-      user: req.user,
-      name,
-      collections: null,
-    });
-  } catch (error) {
-    console.error("Error processing request:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("collection-details", {
+    workspace: details.workspace,
+    collection: details.collection,
+    records: null, // not null
+    user: req.user,
+    name,
+    collections: null,
+  });
+});
 
-const newCollection = async (req, res) => {
-  try {
-    const { workspaceId } = req.params;
+const newCollection = asyncHandler(async (req, res) => {
+  const { workspaceId } = req.params;
 
-    const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
+  const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
-    res.render("collection-form", {
-      user: req.user,
-      workspace,
-      collection: null,
-      errors: [],
-    });
-  } catch (error) {
-    console.error("Error in newWorkspace:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("collection-form", {
+    user: req.user,
+    workspace,
+    collection: null,
+    errors: [],
+  });
+});
 
-const create = async (req, res) => {
-  try {
-    const { workspaceId } = req.params;
-    const { name, description } = req.body;
+const create = asyncHandler(async (req, res) => {
+  const { workspaceId } = req.params;
+  const { name, description } = req.body;
 
-    await CollectionService.create({ workspaceId, name, description });
+  await CollectionService.create({ workspaceId, name, description });
 
-    res.redirect(`/workspaces/${workspaceId}`);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  res.redirect(`/workspaces/${workspaceId}`);
+});
 
-const edit = async (req, res) => {
-  try {
-    const { workspaceId, collectionId } = req.params;
+const edit = asyncHandler(async (req, res) => {
+  const { workspaceId, collectionId } = req.params;
 
-    const details = await CollectionService.getDetails({
-      workspaceId,
-      collectionId,
-    });
+  const details = await CollectionService.getDetails({
+    workspaceId,
+    collectionId,
+  });
 
-    res.render("collection-form", {
-      user: req.user,
-      collection: details.collection,
-      workspace: details.workspace,
-      errors: [],
-    });
-  } catch (error) {
-    console.error("Collection controller ( edit ):", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("collection-form", {
+    user: req.user,
+    collection: details.collection,
+    workspace: details.workspace,
+    errors: [],
+  });
+});
 
-const update = async (req, res) => {
-  try {
-    const { workspaceId, collectionId } = req.params;
-    const { name, description } = req.body;
+const update = asyncHandler(async (req, res) => {
+  const { workspaceId, collectionId } = req.params;
+  const { name, description } = req.body;
 
-    await CollectionService.update({
-      name,
-      description,
-      workspaceId,
-      collectionId,
-    });
+  await CollectionService.update({
+    name,
+    description,
+    workspaceId,
+    collectionId,
+  });
 
-    res.redirect(`/workspaces/${workspaceId}`);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  res.redirect(`/workspaces/${workspaceId}`);
+});
 
-const remove = async (req, res) => {
-  try {
-    const { workspaceId, collectionId } = req.params;
+const remove = asyncHandler(async (req, res) => {
+  const { workspaceId, collectionId } = req.params;
 
-    const collectionRemoved = await CollectionService.remove({
-      workspaceId,
-      collectionId,
-    });
+  const collectionRemoved = await CollectionService.remove({
+    workspaceId,
+    collectionId,
+  });
 
-    res.redirect(`/workspaces/${workspaceId}`);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  res.redirect(`/workspaces/${workspaceId}`);
+});
 
 module.exports = {
   show,
