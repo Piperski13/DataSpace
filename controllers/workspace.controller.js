@@ -1,123 +1,91 @@
 const WorkspaceService = require("../services/workspace/workspace.service.js");
+const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
-const index = async (req, res) => {
-  try {
-    const name = req.query.name || "";
+const index = asyncHandler(async (req, res) => {
+  const name = req.query.name || "";
 
-    const workspaces = await WorkspaceService.list({
-      filter: name,
-      user: req.user,
-    });
+  const workspaces = await WorkspaceService.list({
+    filter: name,
+    user: req.user,
+  });
 
-    res.render("workspace-list", {
-      name,
-      workspaces,
-      user: req.user,
-    });
-  } catch (error) {
-    console.error("Error processing request:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("workspace-list", {
+    name,
+    workspaces,
+    user: req.user,
+  });
+});
 
-const show = async (req, res) => {
-  try {
-    const name = req.query.name || "";
-    const { workspaceId } = req.params;
+const show = asyncHandler(async (req, res) => {
+  const name = req.query.name || "";
+  const { workspaceId } = req.params;
 
-    const details = await WorkspaceService.getDetails({ workspaceId });
+  const details = await WorkspaceService.getDetails({ workspaceId });
 
-    res.render("workspace-details", {
-      workspace: details.workspace,
-      collections: details.collections,
-      user: req.user,
-      name,
-    });
-  } catch (error) {
-    console.error("Error processing request:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("workspace-details", {
+    workspace: details.workspace,
+    collections: details.collections,
+    user: req.user,
+    name,
+  });
+});
 
 const showDashboard = async (req, res) => {
   res.render("dashboard", { user: req.user });
 };
 
-const newWorkspace = async (req, res) => {
-  try {
-    res.render("workspace-form", {
-      user: req.user,
-      workspace: null,
-      errors: [],
-    });
-  } catch (error) {
-    console.error("Error in newWorkspace:", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+const newWorkspace = asyncHandler(async (req, res) => {
+  res.render("workspace-form", {
+    user: req.user,
+    workspace: null,
+    errors: [],
+  });
+});
 
-const create = async (req, res) => {
-  try {
-    const { name, description } = req.body;
+const create = asyncHandler(async (req, res) => {
+  const { name, description } = req.body;
 
-    const workspace = await WorkspaceService.create({
-      name,
-      description,
-      user: req.user,
-    });
+  const workspace = await WorkspaceService.create({
+    name,
+    description,
+    user: req.user,
+  });
 
-    res.redirect("/workspaces");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  res.redirect("/workspaces");
+});
 
-const edit = async (req, res) => {
-  try {
-    const { workspaceId } = req.params;
+const edit = asyncHandler(async (req, res) => {
+  const { workspaceId } = req.params;
 
-    const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
+  const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
-    res.render("workspace-form", {
-      user: req.user,
-      workspace,
-      errors: [],
-    });
-  } catch (error) {
-    console.error("Workspace controller ( edit ):", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.render("workspace-form", {
+    user: req.user,
+    workspace,
+    errors: [],
+  });
+});
 
-const update = async (req, res) => {
-  try {
-    const { workspaceId } = req.params;
-    const { name, description } = req.body;
+const update = asyncHandler(async (req, res) => {
+  const { workspaceId } = req.params;
+  const { name, description } = req.body;
 
-    const workspace = await WorkspaceService.update({
-      workspaceId,
-      name,
-      description,
-    });
+  const workspace = await WorkspaceService.update({
+    workspaceId,
+    name,
+    description,
+  });
 
-    res.redirect("/workspaces");
-  } catch (error) {
-    console.error("Workspace controller (update):", error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  res.redirect("/workspaces");
+});
 
-const remove = async (req, res) => {
-  try {
-    const { workspaceId } = req.params;
+const remove = asyncHandler(async (req, res) => {
+  const { workspaceId } = req.params;
 
-    const workspace = await WorkspaceService.remove({ workspaceId });
+  const workspace = await WorkspaceService.remove({ workspaceId });
 
-    res.redirect("/workspaces");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  res.redirect("/workspaces");
+});
 
 module.exports = {
   index,

@@ -13,7 +13,7 @@ class WorkspaceService {
     const workspace = await Workspace.get(data);
 
     if (!workspace) {
-      throw new NotFoundError("NotFoundError: Workspace not found"); //Create error middleware, test it out
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;
@@ -35,7 +35,7 @@ class WorkspaceService {
     const workspace = await Workspace.update(data);
 
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;
@@ -44,7 +44,7 @@ class WorkspaceService {
     const workspace = await Workspace.remove(data);
 
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace not found");
     }
 
     return workspace;
