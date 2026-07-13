@@ -36,19 +36,25 @@
               method="POST"
               class="form"
             >
-              <label for="name">Record name</label>
-
+              <label for="title">Record Title</label>
               <input
                 type="text"
-                name="name"
+                name="title"
                 placeholder="Saturday discounts"
-                value="<%= record ? record.name : '' %>"
+                value="<%= record ? record.title : '' %>"
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />
 
-              <label for="file">Dokumenti</label>
+              <label for="description">Description : </label>
+              <textarea
+                name="description"
+                placeholder="Short description about this record..."
+                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+              >
+              <%= record ? record.description : '' %></textarea>
 
+              <label for="file">Files</label>
               <% if (files && files.length > 0) { %>
               <ul class="file-list">
                 <% files.forEach(file => { %>
