@@ -101,15 +101,8 @@
                   data-href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
                 >
                   <td><%= collection.id %></td>
-                  <td>
-                    <a
-                      href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
-                    >
-                      <%= collection.name %>
-                    </a>
-                  </td>
+                  <td><%= collection.name %></td>
 
-                  <!-- OPTIONAL: number of records -->
                   <td><%= collection.recordsCount || 0 %></td>
 
                   <td>

@@ -29,6 +29,7 @@ const newRecord = asyncHandler(async (req, res) => {
   const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
   const collection = await CollectionService.requireCollection({
+    workspaceId,
     collectionId,
   });
 

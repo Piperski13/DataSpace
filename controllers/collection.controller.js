@@ -4,7 +4,6 @@ const CollectionService = require("../services/collection/collection.service.js"
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
 const show = asyncHandler(async (req, res) => {
-  //works
   const name = req.query.name || "";
   const { workspaceId, collectionId } = req.params;
 
@@ -13,12 +12,10 @@ const show = asyncHandler(async (req, res) => {
     collectionId,
   });
 
-  //const records = await Records.getRecords(workspaceId,collectionId);
-
   res.render("collection-details", {
     workspace: details.workspace,
     collection: details.collection,
-    records: null, // not null
+    records: details.records,
     user: req.user,
     name,
   });

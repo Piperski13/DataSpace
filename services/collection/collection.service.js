@@ -1,4 +1,5 @@
 const Collection = require("../../model/collection.repository.js");
+const Record = require("../../model/record.repository.js");
 const WorkspaceService = require("../workspace/workspace.service.js");
 
 const NotFoundError = require("../../errors/not-found.error.js");
@@ -17,9 +18,12 @@ class CollectionService {
 
     const collection = await this.requireCollection(data);
 
+    const records = await Record.findMany(data);
+
     return {
       workspace,
       collection,
+      records,
     };
   }
   static async create(data) {
