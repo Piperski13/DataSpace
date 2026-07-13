@@ -23,7 +23,7 @@ class RecordService {
     return {
       workspace,
       collection,
-      recrod,
+      record,
     };
   }
   static async create(data) {

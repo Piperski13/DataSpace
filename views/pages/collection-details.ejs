@@ -96,13 +96,14 @@
               <tbody>
                 <% if (records && records.length > 0) { %> <%
                 records.forEach(record => { %>
-                <tr>
+                <tr
+                  class="clickable-row"
+                  data-href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>/records/<%= record.id %>"
+                >
                   <td><%= record.id %></td>
-                  <td>
-                    <a href="/viewPage/records/<%= record.id %>">
-                      <%= record.name %>
-                    </a>
-                  </td>
+                  <td><%= record.title %></td>
+
+                  <td><%= record.description %></td>
 
                   <td>
                     <% if (record.files && record.files.length > 0) { %> <%
@@ -152,5 +153,6 @@
         </main>
       </div>
     </div>
+    <script src="/scripts/table-row-navigation.js"></script>
   </body>
 </html>
