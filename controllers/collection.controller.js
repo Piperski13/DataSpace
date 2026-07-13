@@ -21,7 +21,6 @@ const show = asyncHandler(async (req, res) => {
     records: null, // not null
     user: req.user,
     name,
-    collections: null,
   });
 });
 
