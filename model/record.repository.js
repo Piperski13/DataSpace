@@ -21,32 +21,85 @@ class Record {
 
   static async findOne({ collectionId, recordId }) {
     try {
-      const query = `SELECT * FROM records WHERE collection_id=$1 AND id=$2;`;
-      const value = [collectionId, recordId];
+      const query = `
+      SELECT
+        r.id,
+        r.title,
+        r.description,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', f.id,
+              'filename', f.filename,
+              'original_name', f.original_name,
+              'path', f.path,
+              'mimetype', f.mimetype,
+              'size', f.size
+            )
+          ) FILTER (WHERE f.id IS NOT NULL),
+          '[]'
+        ) AS files
+      FROM records r
+      LEFT JOIN files f
+        ON f.record_id = r.id
+      WHERE r.collection_id = $1
+        AND r.id = $2
+      GROUP BY r.id;
+    `;
 
-      const { rows } = await pool.query(query, value);
+      const values = [collectionId, recordId];
+
+      const { rows } = await pool.query(query, values);
+
       return rows[0] || null;
     } catch (error) {
       console.error(
-        "record.repository- Error database query (findOne): ",
+        "Record Repository - Database query failed (findOne):",
         error.message,
       );
+
       throw error;
     }
   }
 
   static async findMany({ collectionId }) {
     try {
-      const query = `SELECT * FROM records WHERE collection_id=$1;`;
-      const value = [collectionId];
+      const query = `
+        SELECT
+          r.id,
+          r.title,
+          r.description,
+          COALESCE(
+            json_agg(
+              json_build_object(
+                'id', f.id,
+                'filename', f.filename,
+                'original_name', f.original_name,
+                'path', f.path,
+                'mimetype', f.mimetype,
+                'size', f.size
+              )
+            ) FILTER (WHERE f.id IS NOT NULL),
+            '[]'
+          ) AS files
+        FROM records r
+        LEFT JOIN files f
+          ON f.record_id = r.id
+        WHERE r.collection_id = $1
+        GROUP BY r.id;
+      `;
 
-      const { rows } = await pool.query(query, value);
-      return rows || null;
+      const values = [collectionId];
+
+      const { rows } = await pool.query(query, values);
+
+      return rows;
     } catch (error) {
       console.error(
-        "record.repository- Error database query (findMany): ",
+        "Record Repository - Database query failed (findWithFiles):",
         error.message,
       );
+
       throw error;
     }
   }

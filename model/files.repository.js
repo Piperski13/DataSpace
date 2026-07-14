@@ -36,21 +36,6 @@ class File {
       );
     }
   }
-  static async getAll(user_id) {
-    try {
-      if (user_id) {
-        const query = `SELECT * FROM files WHERE user_id = $1`;
-        const { rows } = await pool.query(query, [user_id]);
-        return rows;
-      }
-
-      const { rows } = await pool.query("SELECT * FROM files");
-      return rows;
-    } catch (error) {
-      console.error("filesModel - Database error (getAll):", error.message);
-      throw error;
-    }
-  }
   static async getByRecordId(recordId) {
     try {
       const query = `SELECT * FROM files WHERE record_id = $1`;
