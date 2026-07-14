@@ -58,7 +58,7 @@
               >
               <%= record && record.id ? record.description : '' %></textarea>
 
-              <label for="file">Files</label>
+              <label for="files">Files</label>
               <% if (files && files.length > 0) { %>
               <ul class="file-list">
                 <% files.forEach(file => { %>
@@ -85,13 +85,7 @@
                 Drag & Drop files here<br />
                 or click to select
               </div>
-              <input
-                type="file"
-                id="file-input"
-                name="myFile"
-                multiple
-                hidden
-              />
+              <input type="file" id="file-input" name="files" multiple hidden />
 
               <div class="submit-row">
                 <%- include("../partials/errors.ejs") %>

@@ -46,8 +46,15 @@ const newRecord = asyncHandler(async (req, res) => {
 const create = asyncHandler(async (req, res) => {
   const { workspaceId, collectionId } = req.params;
   const { title, description } = req.body;
+  const { files } = req;
 
-  await RecordService.create({ workspaceId, collectionId, title, description });
+  await RecordService.create({
+    workspaceId,
+    collectionId,
+    title,
+    description,
+    files,
+  });
 
   res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
 });

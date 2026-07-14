@@ -1,6 +1,7 @@
 const Record = require("../../model/record.repository.js");
 const WorkspaceService = require("../workspace/workspace.service.js");
 const CollectionService = require("../collection/collection.service.js");
+const FileService = require("../record/file.service.js");
 
 const NotFoundError = require("../../errors/not-found.error.js");
 
@@ -30,7 +31,12 @@ class RecordService {
     await WorkspaceService.requireWorkspace(data);
     await CollectionService.requireCollection(data);
 
-    return Record.create(data);
+    const record = await Record.create(data);
+    await FileService.create({
+      ...data,
+      recordId: record.id,
+    });
+    return record;
   }
   static async update(data) {
     await this.getDetails(data);

@@ -1,5 +1,5 @@
 const Record = require("../model/recordsModel.js");
-const File = require("../model/files-repository.js");
+const File = require("../model/files.repository.js");
 const fs = require("fs");
 const path = require("path");
 const { body, validationResult } = require("express-validator");

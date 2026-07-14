@@ -34,7 +34,7 @@ router.get("/records/new", newRecord);
 
 router.post(
   "/records/create",
-  upload.array("myFile", 3),
+  upload.array("files", 3),
   validateWorkspaceIdParam,
   validateCollectionIdParam,
   validateRecordBody,
@@ -60,7 +60,7 @@ router.get(
 
 router.post(
   "/records/:recordId/update",
-  upload.array("myFile", 3),
+  upload.array("files", 3),
   validateWorkspaceIdParam,
   validateCollectionIdParam,
   validateRecordIdParam,
