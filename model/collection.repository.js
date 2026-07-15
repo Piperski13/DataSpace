@@ -40,7 +40,14 @@ class Collection {
   static async findMany({ workspaceId }) {
     //done
     try {
-      const query = `SELECT * FROM collections WHERE workspace_id=$1;`;
+      const query = `
+       SELECT c.*,
+       COUNT(r.id) as records_count 
+       FROM collections c 
+       LEFT JOIN records r 
+       ON r.collection_id = c.id 
+       WHERE c.workspace_id = $1 
+       GROUP BY c.id;`;
       const value = [workspaceId];
 
       const { rows } = await pool.query(query, value);
