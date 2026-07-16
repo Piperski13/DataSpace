@@ -7,7 +7,7 @@ const NotFoundError = require("../../errors/not-found.error.js");
 
 class RecordService {
   static async requireRecord(data) {
-    const record = await Record.findOne(data); // ..file
+    const record = await Record.findOne(data);
 
     if (!record) {
       throw new NotFoundError("Record not found");

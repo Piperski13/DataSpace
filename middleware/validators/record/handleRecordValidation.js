@@ -15,7 +15,6 @@ const handleRecordValidation = (req, res, next) => {
         id: req.params.recordId,
         ...req.body,
       },
-      files: null,
       errors: errors.array(),
       user: req.user,
     });
