@@ -27,6 +27,13 @@
 
       <div class="app-main">
         <main class="app-content records-view-page">
+          <nav class="breadcrumbs">
+            <a href="/workspaces/"> Workspaces </a>
+
+            <span>/</span>
+
+            <span> <%= workspace.name %> </span>
+          </nav>
           <section class="workspace-details">
             <h2><%= workspace.name %></h2>
 
@@ -136,6 +143,11 @@
                 <% } %>
               </tbody>
             </table>
+          </div>
+          <div class="workspace-navigation">
+            <a href="/workspaces/" class="button button--secondary">
+              ← Back to Workspaces
+            </a>
           </div>
         </main>
       </div>

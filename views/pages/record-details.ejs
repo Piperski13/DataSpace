@@ -27,6 +27,23 @@
 
       <div class="app-main">
         <main class="app-content record-details-page">
+          <nav class="breadcrumbs">
+            <a href="/workspaces/<%= workspace.id %>">
+              <%= workspace.name %>
+            </a>
+
+            <span>/</span>
+
+            <a
+              href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
+            >
+              <%= collection.name %>
+            </a>
+
+            <span>/</span>
+
+            <span> <%= record.title %> </span>
+          </nav>
           <h2>Record: <%= record.title %></h2>
 
           <section class="details-card">
@@ -86,6 +103,14 @@
               </form>
             </div>
           </section>
+          <div class="record-navigation">
+            <a
+              href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
+              class="button button--secondary"
+            >
+              ← Back to Collection
+            </a>
+          </div>
         </main>
       </div>
     </div>
