@@ -83,18 +83,27 @@ class File {
       throw error;
     }
   }
-  // static async deleteByRecordId(recordId) {
-  //   try {
-  //     const query = `DELETE FROM files WHERE record_id = $1`;
-  //     return pool.query(query, [recordId]);
-  //   } catch (error) {
-  //     console.error(
-  //       "Files Repository - Error database error (deleteByRecordId):",
-  //       error.message,
-  //     );
-  //     throw error;
-  //   }
-  // }
+  static async getByWorkspaceId(workspaceId) {
+    try {
+      const query = `
+      SELECT f.* 
+      FROM files f 
+      JOIN records r 
+      ON r.id = f.record_id 
+      JOIN collections c 
+      ON c.id = r.collection_id 
+      WHERE c.workspace_id=$1`;
+
+      const { rows } = await pool.query(query, [workspaceId]);
+      return rows;
+    } catch (error) {
+      console.error(
+        "Files Repository - Error database error (getByWorkspaceId):",
+        error.message,
+      );
+      throw error;
+    }
+  }
 }
 
 module.exports = File;

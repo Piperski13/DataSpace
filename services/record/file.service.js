@@ -40,6 +40,10 @@ class FileService {
     const files = await File.getByCollectionId(collectionId);
     return files;
   }
+  static async getByWorkspace(workspaceId) {
+    const files = await File.getByWorkspaceId(workspaceId);
+    return files;
+  }
   static async unlink(files) {
     for (const file of files) {
       try {

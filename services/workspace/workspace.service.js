@@ -1,6 +1,8 @@
 const Workspace = require("../../model/workspace.repository");
 const Collection = require("../../model/collection.repository.js");
 
+const FileService = require("../record/file.service.js");
+
 const NotFoundError = require("../../errors/not-found.error.js");
 
 class WorkspaceService {
@@ -41,11 +43,15 @@ class WorkspaceService {
     return workspace;
   }
   static async remove(data) {
+    const files = await FileService.getByWorkspace(data.workspaceId);
+
     const workspace = await Workspace.remove(data);
 
     if (!workspace) {
       throw new NotFoundError("Workspace not found");
     }
+
+    await FileService.unlink(files);
 
     return workspace;
   }
