@@ -37,7 +37,7 @@ class Collection {
     }
   }
 
-  static async findMany({ workspaceId }) {
+  static async findMany({ workspaceId, filter }) {
     //done
     try {
       const query = `
@@ -47,8 +47,10 @@ class Collection {
        LEFT JOIN records r 
        ON r.collection_id = c.id 
        WHERE c.workspace_id = $1 
+       AND
+       c.name ILIKE $2
        GROUP BY c.id;`;
-      const value = [workspaceId];
+      const value = [workspaceId, `${filter}%`];
 
       const { rows } = await pool.query(query, value);
       return rows || null;
