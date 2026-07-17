@@ -23,9 +23,7 @@ class Record {
     try {
       const query = `
       SELECT
-        r.id,
-        r.title,
-        r.description,
+        r.*,
         COALESCE(
           json_agg(
             json_build_object(
