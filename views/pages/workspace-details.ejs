@@ -27,6 +27,13 @@
 
       <div class="app-main">
         <main class="app-content records-view-page">
+          <nav class="breadcrumbs">
+            <a href="/workspaces/"> Workspaces </a>
+
+            <span>/</span>
+
+            <span> <%= workspace.name %> </span>
+          </nav>
           <section class="workspace-details">
             <h2><%= workspace.name %></h2>
 
@@ -43,7 +50,7 @@
           <div class="div-tables-section">
             <div id="div-filter-form">
               <form
-                action="/viewPage/recordsViewPage"
+                action="/workspaces/<%= workspace.id %>"
                 method="GET"
                 id="filter-form"
               >
@@ -136,6 +143,11 @@
                 <% } %>
               </tbody>
             </table>
+          </div>
+          <div class="workspace-navigation">
+            <a href="/workspaces/" class="button button--secondary">
+              ← Back to Workspaces
+            </a>
           </div>
         </main>
       </div>

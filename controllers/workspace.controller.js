@@ -20,7 +20,10 @@ const show = asyncHandler(async (req, res) => {
   const name = req.query.name || "";
   const { workspaceId } = req.params;
 
-  const details = await WorkspaceService.getDetails({ workspaceId });
+  const details = await WorkspaceService.getDetails({
+    workspaceId,
+    filter: name,
+  });
 
   res.render("workspace-details", {
     workspace: details.workspace,
