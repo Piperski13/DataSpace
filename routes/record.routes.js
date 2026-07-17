@@ -11,6 +11,7 @@ const {
 const {
   validateRecordBody,
   validateRecordIdParam,
+  validateDeletedFiles,
 } = require("../middleware/validators/record/record.validator");
 
 const { upload } = require("../config/multer");
@@ -65,6 +66,7 @@ router.post(
   validateCollectionIdParam,
   validateRecordIdParam,
   validateRecordBody,
+  validateDeletedFiles,
   handleRecordValidation,
   update,
 );

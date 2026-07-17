@@ -36,6 +36,27 @@ class File {
       );
     }
   }
+  static async removeMany(deletedFiles) {
+    try {
+      const query = `
+      DELETE FROM files
+      WHERE id = ANY($1::int[])
+      RETURNING *;
+    `;
+
+      const values = [deletedFiles];
+
+      const { rows } = await pool.query(query, values);
+
+      return rows;
+    } catch (error) {
+      console.error(
+        "Files Repository - Error database query (removeMany):",
+        error.message,
+      );
+      throw error;
+    }
+  }
   static async getByRecordId(recordId) {
     try {
       const query = `SELECT * FROM files WHERE record_id = $1`;
@@ -43,49 +64,37 @@ class File {
       return rows;
     } catch (error) {
       console.error(
-        "filesModel - Database error (getByRecordId):",
+        "Files Repository - Error database error (getByRecordId):",
         error.message,
       );
       throw error;
     }
   }
-  static async deleteByRecordId(recordId) {
+  static async getByCollectionId(collectionId) {
     try {
-      const query = `DELETE FROM files WHERE record_id = $1`;
-      return pool.query(query, [recordId]);
+      const query = `SELECT f.* FROM files f JOIN records r ON r.id = f.record_id WHERE r.collection_id=$1`;
+      const { rows } = await pool.query(query, [collectionId]);
+      return rows;
     } catch (error) {
       console.error(
-        "filesModel - Database error (deleteByRecordId):",
+        "Files Repository - Error database error (getByCollectionId):",
         error.message,
       );
       throw error;
     }
   }
-  static async getByFileId(fileId) {
-    try {
-      const query = `SELECT * FROM files WHERE id = $1`;
-      const { rows } = await pool.query(query, [fileId]);
-      return rows[0];
-    } catch (error) {
-      console.error(
-        "filesModel - Database error (getByFileId):",
-        error.message,
-      );
-      throw error;
-    }
-  }
-  static async deleteByFileId(fileId) {
-    try {
-      const query = `DELETE FROM files WHERE id = $1`;
-      return pool.query(query, [fileId]);
-    } catch (error) {
-      console.error(
-        "filesModel - Database error (deleteByFileId):",
-        error.message,
-      );
-      throw error;
-    }
-  }
+  // static async deleteByRecordId(recordId) {
+  //   try {
+  //     const query = `DELETE FROM files WHERE record_id = $1`;
+  //     return pool.query(query, [recordId]);
+  //   } catch (error) {
+  //     console.error(
+  //       "Files Repository - Error database error (deleteByRecordId):",
+  //       error.message,
+  //     );
+  //     throw error;
+  //   }
+  // }
 }
 
 module.exports = File;

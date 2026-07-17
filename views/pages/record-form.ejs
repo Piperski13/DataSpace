@@ -54,24 +54,25 @@
               >
               <%= record ? record.description : '' %></textarea>
 
+              <input
+                type="hidden"
+                name="deletedFiles"
+                id="deleted-files"
+                value="[]"
+              />
+
               <label for="files">Files</label>
               <% if (record && record.files && record.files.length > 0) { %>
               <ul class="file-list">
                 <% record.files.forEach(file => { %>
-                <li class="file-list__item">
+                <li class="file-list__item" data-file-id="<%= file.id %>">
                   <a
                     href="<%= process.env.UPLOADS_URL %>/<%= file.filename %>"
                     target="_blank"
                   >
                     <%= file.original_name %>
                   </a>
-                  <button
-                    type="button"
-                    class="file-list__delete"
-                    data-file-id="<%= file.id %>"
-                  >
-                    X
-                  </button>
+                  <button type="button" class="file-list__delete">X</button>
                 </li>
                 <% }) %>
               </ul>

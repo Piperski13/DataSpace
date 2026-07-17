@@ -179,6 +179,14 @@ h2 {
 .file-list__delete:hover {
   background: #c0392b;
 }
+
+.file-list__item--deleted {
+  opacity: 0.5;
+}
+
+.file-list__item--deleted a {
+  text-decoration: line-through;
+}
 /*files ul style end*/
 
 /* responsive desing start  */

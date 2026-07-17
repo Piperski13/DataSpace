@@ -47,10 +47,16 @@ class RecordService {
       throw new NotFoundError("Record not found");
     }
 
+    await FileService.removeMany(data);
+
+    await FileService.create(data);
+
     return record;
   }
   static async remove(data) {
     await this.getDetails(data);
+
+    const files = await FileService.getByRecordId(data.recordId);
 
     const record = await Record.remove(data);
 
@@ -58,6 +64,7 @@ class RecordService {
       throw new NotFoundError("Record not found");
     }
 
+    await FileService.unlink(files);
     return record;
   }
 }

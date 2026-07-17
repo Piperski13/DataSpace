@@ -80,15 +80,17 @@ const edit = asyncHandler(async (req, res) => {
 
 const update = asyncHandler(async (req, res) => {
   const { workspaceId, collectionId, recordId } = req.params;
-  const { title, description } = req.body;
+  const { title, description, deletedFiles } = req.body;
   const { files } = req;
 
   await RecordService.update({
     title,
     description,
+    deletedFiles,
     workspaceId,
     collectionId,
     recordId,
+    files,
   });
 
   res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);

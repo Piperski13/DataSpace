@@ -19,7 +19,25 @@ const validateRecordIdParam = [
   param("recordId").isInt().withMessage("Record ID must be a number").toInt(),
 ];
 
+const validateDeletedFiles = [
+  body("deletedFiles")
+    .optional()
+    .customSanitizer((value) => {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return [];
+      }
+    }),
+
+  body("deletedFiles.*")
+    .isInt()
+    .withMessage("Deleted file ID must be a number")
+    .toInt(),
+];
+
 module.exports = {
   validateRecordBody,
   validateRecordIdParam,
+  validateDeletedFiles,
 };
