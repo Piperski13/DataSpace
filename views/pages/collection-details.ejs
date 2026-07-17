@@ -28,7 +28,7 @@
       <div class="app-main">
         <main class="app-content records-view-page">
           <nav class="breadcrumbs">
-            <a href="/workspaces/"> Dashboard </a>
+            <a href="/workspaces/"> Workspaces </a>
 
             <span>/</span>
 
@@ -56,19 +56,19 @@
           <div class="div-tables-section">
             <div id="div-filter-form">
               <form
-                action="/viewPage/recordsViewPage"
+                action="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
                 method="GET"
                 id="filter-form"
               >
-                <label class="filter-label" for="name"
-                  >Filter data by name</label
+                <label class="filter-label" for="title"
+                  >Filter data by title</label
                 >
                 <input
-                  id="name"
-                  name="name"
+                  id="title"
+                  name="title"
                   type="text"
-                  placeholder="Search by Name"
-                  value="<%= name || '' %>"
+                  placeholder="Search by Title"
+                  value="<%= title || '' %>"
                 />
                 <div class="filter-submit">
                   <button

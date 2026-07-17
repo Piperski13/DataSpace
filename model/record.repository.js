@@ -60,13 +60,11 @@ class Record {
     }
   }
 
-  static async findMany({ collectionId }) {
+  static async findMany({ collectionId, filter }) {
     try {
       const query = `
         SELECT
-          r.id,
-          r.title,
-          r.description,
+          r.*,
           COALESCE(
             json_agg(
               json_build_object(
@@ -84,10 +82,12 @@ class Record {
         LEFT JOIN files f
           ON f.record_id = r.id
         WHERE r.collection_id = $1
+        AND 
+        r.title ILIKE $2
         GROUP BY r.id;
       `;
 
-      const values = [collectionId];
+      const values = [collectionId, `${filter}%`];
 
       const { rows } = await pool.query(query, values);
 
