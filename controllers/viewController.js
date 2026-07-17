@@ -1,7 +1,7 @@
 const View = require("../model/viewModel.js");
 const Records = require("../model/recordsModel.js");
 const Users = require("../model/usersModel.js");
-const File = require("../model/filesModel.js");
+const File = require("../model/files.repository.js");
 const Chat = require("../model/chatModel.js");
 const {
   formatSimpleMessengerTime,

@@ -1,6 +1,7 @@
 const Record = require("../../model/record.repository.js");
 const WorkspaceService = require("../workspace/workspace.service.js");
 const CollectionService = require("../collection/collection.service.js");
+const FileService = require("../record/file.service.js");
 
 const NotFoundError = require("../../errors/not-found.error.js");
 
@@ -30,7 +31,12 @@ class RecordService {
     await WorkspaceService.requireWorkspace(data);
     await CollectionService.requireCollection(data);
 
-    return Record.create(data);
+    const record = await Record.create(data);
+    await FileService.create({
+      ...data,
+      recordId: record.id,
+    });
+    return record;
   }
   static async update(data) {
     await this.getDetails(data);
@@ -41,10 +47,16 @@ class RecordService {
       throw new NotFoundError("Record not found");
     }
 
+    await FileService.removeMany(data);
+
+    await FileService.create(data);
+
     return record;
   }
   static async remove(data) {
     await this.getDetails(data);
+
+    const files = await FileService.getByRecordId(data.recordId);
 
     const record = await Record.remove(data);
 
@@ -52,6 +64,7 @@ class RecordService {
       throw new NotFoundError("Record not found");
     }
 
+    await FileService.unlink(files);
     return record;
   }
 }

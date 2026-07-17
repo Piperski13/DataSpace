@@ -62,6 +62,11 @@ app.use(express.static(path.join(__dirname, "public")));
 // Serve uploaded files from disk
 app.use(process.env.UPLOADS_URL, express.static(process.env.UPLOADS_PATH));
 
+app.use((req, res, next) => {
+  res.locals.uploadsUrl = process.env.UPLOADS_URL;
+  next();
+});
+
 // EJS setup
 app.set("views", path.join(__dirname, "views/pages"));
 app.set("view engine", "ejs");

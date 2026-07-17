@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/addRecord.css" />
 
-    <title>
-      <%= record && record.id ? "Update Record" : "Create Record" %>
-    </title>
+    <title><%= record ? "Update Record" : "Create Record" %></title>
   </head>
   <body>
     <div class="app-shell">
@@ -29,11 +27,9 @@
       <div class="app-main">
         <main class="app-content add-record-page">
           <section class="form-header">
-            <h2>
-              <%= record && record.id ? "Update Record" : "Create Record" %>
-            </h2>
+            <h2><%= record ? "Update Record" : "Create Record" %></h2>
             <form
-              action="<%= record && record.id 
+              action="<%= record 
                 ? '/workspaces/' + workspace.id + '/collections/' + collection.id + '/records/' + record.id + '/update'
                 : '/workspaces/' + workspace.id + '/collections/' + collection.id + '/records/create' %>"
               enctype="multipart/form-data"
@@ -45,7 +41,7 @@
                 type="text"
                 name="title"
                 placeholder="Saturday discounts"
-                value="<%= record && record.id ? record.title : '' %>"
+                value="<%= record ? record.title : '' %>"
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
                 required
               />
@@ -56,26 +52,27 @@
                 placeholder="Short description about this record..."
                 class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
               >
-              <%= record && record.id ? record.description : '' %></textarea>
+              <%= record ? record.description : '' %></textarea>
 
-              <label for="file">Files</label>
-              <% if (files && files.length > 0) { %>
+              <input
+                type="hidden"
+                name="deletedFiles"
+                id="deleted-files"
+                value="[]"
+              />
+
+              <label for="files">Files</label>
+              <% if (record && record.files && record.files.length > 0) { %>
               <ul class="file-list">
-                <% files.forEach(file => { %>
-                <li class="file-list__item">
+                <% record.files.forEach(file => { %>
+                <li class="file-list__item" data-file-id="<%= file.id %>">
                   <a
                     href="<%= process.env.UPLOADS_URL %>/<%= file.filename %>"
                     target="_blank"
                   >
                     <%= file.original_name %>
                   </a>
-                  <button
-                    type="button"
-                    class="file-list__delete"
-                    data-file-id="<%= file.id %>"
-                  >
-                    X
-                  </button>
+                  <button type="button" class="file-list__delete">X</button>
                 </li>
                 <% }) %>
               </ul>
@@ -85,18 +82,12 @@
                 Drag & Drop files here<br />
                 or click to select
               </div>
-              <input
-                type="file"
-                id="file-input"
-                name="myFile"
-                multiple
-                hidden
-              />
+              <input type="file" id="file-input" name="files" multiple hidden />
 
               <div class="submit-row">
                 <%- include("../partials/errors.ejs") %>
                 <button type="submit" class="button button--primary">
-                  <%= record && record.id ? "Update Record" : "Create Record" %>
+                  <%= record ? "Update Record" : "Create Record" %>
                 </button>
               </div>
             </form>

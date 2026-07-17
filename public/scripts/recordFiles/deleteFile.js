@@ -1,23 +1,27 @@
-document.addEventListener("click", async (e) => {
-  if (!e.target.classList.contains("file-list__delete")) return;
+const deleteButtons = document.querySelectorAll(".file-list__delete");
+const deletedFilesInput = document.querySelector("#deleted-files");
 
-  const fileId = e.target.dataset.fileId;
-  if (!fileId) return;
+let deletedFiles = [];
 
-  const confirmed = confirm("Obrisati dokument?");
-  if (!confirmed) return;
+deleteButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const fileItem = button.closest(".file-list__item");
+    const fileId = fileItem.dataset.fileId;
 
-  try {
-    const res = await fetch(`/records/delete-file/${fileId}`, {
-      method: "POST",
-    });
+    const isDeleted = fileItem.classList.contains("file-list__item--deleted");
 
-    if (res.ok) {
-      e.target.closest("li").remove();
+    if (!isDeleted) {
+      fileItem.classList.add("file-list__item--deleted");
+
+      deletedFiles.push(fileId);
+      button.textContent = "Undo";
     } else {
-      alert("Greška pri brisanju fajla.");
+      fileItem.classList.remove("file-list__item--deleted");
+
+      deletedFiles = deletedFiles.filter((id) => id !== fileId);
+      button.textContent = "X";
     }
-  } catch (err) {
-    console.error("Delete error:", err);
-  }
+
+    deletedFilesInput.value = JSON.stringify(deletedFiles);
+  });
 });
