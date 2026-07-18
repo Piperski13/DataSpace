@@ -7,13 +7,12 @@ const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
 const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
-// const recordRouter = require("./routes/recordRoutes.js");
 const usersRouter = require("./routes/usersRoutes.js");
 const loginRouter = require("./routes/loginRoutes.js");
-const viewRouter = require("./routes/viewRoutes.js");
 const otpRouter = require("./routes/otpRoutes.js");
 const forgotPassword = require("./routes/forgotPassword.js");
 const chatRouter = require("./routes/chatRoutes.js");
+
 const errorHandler = require("./middleware/errors/errorHandler.js");
 
 const workspaceRouter = require("./routes/workspace.routes.js");
@@ -84,17 +83,11 @@ app.use(
   recordRouter,
 );
 
-app.use("/viewPage", isAuthenticated, viewRouter);
-// app.use("/records", isAuthenticated, recordRouter);
 app.use("/users", isAuthenticated, usersRouter);
 app.use("/otp", otpRouter);
 app.use("/forgot", forgotPassword);
 app.use("/chat", isAuthenticated, chatRouter);
 
 app.use(errorHandler);
-
-// app.use((req, res) => {
-//   res.status(404).render("404");
-// });
 
 module.exports = app;
