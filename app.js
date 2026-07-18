@@ -19,6 +19,8 @@ const workspaceRouter = require("./routes/workspace.routes.js");
 const collectionRouter = require("./routes/collection.routes.js");
 const recordRouter = require("./routes/record.routes.js");
 
+const viewRouter = require("./routes/viewRoutes.js");
+
 require("./config/passportConfig");
 require("dotenv").config("./.env");
 
@@ -82,6 +84,8 @@ app.use(
   isAuthenticated,
   recordRouter,
 );
+
+app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
 
 app.use("/users", isAuthenticated, usersRouter);
 app.use("/otp", otpRouter);
