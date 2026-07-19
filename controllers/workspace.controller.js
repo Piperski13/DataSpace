@@ -46,11 +46,12 @@ const newWorkspace = asyncHandler(async (req, res) => {
 });
 
 const create = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, visibility } = req.body;
 
   const workspace = await WorkspaceService.create({
     name,
     description,
+    visibility,
     user: req.user,
   });
 
