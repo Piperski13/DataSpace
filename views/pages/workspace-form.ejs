@@ -51,6 +51,19 @@
               >
               <%= workspace ? workspace.description : '' %></textarea>
 
+              <div class="form-group">
+                <label for="visibility">Visibility</label>
+
+                <select id="visibility" name="visibility">
+                  <option value="private" selected>Private</option>
+                  <option value="public">Public</option>
+                </select>
+
+                <small id="visibility-description" class="form-text">
+                  Private workspaces are only visible to you.
+                </small>
+              </div>
+
               <div class="submit-row">
                 <%- include("../partials/errors.ejs") %>
                 <button type="submit" class="button button--primary">
@@ -62,5 +75,6 @@
         </main>
       </div>
     </div>
+    <script src="/scripts/workspace-form.js"></script>
   </body>
 </html>
