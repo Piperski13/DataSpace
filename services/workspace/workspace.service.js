@@ -21,6 +21,8 @@ class WorkspaceService {
   static async getDetails(data) {
     const workspace = await this.requireWorkspace(data);
 
+    this.requireViewAccess({ workspace, user: data.user });
+
     const collections = await Collection.findMany(data);
 
     return {
@@ -32,6 +34,8 @@ class WorkspaceService {
     return Workspace.create(data);
   }
   static async update(data) {
+    await this.requireOwner(data);
+
     const workspace = await Workspace.update(data);
 
     if (!workspace) {
@@ -41,6 +45,8 @@ class WorkspaceService {
     return workspace;
   }
   static async remove(data) {
+    await this.requireOwner(data);
+
     const files = await FileService.getByWorkspace(data.workspaceId);
 
     const workspace = await Workspace.remove(data);
@@ -50,6 +56,21 @@ class WorkspaceService {
     }
 
     await FileService.unlink(files);
+
+    return workspace;
+  }
+  static requireViewAccess({ workspace, user }) {
+    if (workspace.visibility === "private" && workspace.owner_id !== user.id) {
+      throw new NotFoundError("Workspace not found");
+    }
+  }
+
+  static async requireOwner(data) {
+    const workspace = await this.requireWorkspace(data);
+
+    if (workspace.owner_id !== data.user.id) {
+      throw new NotFoundError("Workspace not found");
+    }
 
     return workspace;
   }

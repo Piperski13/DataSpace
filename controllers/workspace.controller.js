@@ -23,6 +23,7 @@ const show = asyncHandler(async (req, res) => {
   const details = await WorkspaceService.getDetails({
     workspaceId,
     filter: name,
+    user: req.user,
   });
 
   res.render("workspace-details", {
@@ -61,7 +62,10 @@ const create = asyncHandler(async (req, res) => {
 const edit = asyncHandler(async (req, res) => {
   const { workspaceId } = req.params;
 
-  const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
+  const workspace = await WorkspaceService.requireOwner({
+    workspaceId,
+    user: req.user,
+  });
 
   res.render("workspace-form", {
     user: req.user,
@@ -78,6 +82,7 @@ const update = asyncHandler(async (req, res) => {
     workspaceId,
     name,
     description,
+    user: req.user,
   });
 
   res.redirect("/workspaces");
@@ -86,7 +91,10 @@ const update = asyncHandler(async (req, res) => {
 const remove = asyncHandler(async (req, res) => {
   const { workspaceId } = req.params;
 
-  const workspace = await WorkspaceService.remove({ workspaceId });
+  const removedWorksapces = await WorkspaceService.remove({
+    workspaceId,
+    user: req.user,
+  });
 
   res.redirect("/workspaces");
 });
