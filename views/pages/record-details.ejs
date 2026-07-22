@@ -83,6 +83,7 @@
               <% } %>
             </td>
 
+            <% if (user.id === workspace.owner_id) { %>
             <div class="record-actions">
               <form
                 action="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>/records/<%= record.id %>/edit"
@@ -102,6 +103,7 @@
                 </button>
               </form>
             </div>
+            <% } %>
           </section>
           <div class="record-navigation">
             <a

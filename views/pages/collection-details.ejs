@@ -103,8 +103,11 @@
                   <th>Name</th>
                   <th>Description</th>
                   <th>Documents</th>
+
+                  <% if (user.id === workspace.owner_id) { %>
                   <th>Update</th>
                   <th>Delete</th>
+                  <% } %>
                 </tr>
               </thead>
               <tbody>
@@ -132,6 +135,7 @@
                     <% } %>
                   </td>
 
+                  <% if (user.id === workspace.owner_id) { %>
                   <td>
                     <form
                       action="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>/records/<%= record.id %>/edit"
@@ -155,6 +159,7 @@
                       </button>
                     </form>
                   </td>
+                  <% } %>
                 </tr>
                 <% }) %> <% } else { %>
                 <tr>
