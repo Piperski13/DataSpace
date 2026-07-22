@@ -17,19 +17,24 @@ const index = asyncHandler(async (req, res) => {
 });
 
 const show = asyncHandler(async (req, res) => {
+  const user = req.user;
   const name = req.query.name || "";
   const { workspaceId } = req.params;
 
-  const details = await WorkspaceService.getDetails({
+  const workspace = await WorkspaceService.requireViewableWorkspace({
+    workspaceId,
+    user,
+  });
+
+  const collections = await WorkspaceService.getCollections({
     workspaceId,
     filter: name,
-    user: req.user,
   });
 
   res.render("workspace-details", {
-    workspace: details.workspace,
-    collections: details.collections,
-    user: req.user,
+    workspace,
+    collections,
+    user,
     name,
   });
 });
@@ -49,7 +54,7 @@ const newWorkspace = asyncHandler(async (req, res) => {
 const create = asyncHandler(async (req, res) => {
   const { name, description, visibility } = req.body;
 
-  const workspace = await WorkspaceService.create({
+  const createdWorkspace = await WorkspaceService.create({
     name,
     description,
     visibility,
@@ -60,40 +65,52 @@ const create = asyncHandler(async (req, res) => {
 });
 
 const edit = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId } = req.params;
 
-  const workspace = await WorkspaceService.requireOwner({
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
     workspaceId,
-    user: req.user,
+    user,
   });
 
   res.render("workspace-form", {
-    user: req.user,
+    user,
     workspace,
     errors: [],
   });
 });
 
 const update = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId } = req.params;
   const { name, description } = req.body;
 
-  const workspace = await WorkspaceService.update({
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
+
+  const updatedWorkspace = await WorkspaceService.update({
     workspaceId,
     name,
     description,
-    user: req.user,
+    user,
   });
 
   res.redirect("/workspaces");
 });
 
 const remove = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId } = req.params;
 
-  const removedWorksapces = await WorkspaceService.remove({
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
     workspaceId,
-    user: req.user,
+    user,
+  });
+
+  const removedWorkspace = await WorkspaceService.remove({
+    workspaceId,
   });
 
   res.redirect("/workspaces");

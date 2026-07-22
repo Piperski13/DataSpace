@@ -5,6 +5,7 @@ const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
 const show = asyncHandler(async (req, res) => {
   const title = req.query.title || "";
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
 
   const details = await CollectionService.getDetails({
@@ -13,22 +14,30 @@ const show = asyncHandler(async (req, res) => {
     filter: title,
   });
 
+  await WorkspaceService.assertCanView({
+    workspace: details.workspace,
+    user,
+  });
+
   res.render("collection-details", {
     workspace: details.workspace,
     collection: details.collection,
     records: details.records,
-    user: req.user,
+    user,
     title,
   });
 });
 
 const newCollection = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId } = req.params;
 
   const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
+  await WorkspaceService.assertOwner({ workspace, user });
+
   res.render("collection-form", {
-    user: req.user,
+    user,
     workspace,
     collection: null,
     errors: [],
@@ -45,15 +54,17 @@ const create = asyncHandler(async (req, res) => {
 });
 
 const edit = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
 
   const details = await CollectionService.getDetails({
     workspaceId,
     collectionId,
+    user,
   });
 
   res.render("collection-form", {
-    user: req.user,
+    user,
     collection: details.collection,
     workspace: details.workspace,
     errors: [],
