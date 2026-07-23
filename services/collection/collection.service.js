@@ -15,25 +15,22 @@ class CollectionService {
     return collection;
   }
   static async getDetails(data) {
-    const workspace = await WorkspaceService.requireWorkspace(data);
-
     const collection = await this.requireCollection(data);
 
     const records = await Record.findMany(data);
 
     return {
-      workspace,
       collection,
       records,
     };
   }
   static async create(data) {
-    await WorkspaceService.requireWorkspace(data);
+    await WorkspaceService.requireOwnerWorkspace(data);
 
     return Collection.create(data);
   }
   static async update(data) {
-    await this.getDetails(data);
+    await this.requireCollection(data);
 
     const collection = await Collection.update(data);
 
@@ -44,7 +41,7 @@ class CollectionService {
     return collection;
   }
   static async remove(data) {
-    await this.getDetails(data);
+    await this.requireCollection(data);
 
     const files = await FileService.getByCollection(data.collectionId);
 

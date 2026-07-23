@@ -8,19 +8,19 @@ const show = asyncHandler(async (req, res) => {
   const user = req.user;
   const { workspaceId, collectionId } = req.params;
 
+  const workspace = await WorkspaceService.requireViewableWorkspace({
+    workspaceId,
+    user,
+  });
+
   const details = await CollectionService.getDetails({
     workspaceId,
     collectionId,
     filter: title,
   });
 
-  await WorkspaceService.assertCanView({
-    workspace: details.workspace,
-    user,
-  });
-
   res.render("collection-details", {
-    workspace: details.workspace,
+    workspace,
     collection: details.collection,
     records: details.records,
     user,
@@ -32,9 +32,10 @@ const newCollection = asyncHandler(async (req, res) => {
   const user = req.user;
   const { workspaceId } = req.params;
 
-  const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
-
-  await WorkspaceService.assertOwner({ workspace, user });
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   res.render("collection-form", {
     user,
@@ -45,10 +46,11 @@ const newCollection = asyncHandler(async (req, res) => {
 });
 
 const create = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId } = req.params;
   const { name, description } = req.body;
 
-  await CollectionService.create({ workspaceId, name, description });
+  await CollectionService.create({ workspaceId, user, name, description });
 
   res.redirect(`/workspaces/${workspaceId}`);
 });
@@ -56,6 +58,11 @@ const create = asyncHandler(async (req, res) => {
 const edit = asyncHandler(async (req, res) => {
   const user = req.user;
   const { workspaceId, collectionId } = req.params;
+
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   const details = await CollectionService.getDetails({
     workspaceId,
@@ -66,14 +73,20 @@ const edit = asyncHandler(async (req, res) => {
   res.render("collection-form", {
     user,
     collection: details.collection,
-    workspace: details.workspace,
+    workspace,
     errors: [],
   });
 });
 
 const update = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
   const { name, description } = req.body;
+
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   await CollectionService.update({
     name,
@@ -86,7 +99,13 @@ const update = asyncHandler(async (req, res) => {
 });
 
 const remove = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
+
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   const collectionRemoved = await CollectionService.remove({
     workspaceId,
