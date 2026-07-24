@@ -28,9 +28,9 @@ class RecordService {
     };
   }
   static async create(data) {
-    await WorkspaceService.requireWorkspace(data);
+   
+ await WorkspaceService.requireWorkspace(data);
     await CollectionService.requireCollection(data);
-
     const record = await Record.create(data);
     await FileService.create({
       ...data,

@@ -1,6 +1,7 @@
 const WorkspaceService = require("../services/workspace/workspace.service.js");
 const CollectionService = require("../services/collection/collection.service.js");
 const RecordService = require("../services/record/record.service.js");
+const FileService = require("../services/record/file.service.js");
 
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
@@ -24,9 +25,15 @@ const show = asyncHandler(async (req, res) => {
 });
 
 const newRecord = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
 
-  const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
+  // const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
+
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   const collection = await CollectionService.requireCollection({
     workspaceId,
@@ -34,7 +41,7 @@ const newRecord = asyncHandler(async (req, res) => {
   });
 
   res.render("record-form", {
-    user: req.user,
+    user,
     workspace,
     collection,
     record: null,
@@ -48,15 +55,21 @@ const create = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
   const { files } = req;
 
-  await RecordService.create({
-    workspaceId,
-    collectionId,
-    title,
-    description,
-    files,
-  });
+  try {
+    await RecordService.create({
+      workspaceId,
+      collectionId,
+      title,
+      description,
+      files,
+    });
 
-  res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+    res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+  } catch (error) {
+    await FileService.unlink(files);
+
+    throw error;
+  }
 });
 
 const edit = asyncHandler(async (req, res) => {
@@ -83,17 +96,23 @@ const update = asyncHandler(async (req, res) => {
   const { title, description, deletedFiles } = req.body;
   const { files } = req;
 
-  await RecordService.update({
-    title,
-    description,
-    deletedFiles,
-    workspaceId,
-    collectionId,
-    recordId,
-    files,
-  });
+  try {
+    await RecordService.update({
+      title,
+      description,
+      deletedFiles,
+      workspaceId,
+      collectionId,
+      recordId,
+      files,
+    });
 
-  res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+    res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+  } catch (error) {
+    await FileService.unlink(files);
+
+    throw error;
+  }
 });
 
 const remove = asyncHandler(async (req, res) => {
