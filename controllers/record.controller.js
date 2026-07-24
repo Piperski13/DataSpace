@@ -6,8 +6,14 @@ const FileService = require("../services/record/file.service.js");
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
 const show = asyncHandler(async (req, res) => {
+  const user = req.user;
   const name = req.query.name || "";
   const { workspaceId, collectionId, recordId } = req.params;
+
+  const workspace = WorkspaceService.requireViewableWorkspace({
+    workspaceId,
+    user,
+  });
 
   const details = await RecordService.getDetails({
     workspaceId,
@@ -16,10 +22,10 @@ const show = asyncHandler(async (req, res) => {
   });
 
   res.render("record-details", {
-    workspace: details.workspace,
+    workspace,
     collection: details.collection,
     record: details.record,
-    user: req.user,
+    user,
     name,
   });
 });
@@ -27,8 +33,6 @@ const show = asyncHandler(async (req, res) => {
 const newRecord = asyncHandler(async (req, res) => {
   const user = req.user;
   const { workspaceId, collectionId } = req.params;
-
-  // const workspace = await WorkspaceService.requireWorkspace({ workspaceId });
 
   const workspace = await WorkspaceService.requireOwnerWorkspace({
     workspaceId,
@@ -51,11 +55,16 @@ const newRecord = asyncHandler(async (req, res) => {
 });
 
 const create = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId } = req.params;
   const { title, description } = req.body;
   const { files } = req;
 
   try {
+    await WorkspaceService.requireOwnerWorkspace({
+      workspaceId,
+      user,
+    });
     await RecordService.create({
       workspaceId,
       collectionId,
@@ -73,7 +82,13 @@ const create = asyncHandler(async (req, res) => {
 });
 
 const edit = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId, recordId } = req.params;
+
+  const workspace = await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   const details = await RecordService.getDetails({
     workspaceId,
@@ -84,7 +99,7 @@ const edit = asyncHandler(async (req, res) => {
   res.render("record-form", {
     user: req.user,
     collection: details.collection,
-    workspace: details.workspace,
+    workspace,
     record: details.record,
     files: null,
     errors: [],
@@ -92,11 +107,16 @@ const edit = asyncHandler(async (req, res) => {
 });
 
 const update = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId, recordId } = req.params;
   const { title, description, deletedFiles } = req.body;
   const { files } = req;
 
   try {
+    await WorkspaceService.requireOwnerWorkspace({
+      workspaceId,
+      user,
+    });
     await RecordService.update({
       title,
       description,
@@ -116,7 +136,13 @@ const update = asyncHandler(async (req, res) => {
 });
 
 const remove = asyncHandler(async (req, res) => {
+  const user = req.user;
   const { workspaceId, collectionId, recordId } = req.params;
+
+  await WorkspaceService.requireOwnerWorkspace({
+    workspaceId,
+    user,
+  });
 
   const recordRemoved = await RecordService.remove({
     workspaceId,

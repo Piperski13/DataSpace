@@ -1,11 +1,11 @@
 const pool = require("../db/pool");
 
 class Workspace {
-  static async create({ name, description, user }) {
+  static async create({ name, description, visibility, user }) {
     try {
-      const query = `INSERT INTO workspaces (name, description, owner_id) VALUES ($1,$2,$3) RETURNING *`;
+      const query = `INSERT INTO workspaces (name, description,visibility, owner_id) VALUES ($1,$2,$3,$4) RETURNING *`;
 
-      const value = [name, description, user.id];
+      const value = [name, description, visibility, user.id];
 
       const { rows } = await pool.query(query, value);
 
@@ -17,7 +17,7 @@ class Workspace {
       );
     }
   }
-  static async showList({ filter, user_id }) {
+  static async showList({ filter, user }) {
     try {
       let query = `
       SELECT
@@ -26,20 +26,13 @@ class Workspace {
       FROM workspaces w
       LEFT JOIN collections c
         ON c.workspace_id = w.id
-      WHERE w.name ILIKE $1
-    `;
-
-      const values = [`${filter}%`];
-
-      if (user_id) {
-        query += ` AND w.owner_id = $2`;
-        values.push(user_id);
-      }
-
-      query += `
+      WHERE (w.visibility = $1 OR w.owner_id = $2)
+      AND w.name ILIKE $3
       GROUP BY w.id
       ORDER BY w.id;
     `;
+
+      const values = ["public", user.id, `${filter}%`];
 
       const { rows } = await pool.query(query, values);
 

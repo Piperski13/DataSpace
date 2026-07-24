@@ -83,6 +83,7 @@
                   <td><%= workspace.name %></td>
                   <td><%= workspace.collections_count || 0 %></td>
 
+                  <% if (user.id === workspace.owner_id) { %>
                   <td>
                     <form
                       action="/workspaces/<%= workspace.id %>/edit"
@@ -105,6 +106,7 @@
                       </button>
                     </form>
                   </td>
+                  <% } %>
                 </tr>
                 <% }) %> <% } else { %>
                 <tr>

@@ -15,21 +15,16 @@ class RecordService {
     return record;
   }
   static async getDetails(data) {
-    const workspace = await WorkspaceService.requireWorkspace(data);
-
     const collection = await CollectionService.requireCollection(data);
 
     const record = await this.requireRecord(data);
 
     return {
-      workspace,
       collection,
       record,
     };
   }
   static async create(data) {
-   
- await WorkspaceService.requireWorkspace(data);
     await CollectionService.requireCollection(data);
     const record = await Record.create(data);
     await FileService.create({

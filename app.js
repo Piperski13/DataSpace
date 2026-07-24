@@ -87,10 +87,10 @@ app.use(
 
 app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
 
-app.use("/users", isAuthenticated, usersRouter);
-app.use("/otp", otpRouter);
-app.use("/forgot", forgotPassword);
-app.use("/chat", isAuthenticated, chatRouter);
+app.use("/users", isAuthenticated, usersRouter); // user update, user delete
+app.use("/otp", otpRouter); // acc creation, sends email otp code
+app.use("/forgot", forgotPassword); // forgot password link is sent for reset
+app.use("/chat", isAuthenticated, chatRouter); // chat removal for adming
 
 app.use(errorHandler);
 

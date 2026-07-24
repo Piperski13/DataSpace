@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS workspaces (
     owner_id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     description TEXT,
+    visibility VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

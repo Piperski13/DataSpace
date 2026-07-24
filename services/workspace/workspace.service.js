@@ -7,9 +7,7 @@ const NotFoundError = require("../../errors/not-found.error.js");
 
 class WorkspaceService {
   static async list({ filter, user }) {
-    const userId = user.is_admin ? null : user.id;
-
-    return Workspace.showList({ filter, userId });
+    return Workspace.showList({ filter, user });
   }
   static async requireWorkspace(data) {
     const workspace = await Workspace.get(data);
@@ -20,38 +18,66 @@ class WorkspaceService {
 
     return workspace;
   }
-  static async getDetails(data) {
-    const workspace = await this.requireWorkspace(data);
-
+  static async getCollections(data) {
     const collections = await Collection.findMany(data);
 
-    return {
-      workspace,
-      collections,
-    };
+    return collections;
   }
   static async create(data) {
     return Workspace.create(data);
   }
   static async update(data) {
-    const workspace = await Workspace.update(data);
+    const updatedWorkspace = await Workspace.update(data);
 
-    if (!workspace) {
+    if (!updatedWorkspace) {
       throw new NotFoundError("Workspace not found");
     }
 
-    return workspace;
+    return updatedWorkspace;
   }
   static async remove(data) {
     const files = await FileService.getByWorkspace(data.workspaceId);
 
-    const workspace = await Workspace.remove(data);
+    const removedWorkspace = await Workspace.remove(data);
 
-    if (!workspace) {
+    if (!removedWorkspace) {
       throw new NotFoundError("Workspace not found");
     }
 
     await FileService.unlink(files);
+
+    return removedWorkspace;
+  }
+  static assertCanView({ workspace, user }) {
+    if (workspace.visibility === "private" && workspace.owner_id !== user.id) {
+      throw new NotFoundError("Workspace not found");
+    }
+  }
+
+  static assertOwner({ workspace, user }) {
+    if (workspace.owner_id !== user.id) {
+      throw new NotFoundError("Workspace not found");
+    }
+  }
+
+  static async requireOwnerWorkspace(data) {
+    const workspace = await this.requireWorkspace(data);
+
+    this.assertOwner({
+      workspace,
+      user: data.user,
+    });
+
+    return workspace;
+  }
+
+  static async requireViewableWorkspace(data) {
+    const workspace = await this.requireWorkspace(data);
+
+    this.assertCanView({
+      workspace,
+      user: data.user,
+    });
 
     return workspace;
   }

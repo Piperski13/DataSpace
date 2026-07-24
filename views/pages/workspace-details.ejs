@@ -76,6 +76,7 @@
               </form>
             </div>
 
+            <% if (user.id === workspace.owner_id) { %>
             <div class="workspace-actions">
               <form
                 action="/workspaces/<%= workspace.id %>/collections/new"
@@ -86,6 +87,7 @@
                 </button>
               </form>
             </div>
+            <% } %>
 
             <table id="big-table">
               <caption>
@@ -96,8 +98,11 @@
                   <th>ID</th>
                   <th>Name</th>
                   <th>Records</th>
+
+                  <% if (user.id === workspace.owner_id) { %>
                   <th>Update</th>
                   <th>Delete</th>
+                  <% } %>
                 </tr>
               </thead>
               <tbody>
@@ -112,6 +117,7 @@
 
                   <td><%= collection.records_count || 0 %></td>
 
+                  <% if (user.id === workspace.owner_id) { %>
                   <td>
                     <form
                       action="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>/edit"
@@ -135,6 +141,7 @@
                       </button>
                     </form>
                   </td>
+                  <% } %>
                 </tr>
                 <% }) %> <% } else { %>
                 <tr>

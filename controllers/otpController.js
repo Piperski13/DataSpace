@@ -117,7 +117,7 @@ const verifyOtp = async (req, res) => {
 };
 
 const showSignIn = async (req, res, next, errors = []) => {
-  res.render("signIn", { errors, user: req.user });
+  res.render("signIn", { errors, user: null });
 };
 
 module.exports = { generateOtp, verifyOtp, validateUser, showSignIn };

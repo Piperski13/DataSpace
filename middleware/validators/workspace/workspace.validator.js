@@ -13,6 +13,11 @@ const validateWorkspaceBody = [
     .trim()
     .isLength({ max: 200 })
     .withMessage("Description must be max 200 characters"),
+
+  body("visibility")
+    .trim()
+    .isIn(["private", "public"])
+    .withMessage("Visibility must be private or public."),
 ];
 
 const validateWorkspaceIdParam = [
@@ -21,7 +26,6 @@ const validateWorkspaceIdParam = [
     .withMessage("Workspace ID must be a number")
     .toInt(),
 ];
-
 
 module.exports = {
   validateWorkspaceBody,
