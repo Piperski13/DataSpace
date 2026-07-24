@@ -1,6 +1,7 @@
 const WorkspaceService = require("../services/workspace/workspace.service.js");
 const CollectionService = require("../services/collection/collection.service.js");
 const RecordService = require("../services/record/record.service.js");
+const FileService = require("../services/record/file.service.js");
 
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
@@ -59,20 +60,25 @@ const create = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
   const { files } = req;
 
-  await WorkspaceService.requireOwnerWorkspace({
-    workspaceId,
-    user,
-  });
+  try {
+    await WorkspaceService.requireOwnerWorkspace({
+      workspaceId,
+      user,
+    });
+    await RecordService.create({
+      workspaceId,
+      collectionId,
+      title,
+      description,
+      files,
+    });
 
-  await RecordService.create({
-    workspaceId,
-    collectionId,
-    title,
-    description,
-    files,
-  });
+    res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+  } catch (error) {
+    await FileService.unlink(files);
 
-  res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+    throw error;
+  }
 });
 
 const edit = asyncHandler(async (req, res) => {
@@ -106,22 +112,27 @@ const update = asyncHandler(async (req, res) => {
   const { title, description, deletedFiles } = req.body;
   const { files } = req;
 
-  await WorkspaceService.requireOwnerWorkspace({
-    workspaceId,
-    user,
-  });
+  try {
+    await WorkspaceService.requireOwnerWorkspace({
+      workspaceId,
+      user,
+    });
+    await RecordService.update({
+      title,
+      description,
+      deletedFiles,
+      workspaceId,
+      collectionId,
+      recordId,
+      files,
+    });
 
-  await RecordService.update({
-    title,
-    description,
-    deletedFiles,
-    workspaceId,
-    collectionId,
-    recordId,
-    files,
-  });
+    res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+  } catch (error) {
+    await FileService.unlink(files);
 
-  res.redirect(`/workspaces/${workspaceId}/collections/${collectionId}`);
+    throw error;
+  }
 });
 
 const remove = asyncHandler(async (req, res) => {

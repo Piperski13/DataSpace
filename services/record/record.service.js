@@ -26,7 +26,6 @@ class RecordService {
   }
   static async create(data) {
     await CollectionService.requireCollection(data);
-
     const record = await Record.create(data);
     await FileService.create({
       ...data,
