@@ -32,7 +32,7 @@
         </div>
 
         <% if (user) { %>
-        <form action="/logout" class="login-form">
+        <form action="/auth/logout" class="login-form">
           <span class="material-symbols-outlined icon"> account_circle </span>
           <a href="/workspaces/dashboard" class="welcome-link"
             >Go back to the dashboard page</a
@@ -40,7 +40,7 @@
           <button type="submit" class="submit-btn">LOGOUT</button>
         </form>
         <% } else { %>
-        <form class="login-form" action="/login" method="POST">
+        <form class="login-form" action="/auth/login" method="POST">
           <span class="material-symbols-outlined icon"> account_circle </span>
           <p class="login-error"><%= error ? error : "" %></p>
           <input
