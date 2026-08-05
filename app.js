@@ -8,9 +8,7 @@ const { createClient } = require("redis");
 
 const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const usersRouter = require("./routes/usersRoutes.js");
-const authRouter = require("./routes/authRoutes.js");
-const otpRouter = require("./routes/otpRoutes.js");
-const forgotPassword = require("./routes/forgotPassword.js");
+const authRouter = require("./routes/auth.routes.js");
 const chatRouter = require("./routes/chatRoutes.js");
 
 const errorHandler = require("./middleware/errors/errorHandler.js");
@@ -88,8 +86,6 @@ app.use(
 //Old routes bellow - refactor needed
 app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
 app.use("/users", isAuthenticated, usersRouter); // user update, user delete
-app.use("/otp", otpRouter); // acc creation, sends email otp code
-app.use("/forgot", forgotPassword); // forgot password link is sent for reset
 app.use("/chat", isAuthenticated, chatRouter); // chat removal for adming
 //
 

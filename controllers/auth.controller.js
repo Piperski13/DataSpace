@@ -1,9 +1,14 @@
-const Otp = require("../model/otpModel");
 const Login = require("../model/loginModel.js");
+const Users = require("../model/usersModel.js");
+const ForgotPassword = require("../model/forgotPasswordModel.js");
+const Otp = require("../model/otpModel.js");
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const otpGenerator = require("otp-generator");
-const sendOTPEmail = require("../utils/sendEmail");
-const { registerPendingUser } = require("../services/userService");
+const sendOTPEmail = require("../utils/sendEmail.js");
+const sendResetPasswordEmail = require("../utils/resetPasswordEmail.js");
+
+const { registerPendingUser } = require("../services/userService.js");
 const { body, validationResult } = require("express-validator");
 
 const passport = require("passport");
@@ -51,6 +56,7 @@ const logout = async (req, res, next) => {
   }
 };
 
+//otp
 const generateOtp = async (req, res) => {
   const { email, first_name, last_name, password } = req.body;
 
@@ -134,6 +140,96 @@ const showRegister = async (req, res, next, errors = []) => {
   res.render("signIn", { errors, user: null });
 };
 
+//forgotpass
+
+const handleForgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const selector = crypto.randomBytes(8).toString("hex");
+    const token = crypto.randomBytes(32).toString("hex");
+    const hashedToken = await bcrypt.hash(token, 10);
+
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    await ForgotPassword.addPasswordReset(
+      email,
+      selector,
+      hashedToken,
+      expiresAt,
+    );
+
+    const resetLink = `${process.env.RESET_LINK_HOST}/auth/reset-password/${selector}/${token}`;
+
+    await sendResetPasswordEmail(email, resetLink);
+
+    res.render("forgot-password-success");
+  } catch (error) {
+    console.error("Error handling forgot password:", error);
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const showResetForm = async (req, res, next, errors = []) => {
+  const selector = req.params.selector;
+  const token = req.params.token;
+
+  if (!selector || !token) {
+    return res.render("reset-password", {
+      errors: [{ msg: "Invalid reset link." }],
+      selector: null,
+      token: null,
+    });
+  }
+
+  return res.render("reset-password", { selector, token, errors });
+};
+
+const showForgotPage = async (req, res) => {
+  return res.render("forgot-password");
+};
+
+const handleResetPassword = async (req, res) => {
+  const { selector, token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const resetEntry = await ForgotPassword.findBySelector(selector);
+    if (!resetEntry || resetEntry.expires_at < new Date()) {
+      return showResetForm(
+        req,
+        res,
+        [],
+        [{ msg: "Reset link invalid or expired." }],
+      );
+    }
+
+    const tokenMatches = await bcrypt.compare(token, resetEntry.token_hash);
+
+    if (!tokenMatches) {
+      return showResetForm(req, res, [], [{ msg: "Invalid token." }]);
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await Users.updatePassword(hashedPassword, resetEntry.email);
+
+    await ForgotPassword.removeBySelector(selector);
+
+    req.session.successMessage = "✅ Password changed successfully!";
+    res.redirect("/auth/login");
+  } catch (error) {
+    console.error("Error resetting password:", err);
+    return showResetForm(
+      req,
+      res,
+      [],
+      [{ msg: "An unexpected error occurred. Please try again." }],
+    );
+  }
+};
+
 module.exports = {
   showLogin,
   login,
@@ -141,4 +237,8 @@ module.exports = {
   generateOtp,
   verifyOtp,
   showRegister,
+  handleForgotPassword,
+  showResetForm,
+  showForgotPage,
+  handleResetPassword,
 };

@@ -7,13 +7,23 @@ const {
 const handleRegisterValidation = require("../middleware/validators/auth/otp/handleRegisterValidation");
 
 const {
+  validatePassword,
+} = require("../middleware/validators/auth/forgotPassword/password.validator");
+
+const handlePasswordValidation = require("../middleware/validators/auth/forgotPassword/handlePasswordValidation");
+
+const {
   showLogin,
   login,
   logout,
   generateOtp,
   verifyOtp,
   showRegister,
-} = require("../controllers/loginController");
+  showForgotPage,
+  handleForgotPassword,
+  showResetForm,
+  handleResetPassword,
+} = require("../controllers/auth.controller");
 
 const router = express.Router();
 
@@ -30,10 +40,14 @@ router.post(
 );
 router.post("/register/verify", verifyOtp);
 
-// GET  /forgot-password
-// POST /forgot-password
-
-// GET  /reset-password/:resetLink
-// POST /reset-password/:selector/:token
+router.get("/forgot-password", showForgotPage);
+router.post("/forgot-password", handleForgotPassword);
+router.get("/reset-password/:selector/:token", showResetForm);
+router.post(
+  "/reset-password/:selector/:token",
+  validatePassword,
+  handlePasswordValidation,
+  handleResetPassword,
+);
 
 module.exports = router;
