@@ -1,4 +1,4 @@
-const Users = require("../model/usersModel.js");
+const Users = require("../model/user.repository.js");
 const { body, validationResult } = require("express-validator");
 const { showAddRecord } = require("./viewController.js");
 

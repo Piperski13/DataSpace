@@ -1,5 +1,5 @@
 const View = require("../model/viewModel.js");
-const Users = require("../model/usersModel.js");
+const Users = require("../model/user.repository.js");
 const File = require("../model/files.repository.js");
 const Chat = require("../model/chatModel.js");
 const {

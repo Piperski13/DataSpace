@@ -1,7 +1,28 @@
 const pool = require("../db/pool");
 
-class Users {
-  static async getById(id) {
+class User {
+  static async create(email, password, first_name, last_name) {
+    try {
+      await pool.query(
+        "INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4)",
+        [email, password, first_name, last_name],
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+  static async existsByEmail(email) {
+    try {
+      const { rows } = await pool.query(
+        `SELECT 1 FROM users WHERE email = $1`,
+        [email],
+      );
+      return rows.length > 0;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  static async findById(id) {
     try {
       const query = `SELECT * FROM users WHERE id=$1;`;
       const value = [id];
@@ -15,7 +36,7 @@ class Users {
       );
     }
   }
-  static async getByEmail(email) {
+  static async findByEmail(email) {
     try {
       const query = `SELECT * FROM users WHERE email=$1;`;
       const value = [email];
@@ -72,4 +93,4 @@ class Users {
   }
 }
 
-module.exports = Users;
+module.exports = User;

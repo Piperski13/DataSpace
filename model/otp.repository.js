@@ -2,34 +2,30 @@ const pool = require("../db/pool");
 const bcrypt = require("bcryptjs");
 
 class Otp {
-  static async storeOtp(email, otp) {
+  static async create({ email, otp }) {
     try {
-      const hashedOtp = await bcrypt.hash(otp, 10);
       const { rows } = await pool.query(
-        "INSERT INTO otps (email, otp) VALUES ($1, $2)",
-        [email, hashedOtp]
+        "INSERT INTO otps (email, otp) VALUES ($1, $2) RETURNING *",
+        [email, otp],
       );
 
-      return rows[0] || null;
+      return rows[0];
     } catch (error) {
-      console.error(
-        "otpModel - Error database query storeOtp: ",
-        error.message
-      );
+      console.error("otpModel - Error database query create: ", error.message);
     }
   }
   static async removeOtp(email) {
     try {
       const { rowCount } = await pool.query(
         "DELETE FROM otps WHERE email = $1",
-        [email]
+        [email],
       );
 
       return rowCount > 0;
     } catch (error) {
       console.error(
         "otpModel - Error database query removeOtp:",
-        error.message
+        error.message,
       );
     }
   }
@@ -37,7 +33,7 @@ class Otp {
     try {
       const { rows } = await pool.query(
         "SELECT * FROM otps WHERE email = $1 ORDER BY created_at DESC LIMIT 1",
-        [email]
+        [email],
       );
 
       if (!rows.length) return { valid: false, reason: "invalid" };
@@ -55,7 +51,7 @@ class Otp {
     } catch (error) {
       console.error(
         "otpModel - Error database query verifyOtp:",
-        error.message
+        error.message,
       );
       throw error;
     }
