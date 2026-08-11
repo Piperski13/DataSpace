@@ -24,7 +24,7 @@ const showUsers = async (req, res) => {
   res.render("users", { user: req.user, data, email });
 };
 
-const showUpdateUser = async (req, res, next, errors = []) => {
+const showUpdateUser = async (req, res, next, fieldErrors = []) => {
   try {
     const { id } = req.params;
     let profile = null;
@@ -36,7 +36,7 @@ const showUpdateUser = async (req, res, next, errors = []) => {
     res.render("updateUser", {
       user: req.user,
       profile,
-      errors,
+      fieldErrors,
     });
   } catch (error) {
     console.error("Error in showUpdateUser:", error.message);

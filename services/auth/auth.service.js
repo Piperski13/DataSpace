@@ -4,8 +4,10 @@ const otpGenerator = require("otp-generator");
 const sendOTPEmail = require("../../utils/sendEmail.js");
 const bcrypt = require("bcryptjs");
 
-const NotFoundError = require("../../errors/not-found.error.js");
 const ConflictError = require("../../errors/conflict.error.js");
+const SessionExpiredError = require("../../errors/session.error.js");
+const InvalidOtpError = require("../../errors/otp/invalid-otp.error.js");
+const OtpExpiredError = require("../../errors/otp/otp-expired.error.js");
 
 class AuthService {
   static async generateRegistrationOtp({
@@ -45,6 +47,35 @@ class AuthService {
     await sendOTPEmail(email, otp);
 
     return pendingUser;
+  }
+  static async completeRegistration({ pendingUser, otp }) {
+    if (!pendingUser) {
+      throw new SessionExpiredError();
+    }
+
+    const { email } = pendingUser;
+
+    const otpRecord = await Otp.findLatestByEmail(email);
+
+    if (!otpRecord) {
+      throw new InvalidOtpError();
+    }
+
+    const isMatch = await bcrypt.compare(otp, otpRecord.otp);
+
+    if (!isMatch) {
+      throw new InvalidOtpError();
+    }
+
+    const ageInMinutes =
+      (Date.now() - otpRecord.created_at.getTime()) / 1000 / 60;
+
+    if (ageInMinutes > 5) {
+      throw new OtpExpiredError();
+    }
+
+    await User.create(pendingUser);
+    await Otp.remove(email);
   }
 }
 module.exports = AuthService;

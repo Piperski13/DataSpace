@@ -41,7 +41,7 @@ const newCollection = asyncHandler(async (req, res) => {
     user,
     workspace,
     collection: null,
-    errors: [],
+    fieldErrors: [],
   });
 });
 
@@ -74,7 +74,7 @@ const edit = asyncHandler(async (req, res) => {
     user,
     collection: details.collection,
     workspace,
-    errors: [],
+    fieldErrors: [],
   });
 });
 

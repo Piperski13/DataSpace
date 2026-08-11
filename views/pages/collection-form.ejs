@@ -42,7 +42,7 @@
                 name="name"
                 placeholder="Business Logic"
                 value="<%= collection ? collection.name : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
 
@@ -50,12 +50,12 @@
               <textarea
                 name="description"
                 placeholder="Short description about this workspace..."
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
               >
               <%= collection ? collection.description : '' %></textarea>
 
               <div class="submit-row">
-                <%- include("../partials/errors.ejs") %>
+                <%- include("../partials/field-errors.ejs") %>
                 <button type="submit" class="button button--primary">
                   <%= collection ? "Update Collection" : "Create Collection" %>
                 </button>

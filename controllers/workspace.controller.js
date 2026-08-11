@@ -47,7 +47,7 @@ const newWorkspace = asyncHandler(async (req, res) => {
   res.render("workspace-form", {
     user: req.user,
     workspace: null,
-    errors: [],
+    fieldErrors: [],
   });
 });
 
@@ -76,7 +76,7 @@ const edit = asyncHandler(async (req, res) => {
   res.render("workspace-form", {
     user,
     workspace,
-    errors: [],
+    fieldErrors: [],
   });
 });
 

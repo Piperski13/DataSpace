@@ -39,7 +39,7 @@
                 name="email"
                 placeholder="user@mail.domen"
                 value="<%= profile ? profile.email : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
               <label for="first_name">Firstname</label>
@@ -48,7 +48,7 @@
                 name="first_name"
                 placeholder="John"
                 value="<%= profile ? profile.first_name : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
               <label for="last_name">Lastname</label>
@@ -57,16 +57,16 @@
                 name="last_name"
                 placeholder="Doe"
                 value="<%= profile ? profile.last_name : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
               <label for="is_admin">Admin Status</label>
               <input type="checkbox" id="is_admin" name="is_admin" value="true" <%=
               profile && profile.is_admin ? 'checked' : '' %> class="<%=
-              locals.errors.length > 0 ? 'input-error' : '' %>" >
+              locals.fieldErrors.length > 0 ? 'input-error' : '' %>" >
 
               <div class="submit-row">
-                <%- include("../partials/errors.ejs") %>
+                <%- include("../partials/field-errors.ejs") %>
                 <button type="submit" class="form-submit-button">
                   Update User
                 </button>

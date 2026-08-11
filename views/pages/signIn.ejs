@@ -42,26 +42,27 @@
         <% } else { %>
         <form class="login-form" action="/auth/register/otp" method="POST">
           <span class="material-symbols-outlined icon"> account_circle </span>
-          <%- include("../partials/errors.ejs") %>
+          <%- include("../partials/field-errors.ejs") %> <%-
+          include("../partials/app-error.ejs") %>
           <input
             id="first_name"
             name="first_name"
             type="text"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+            class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
             placeholder="Firstname"
           />
           <input
             id="last_name"
             name="last_name"
             type="text"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+            class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
             placeholder="Lastname"
           />
           <input
             id="email"
             name="email"
             type="email"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+            class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
             placeholder="Email"
           />
 
@@ -69,7 +70,7 @@
             id="password"
             name="password"
             type="password"
-            class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+            class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
             placeholder="Password"
           />
           <a href="/auth/login" class="form-link"

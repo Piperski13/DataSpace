@@ -7,7 +7,7 @@ const handleRegisterValidation = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     return res.status(400).render("reset-password", {
-      errors: errors.array(),
+      fieldErrors: errors.array(),
       user: null,
       selector,
       token,

@@ -16,7 +16,7 @@ const handleCollectionValidation = (req, res, next) => {
         id: req.params.workspaceId,
       },
       collection,
-      errors: errors.array(),
+      fieldErrors: errors.array(),
       user: req.user,
     });
   }

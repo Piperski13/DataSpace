@@ -12,6 +12,8 @@ const sendResetPasswordEmail = require("../utils/resetPasswordEmail.js");
 const { registerPendingUser } = require("../services/userService.js");
 const { body, validationResult } = require("express-validator");
 
+const AppError = require("../errors/app.error.js");
+
 const passport = require("passport");
 require("dotenv").config("../.env");
 
@@ -57,71 +59,64 @@ const logout = async (req, res, next) => {
   }
 };
 
-//otp
 const generateOtp = asyncHandler(async (req, res) => {
-  const { email, first_name, last_name, password } = req.body;
-
-  const pendingUser = await AuthService.generateRegistrationOtp({
-    email,
-    first_name,
-    last_name,
-    password,
-  });
-
-  req.session.pendingUser = pendingUser;
-
-  res.render("otp", {
-    user: req.user || "",
-    message: "OTP sent to your email!",
-    errorMessage: "",
-  });
-});
-
-const verifyOtp = async (req, res) => {
-  const { otp } = req.body;
-  const otpString = otp.join("");
-  const pendingUser = req.session.pendingUser;
-
-  if (!pendingUser) {
-    // return showSignIn(req, res, null, [
-    //   { msg: "Session expired. Please register again." },
-    // ]);
-  }
-
   try {
-    const { email } = pendingUser;
-    const result = await Otp.verifyOtp(email, otpString);
+    const { email, first_name, last_name, password } = req.body;
 
-    if (!result.valid) {
-      const message =
-        result.reason === "expired" ? "OTP expired" : "Invalid OTP";
-      return res.render("otp", {
-        user: req.user,
-        errorMessage: message,
-        message: "",
-      });
-    }
+    const pendingUser = await AuthService.generateRegistrationOtp({
+      email,
+      first_name,
+      last_name,
+      password,
+    });
 
-    await registerPendingUser(pendingUser);
-    await Otp.removeOtp(email);
-
-    delete req.session.pendingUser;
-
-    req.session.successMessage = "✅ Account created successfully!";
-    res.redirect("/auth/login");
-  } catch (err) {
-    console.error(err);
+    req.session.pendingUser = pendingUser;
 
     res.render("otp", {
       user: req.user,
-      errorMessage: "Error verifying OTP",
-      message: "",
+      appError: "",
     });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.render("signIn", {
+        user: req.user,
+        appError: error.message,
+        fieldErrors: [],
+      });
+    }
+    next(err);
   }
-};
+});
 
-const showRegister = async (req, res, next, errors = []) => {
-  res.render("signIn", { errors, user: null });
+const verifyOtp = asyncHandler(async (req, res) => {
+  try {
+    const otp = req.body.otp.join("");
+
+    const pendingUser = req.session.pendingUser;
+
+    await AuthService.completeRegistration({
+      pendingUser,
+      otp,
+    });
+
+    delete req.session.pendingUser;
+
+    req.session.successMessage = "Account created successfully!";
+
+    res.redirect("/auth/login");
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.render("otp", {
+        user: req.user,
+        appError: error.message,
+      });
+    }
+    next(err);
+  }
+});
+
+const showRegister = async (req, res) => {
+  res.render("signIn", { fieldErrors: [], user: null, appError: "" });
 };
 
 //forgotpass
@@ -155,19 +150,19 @@ const handleForgotPassword = async (req, res) => {
   }
 };
 
-const showResetForm = async (req, res, next, errors = []) => {
+const showResetForm = async (req, res, next, fieldErrors = []) => {
   const selector = req.params.selector;
   const token = req.params.token;
 
   if (!selector || !token) {
     return res.render("reset-password", {
-      errors: [{ msg: "Invalid reset link." }],
+      fieldErrors: [{ msg: "Invalid reset link." }],
       selector: null,
       token: null,
     });
   }
 
-  return res.render("reset-password", { selector, token, errors });
+  return res.render("reset-password", { selector, token, fieldErrors });
 };
 
 const showForgotPage = async (req, res) => {
