@@ -1,17 +1,6 @@
 const AuthService = require("../services/auth/auth.service.js");
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
 
-const User = require("../model/user.repository.js");
-const ForgotPassword = require("../model/forgotPassword.repository.js");
-const Otp = require("../model/otp.repository.js");
-const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
-const sendOTPEmail = require("../utils/sendEmail.js");
-const sendResetPasswordEmail = require("../utils/resetPasswordEmail.js");
-
-const { registerPendingUser } = require("../services/userService.js");
-const { body, validationResult } = require("express-validator");
-
 const AppError = require("../errors/app.error.js");
 
 const passport = require("passport");
