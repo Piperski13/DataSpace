@@ -20,7 +20,7 @@ const {
   verifyOtp,
   showRegister,
   showForgotPage,
-  handleForgotPassword,
+  requestPasswordReset,
   showResetForm,
   handleResetPassword,
 } = require("../controllers/auth.controller");
@@ -41,7 +41,7 @@ router.post(
 router.post("/register/verify", verifyOtp);
 
 router.get("/forgot-password", showForgotPage);
-router.post("/forgot-password", handleForgotPassword);
+router.post("/forgot-password", requestPasswordReset);
 router.get("/reset-password/:selector/:token", showResetForm);
 router.post(
   "/reset-password/:selector/:token",

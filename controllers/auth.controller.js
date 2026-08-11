@@ -119,95 +119,57 @@ const showRegister = async (req, res) => {
   res.render("signIn", { fieldErrors: [], user: null, appError: "" });
 };
 
-//forgotpass
-
-const handleForgotPassword = async (req, res) => {
+const requestPasswordReset = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    const selector = crypto.randomBytes(8).toString("hex");
-    const token = crypto.randomBytes(32).toString("hex");
-    const hashedToken = await bcrypt.hash(token, 10);
+    await AuthService.requestPasswordReset({ email });
 
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+    return res.render("forgot-password-success");
+  } catch (err) {
+    if (err instanceof AppError) {
+      return res.render("forgot-password", {
+        user: req.user,
+        appError: err.message,
+      });
+    }
 
-    await ForgotPassword.addPasswordReset(
-      email,
-      selector,
-      hashedToken,
-      expiresAt,
-    );
-
-    const resetLink = `${process.env.RESET_LINK_HOST}/auth/reset-password/${selector}/${token}`;
-
-    await sendResetPasswordEmail(email, resetLink);
-
-    res.render("forgot-password-success");
-  } catch (error) {
-    console.error("Error handling forgot password:", error);
-
-    res.status(500).json({ error: error.message });
+    next(err);
   }
-};
+});
 
-const showResetForm = async (req, res, next, fieldErrors = []) => {
+const showResetForm = asyncHandler(async (req, res) => {
   const selector = req.params.selector;
   const token = req.params.token;
 
-  if (!selector || !token) {
-    return res.render("reset-password", {
-      fieldErrors: [{ msg: "Invalid reset link." }],
-      selector: null,
-      token: null,
-    });
-  }
+  await AuthService.validatePasswordResetLink({ selector, token });
 
-  return res.render("reset-password", { selector, token, fieldErrors });
-};
+  return res.render("reset-password", {
+    selector,
+    token,
+    fieldErrors: [],
+    appError: "",
+  });
+});
 
 const showForgotPage = async (req, res) => {
-  return res.render("forgot-password");
+  return res.render("forgot-password", { appError: "" });
 };
 
-const handleResetPassword = async (req, res) => {
+const handleResetPassword = asyncHandler(async (req, res) => {
   const { selector, token } = req.params;
   const { password } = req.body;
 
-  try {
-    const resetEntry = await ForgotPassword.findBySelector(selector);
-    if (!resetEntry || resetEntry.expires_at < new Date()) {
-      return showResetForm(
-        req,
-        res,
-        [],
-        [{ msg: "Reset link invalid or expired." }],
-      );
-    }
+  await AuthService.resetPassword({
+    selector,
+    token,
+    password,
+  });
 
-    const tokenMatches = await bcrypt.compare(token, resetEntry.token_hash);
+  req.session.successMessage = "Password changed successfully!";
 
-    if (!tokenMatches) {
-      return showResetForm(req, res, [], [{ msg: "Invalid token." }]);
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await User.updatePassword(hashedPassword, resetEntry.email);
-
-    await ForgotPassword.removeBySelector(selector);
-
-    req.session.successMessage = "✅ Password changed successfully!";
-    res.redirect("/auth/login");
-  } catch (error) {
-    console.error("Error resetting password:", err);
-    return showResetForm(
-      req,
-      res,
-      [],
-      [{ msg: "An unexpected error occurred. Please try again." }],
-    );
-  }
-};
+  return res.redirect("/auth/login");
+});
 
 module.exports = {
   showLogin,
@@ -216,7 +178,7 @@ module.exports = {
   generateOtp,
   verifyOtp,
   showRegister,
-  handleForgotPassword,
+  requestPasswordReset,
   showResetForm,
   showForgotPage,
   handleResetPassword,
