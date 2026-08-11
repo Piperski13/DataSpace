@@ -6,11 +6,11 @@ const AppError = require("../errors/app.error.js");
 const passport = require("passport");
 require("dotenv").config("../.env");
 
-const showLogin = async (req, res, next, error = []) => {
+const showLogin = async (req, res) => {
   const successMessage = req.session.successMessage;
   delete req.session.successMessage;
   res.render("login", {
-    error,
+    appError: "",
     user: req.user,
     successMessage,
   });
@@ -21,7 +21,11 @@ const login = async (req, res, next) => {
     if (err) return next(err);
 
     if (!user) {
-      return showLogin(req, res, [], info.message);
+      return res.render("login", {
+        appError: info.message,
+        user: null,
+        successMessage: "",
+      });
     }
 
     req.logIn(user, (err) => {
@@ -31,22 +35,29 @@ const login = async (req, res, next) => {
   })(req, res, next);
 };
 
-const logout = async (req, res, next) => {
-  try {
-    await new Promise((resolve, reject) => {
-      req.logout((err) => {
-        if (err) return reject(err);
-        resolve();
-      });
-    });
+const logout = asyncHandler(async (req, res) => {
+  await new Promise((resolve, reject) => {
+    req.logout((err) => {
+      if (err) {
+        return reject(err);
+      }
 
-    req.session.destroy(() => {
-      res.redirect("/auth/login");
+      resolve();
     });
-  } catch (err) {
-    next(err);
-  }
-};
+  });
+
+  await new Promise((resolve, reject) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve();
+    });
+  });
+
+  return res.redirect("/auth/login");
+});
 
 const generateOtp = asyncHandler(async (req, res) => {
   try {

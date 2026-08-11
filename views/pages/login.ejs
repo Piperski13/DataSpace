@@ -42,12 +42,12 @@
         <% } else { %>
         <form class="login-form" action="/auth/login" method="POST">
           <span class="material-symbols-outlined icon"> account_circle </span>
-          <p class="login-error"><%= error ? error : "" %></p>
+          <%- include("../partials/app-error.ejs") %>
           <input
             id="email"
             name="email"
             type="email"
-            class="<%= error.length>0 ? 'input-error' : '' %>"
+            class="<%= appError.length>0 ? 'input-error' : '' %>"
             placeholder="Email"
           />
 
@@ -55,7 +55,7 @@
             id="password"
             name="password"
             type="password"
-            class="<%= error.length>0 ? 'input-error' : '' %>"
+            class="<%= appError.length>0 ? 'input-error' : '' %>"
             placeholder="Password"
           />
           <a href="/auth/forgot-password" class="form-link">Forgot Password?</a>
