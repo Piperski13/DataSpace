@@ -4,7 +4,7 @@ const handleRegisterValidation = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).render("signIn", {
+    return res.status(400).render("register", {
       fieldErrors: errors.array(),
       user: null,
       appError: "",
