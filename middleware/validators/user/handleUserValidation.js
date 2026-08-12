@@ -13,8 +13,8 @@ const handleUserValidation = (req, res, next) => {
 
     return res.status(400).render("updateUser", {
       fieldErrors: errors.array(),
-      user: req.user,
       profile,
+      user: req.user,
     });
   }
 

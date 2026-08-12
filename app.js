@@ -7,7 +7,7 @@ const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
 const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
-const usersRouter = require("./routes/usersRoutes.js");
+const usersRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
 const chatRouter = require("./routes/chatRoutes.js");
 

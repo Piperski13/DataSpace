@@ -4,7 +4,7 @@ const {
   deleteUser,
   showUsers,
   showUpdateUser,
-} = require("../controllers/usersController.js");
+} = require("../controllers/user.controller.js");
 
 const {
   validateUserBody,

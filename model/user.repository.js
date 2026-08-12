@@ -91,6 +91,20 @@ class User {
       );
     }
   }
+  static async findAll(filter) {
+    try {
+      const query = `SELECT * FROM users WHERE email ILIKE $1;`;
+      const value = [`${filter}%`];
+
+      const { rows } = await pool.query(query, value);
+      return rows;
+    } catch (error) {
+      console.error(
+        "userModel - Error database query (filterUsers): ",
+        error.message,
+      );
+    }
+  }
 }
 
 module.exports = User;
