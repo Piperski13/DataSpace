@@ -86,8 +86,9 @@ app.use(
 app.use("/users", isAuthenticated, usersRouter);
 
 //Old routes bellow - refactor needed
-app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
-app.use("/chat", isAuthenticated, chatRouter); // chat removal for adming
+app.use("/chat", isAuthenticated, chatRouter);
+app.use("/viewPage", isAuthenticated, viewRouter);
+
 //
 
 app.use(errorHandler);
