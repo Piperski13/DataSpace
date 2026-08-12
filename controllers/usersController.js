@@ -1,36 +1,16 @@
 const Users = require("../model/user.repository.js");
-const { body, validationResult } = require("express-validator");
-const { showAddRecord } = require("./viewController.js");
-
-const alphaErr = "must only contain letters.";
-const lengthErr = "must be between 2 and 15 characters.";
-
-const validateUser = [
-  body("first_name")
-    .trim()
-    .isAlpha()
-    .withMessage(`first_name ${alphaErr}`)
-    .isLength({ min: 2, max: 12 })
-    .withMessage(`first_name ${lengthErr}`),
-  body("last_name")
-    .trim()
-    .isAlpha()
-    .withMessage(`Lastname ${alphaErr}`)
-    .isLength({ min: 2, max: 12 })
-    .withMessage(`Lastname ${lengthErr}`),
-  body("email").isEmail().withMessage("Invalid email address"),
-];
+const View = require("../model/viewModel.js");
 
 const deleteUser = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const { id } = req.params;
 
     const results = await Users.deleteById(id);
 
     if (results.rowCount === 0) {
       res.status(404).json({ message: `User with ${id} was not found ` });
     }
-    res.redirect("/viewPage/users");
+    res.redirect("/users/");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -38,12 +18,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return showAddRecord(req, res, [], errors.array());
-    }
-
-    const id = parseInt(req.params.id);
+    const { id } = req.params;
     const { email, first_name, last_name } = req.body;
 
     const is_admin = req.body.is_admin ? true : false;
@@ -56,14 +31,41 @@ const updateUser = async (req, res) => {
       is_admin,
     });
 
-    res.redirect("/viewPage/users");
+    res.redirect("/users/");
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+const showUsers = async (req, res) => {
+  const email = req.query.email || "";
+  const data = await View.filterUsers(email);
+
+  res.render("users", { user: req.user, data, email });
+};
+
+const showUpdateUser = async (req, res, next, fieldErrors = []) => {
+  try {
+    const { id } = req.params;
+    let profile = null;
+
+    if (id) {
+      profile = await Users.findById(id);
+    }
+
+    res.render("updateUser", {
+      user: req.user,
+      profile,
+      fieldErrors,
+    });
+  } catch (error) {
+    console.error("Error in showUpdateUser:", error.message);
+    res.status(500).send("Internal Server Error");
   }
 };
 
 module.exports = {
   deleteUser,
   updateUser,
-  validateUser,
+  showUsers,
+  showUpdateUser,
 };

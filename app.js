@@ -83,9 +83,10 @@ app.use(
   recordRouter,
 );
 
+app.use("/users", isAuthenticated, usersRouter);
+
 //Old routes bellow - refactor needed
 app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
-app.use("/users", isAuthenticated, usersRouter); // user update, user delete
 app.use("/chat", isAuthenticated, chatRouter); // chat removal for adming
 //
 

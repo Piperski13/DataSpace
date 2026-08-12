@@ -34,16 +34,16 @@
         <% if (user) { %>
         <form action="/auth/logout" class="login-form">
           <span class="material-symbols-outlined icon"> account_circle </span>
-          <a href="/viewPage/welcome" class="welcome-link"
-            >Go back to the welcome page</a
+          <a href="/workspaces/dashboard" class="welcome-link"
+            >Go back to the dashboard</a
           >
           <button type="submit" class="submit-btn">LOGOUT</button>
         </form>
         <% } else { %>
         <form class="login-form" action="/auth/register/otp" method="POST">
           <span class="material-symbols-outlined icon"> account_circle </span>
-          <%- include("../partials/field-errors.ejs") %> 
-          <%- include("../partials/app-error.ejs") %>
+          <%- include("../partials/field-errors.ejs") %> <%-
+          include("../partials/app-error.ejs") %>
           <input
             id="first_name"
             name="first_name"

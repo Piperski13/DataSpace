@@ -31,7 +31,7 @@
             <h1>Lista Korisnika</h1>
             <p>Filter users by email:</p>
             <div id="div-filter-form">
-              <form action="/viewPage/users" method="GET" id="filter-form">
+              <form action="/users/" method="GET" id="filter-form">
                 <input
                   id="email"
                   name="email"
@@ -74,7 +74,7 @@
                   <td><%= user.is_admin %></td>
                   <td>
                     <form
-                      action="/viewPage/updateUser/<%= user.id %>"
+                      action="/users/<%= user.id %>/edit"
                       method="GET"
                       style="display: inline"
                     >
@@ -85,7 +85,7 @@
                   </td>
                   <td>
                     <form
-                      action="/users/delete/<%= user.id %>"
+                      action="/users/<%= user.id %>/delete"
                       method="POST"
                       style="display: inline"
                     >
