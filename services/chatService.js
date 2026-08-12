@@ -1,5 +1,5 @@
 const pool = require("../db/pool");
-const Chat = require("../model/chatModel");
+const Chat = require("../model/chat.repository");
 const Redis = require("redis");
 
 const redisClient = require("../config/redisClient");
@@ -28,7 +28,7 @@ async function handleNewMessage(socket, msg, io) {
     const insertedMessage = await Chat.createMessage(
       msg.userId,
       msg.user,
-      msg.text
+      msg.text,
     );
 
     // broadcast to clients

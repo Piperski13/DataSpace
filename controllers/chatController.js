@@ -1,30 +1,28 @@
-const Chat = require("../model/chatModel.js");
+const ChatService = require("../services/chat/chat.service.js");
+const asyncHandler = require("../middleware/errors/asyncHandler");
 const {
   formatSimpleMessengerTime,
 } = require("../public/scripts/websocket/serverUtils.js");
 
 const path = require("path");
 
-const showChat = async (req, res) => {
-  const messages = await Chat.getMessages();
-  res.render("chat", {
+const showChat = asyncHandler(async (req, res) => {
+  const messages = await ChatService.getMessages();
+
+  return res.render("chat", {
     user: req.user,
     messages,
     formatDate: formatSimpleMessengerTime,
   });
-};
+});
 
-const deleteAll = async (req, res) => {
-  try {
-    await Chat.DeleteAllMessages();
+const deleteAllMessages = asyncHandler(async (req, res) => {
+  await ChatService.deleteAllMessages();
 
-    return res.sendStatus(204);
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
+  return res.sendStatus(204);
+});
 
 module.exports = {
   showChat,
-  deleteAll,
+  deleteAllMessages,
 };
