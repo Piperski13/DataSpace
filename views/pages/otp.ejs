@@ -43,8 +43,10 @@
         <% } else { %>
         <form class="login-form" action="/auth/register/verify" method="POST">
           <span class="material-symbols-outlined icon"> account_circle </span>
-          <%- include("../partials/app-error.ejs") %>
+          <%- include("../partials/app-error.ejs") %> <% if (!locals.appError) {
+          %>
           <p class="message-otp">OTP sent to your email!</p>
+          <% } %>
           <div id="inputs" class="inputs">
             <input class="otp-input" name="otp" type="text" maxlength="1" />
             <input class="otp-input" name="otp" type="text" maxlength="1" />
