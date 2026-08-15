@@ -10,7 +10,7 @@ const show = asyncHandler(async (req, res) => {
   const name = req.query.name || "";
   const { workspaceId, collectionId, recordId } = req.params;
 
-  const workspace = WorkspaceService.requireViewableWorkspace({
+  const workspace = await WorkspaceService.requireViewableWorkspace({
     workspaceId,
     user,
   });
