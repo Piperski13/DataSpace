@@ -55,8 +55,19 @@
                 <label for="visibility">Visibility</label>
 
                 <select id="visibility" name="visibility">
-                  <option value="private" selected>Private</option>
-                  <option value="public">Public</option>
+                  <option
+                    value="private"
+                    <%= workspace && workspace.visibility === "private" ? "selected" : "" %>
+                  >
+                    Private
+                  </option>
+
+                  <option
+                    value="public"
+                    <%= workspace && workspace.visibility === "public" ? "selected" : "" %>
+                  >
+                    Public
+                  </option>
                 </select>
 
                 <small id="visibility-description" class="form-text">

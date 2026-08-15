@@ -83,7 +83,7 @@ const edit = asyncHandler(async (req, res) => {
 const update = asyncHandler(async (req, res) => {
   const user = req.user;
   const { workspaceId } = req.params;
-  const { name, description } = req.body;
+  const { name, description, visibility } = req.body;
 
   const workspace = await WorkspaceService.requireOwnerWorkspace({
     workspaceId,
@@ -94,6 +94,7 @@ const update = asyncHandler(async (req, res) => {
     workspaceId,
     name,
     description,
+    visibility,
     user,
   });
 

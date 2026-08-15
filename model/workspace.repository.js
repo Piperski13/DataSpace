@@ -59,11 +59,11 @@ class Workspace {
       );
     }
   }
-  static async update({ workspaceId, name, description }) {
+  static async update({ workspaceId, name, description, visibility }) {
     try {
       const query =
-        "UPDATE workspaces Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *;";
-      const values = [name, description, workspaceId];
+        "UPDATE workspaces Set name = $1, description = $2, visibility = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *;";
+      const values = [name, description, visibility, workspaceId];
 
       const { rows } = await pool.query(query, values);
 
