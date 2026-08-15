@@ -6,16 +6,16 @@ const passport = require("passport");
 const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
-const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const usersRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
 const chatRouter = require("./routes/chatRoutes.js");
 
-const errorHandler = require("./middleware/errors/errorHandler.js");
-
 const workspaceRouter = require("./routes/workspace.routes.js");
 const collectionRouter = require("./routes/collection.routes.js");
 const recordRouter = require("./routes/record.routes.js");
+
+const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
+const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
 require("dotenv").config("./.env");
