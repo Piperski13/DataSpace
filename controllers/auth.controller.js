@@ -78,7 +78,7 @@ const generateOtp = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     if (error instanceof AppError) {
-      return res.render("register", {
+      return res.render("register-form", {
         user: req.user,
         appError: error.message,
         fieldErrors: [],
@@ -116,7 +116,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
 });
 
 const showRegister = async (req, res) => {
-  res.render("register", { fieldErrors: [], user: null, appError: "" });
+  res.render("register-form", { fieldErrors: [], user: null, appError: "" });
 };
 
 const requestPasswordReset = asyncHandler(async (req, res, next) => {
