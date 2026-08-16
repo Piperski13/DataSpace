@@ -51,8 +51,7 @@
                 name="description"
                 placeholder="Short description about this workspace..."
                 class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
-              >
-              <%= collection ? collection.description : '' %></textarea>
+              ><%= collection ? collection.description : '' %></textarea>
 
               <div class="submit-row">
                 <%- include("../partials/field-errors.ejs") %>
