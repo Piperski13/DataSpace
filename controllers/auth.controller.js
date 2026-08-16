@@ -128,7 +128,7 @@ const requestPasswordReset = asyncHandler(async (req, res, next) => {
     return res.render("forgot-password-success");
   } catch (err) {
     if (err instanceof AppError) {
-      return res.render("forgot-password", {
+      return res.render("forgot-password-form", {
         user: req.user,
         appError: err.message,
       });
@@ -153,7 +153,7 @@ const showResetForm = asyncHandler(async (req, res) => {
 });
 
 const showForgotPage = async (req, res) => {
-  return res.render("forgot-password", { appError: "" });
+  return res.render("forgot-password-form", { appError: "" });
 };
 
 const handleResetPassword = asyncHandler(async (req, res) => {
