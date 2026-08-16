@@ -150,6 +150,75 @@ input {
 }
 /* Filter form End */
 
+/* Details table start */
+.entity-details {
+  padding: 24px;
+  margin-bottom: 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.entity-details h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.entity-details__description {
+  margin: 0 0 20px;
+  color: #6b7280;
+}
+
+.entity-details__meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 24px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.entity-details__meta dt {
+  font-weight: 600;
+  color: #374151;
+}
+
+.entity-details__meta dd {
+  margin: 0;
+  color: #6b7280;
+}
+/* Details table end */
+
+/* Breadcrumbs start */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.breadcrumbs a {
+  color: #4b5563;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.breadcrumbs a:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+.breadcrumbs span {
+  color: #9ca3af;
+}
+
+.breadcrumbs span:last-child {
+  color: #111827;
+  font-weight: 500;
+}
+/* Breadcrumbs end */
+
 /* responsive design finish */
 @media (max-width: 1250px) {
   .div-tables-section {

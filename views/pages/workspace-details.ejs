@@ -34,12 +34,14 @@
 
             <span> <%= workspace.name %> </span>
           </nav>
-          <section class="workspace-details">
+          <section class="entity-details">
             <h2><%= workspace.name %></h2>
 
-            <p><%= workspace.description %></p>
+            <p class="entity-details__description">
+              <%= workspace.description %>
+            </p>
 
-            <dl>
+            <dl class="entity-details__meta">
               <dt>Created</dt>
               <dd><%= workspace.created_at %></dd>
 
@@ -151,7 +153,7 @@
               </tbody>
             </table>
           </div>
-          <div class="workspace-navigation">
+          <div class="back-navigation">
             <a href="/workspaces/" class="button button--secondary">
               ← Back to Workspaces
             </a>

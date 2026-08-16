@@ -15,6 +15,7 @@
     <!-- Local Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/table.css" />
+    <link rel="stylesheet" href="/styles/record.css" />
 
     <title>Record detail</title>
   </head>
@@ -44,7 +45,7 @@
 
             <span> <%= record.title %> </span>
           </nav>
-          <h2>Record: <%= record.title %></h2>
+          <h2 class="record-page-title">Record: <%= record.title %></h2>
 
           <section class="details-card">
             <div class="detail-row">
@@ -70,10 +71,14 @@
               <span class="detail-value"><%= record.created_at %></span>
             </div>
 
-            <td>
+            <div class="detail-value">
               <% if (record.files && record.files.length > 0) { %> <%
               record.files.forEach(file => { %>
-              <a href="<%= uploadsUrl %>/<%= file.filename %>" download>
+              <a
+                class="file-link"
+                href="<%= uploadsUrl %>/<%= file.filename %>"
+                download
+              >
                 <%= file.original_name%>
               </a>
               <br />
@@ -81,7 +86,7 @@
               <% }) %> <% } else { %>
               <em>No files</em>
               <% } %>
-            </td>
+            </div>
 
             <% if (user.id === workspace.owner_id) { %>
             <div class="record-actions">
@@ -105,7 +110,7 @@
             </div>
             <% } %>
           </section>
-          <div class="record-navigation">
+          <div class="back-navigation">
             <a
               href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
               class="button button--secondary"

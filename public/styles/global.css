@@ -39,3 +39,37 @@ body {
 
   background: rgb(228, 228, 228);
 }
+
+/* Back navigation start*/
+.back-navigation {
+  margin-top: 24px;
+}
+
+.back-navigation .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.back-navigation .button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.back-navigation .button:active {
+  background: #f3f4f6;
+}
+/* Back navigation end*/

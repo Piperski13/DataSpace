@@ -40,12 +40,14 @@
 
             <span> <%= collection.name %> </span>
           </nav>
-          <section class="">
+          <section class="entity-details">
             <h2><%= collection.name %></h2>
 
-            <p><%= collection.description %></p>
+            <p class="entity-details__description">
+              <%= collection.description %>
+            </p>
 
-            <dl>
+            <dl class="entity-details__meta">
               <dt>Created</dt>
               <dd><%= collection.created_at %></dd>
 
@@ -169,7 +171,7 @@
               </tbody>
             </table>
           </div>
-          <div class="collection-navigation">
+          <div class="back-navigation">
             <a
               href="/workspaces/<%= workspace.id %>"
               class="button button--secondary"
