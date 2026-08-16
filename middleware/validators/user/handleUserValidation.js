@@ -11,7 +11,7 @@ const handleUserValidation = (req, res, next) => {
         }
       : null;
 
-    return res.status(400).render("updateUser", {
+    return res.status(400).render("user-form", {
       fieldErrors: errors.array(),
       profile,
       user: req.user,

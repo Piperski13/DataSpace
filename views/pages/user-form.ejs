@@ -60,10 +60,12 @@
                 class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
-              <label for="is_admin">Admin Status</label>
-              <input type="checkbox" id="is_admin" name="is_admin" value="true" <%=
-              profile && profile.is_admin ? 'checked' : '' %> class="<%=
-              locals.fieldErrors.length > 0 ? 'input-error' : '' %>" >
+              <div class="checkbox-field">
+                <label for="is_admin">Admin Status</label>
+                <input type="checkbox" id="is_admin" name="is_admin" value="true" <%=
+                profile && profile.is_admin ? 'checked' : '' %> class="<%=
+                locals.fieldErrors.length > 0 ? 'input-error' : '' %>" >
+              </div>
 
               <div class="submit-row">
                 <%- include("../partials/field-errors.ejs") %>

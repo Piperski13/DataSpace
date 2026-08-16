@@ -27,14 +27,14 @@ const showUsers = asyncHandler(async (req, res) => {
   const email = req.query.email || "";
   const profiles = await UserService.getUsers(email);
 
-  res.render("users", { user: req.user, profiles, email });
+  res.render("user-list", { user: req.user, profiles, email });
 });
 
 const showUpdateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const profile = await UserService.getUserForEdit(id);
 
-  res.render("updateUser", {
+  res.render("user-form", {
     user: req.user,
     profile,
     fieldErrors: [],

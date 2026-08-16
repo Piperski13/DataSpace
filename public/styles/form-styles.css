@@ -188,6 +188,30 @@ h2 {
   text-decoration: line-through;
 }
 /*files ul style end*/
+/* User from checkbox start*/
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.checkbox-field input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.checkbox-field label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+}
+/* User from checkbox end*/
 
 /* responsive desing start  */
 @media (max-width: 1439px) {
