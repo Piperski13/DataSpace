@@ -13,7 +13,7 @@ const handleWorkspaceValidation = (req, res, next) => {
 
     return res.status(400).render("workspace-form", {
       workspace,
-      errors: errors.array(),
+      fieldErrors: errors.array(),
       user: req.user,
     });
   }

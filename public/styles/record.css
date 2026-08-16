@@ -1,0 +1,91 @@
+.record-page-title {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+}
+
+.details-card {
+  padding: 24px;
+  margin-bottom: 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-row:first-child {
+  padding-top: 0;
+}
+
+.detail-row:last-of-type {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.detail-value {
+  color: #6b7280;
+}
+
+.detail-files {
+  align-items: start;
+}
+
+.file-link {
+  display: block;
+  margin-bottom: 6px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.file-link:hover {
+  text-decoration: underline;
+}
+
+.detail-value em {
+  color: #9ca3af;
+}
+
+.record-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+.button {
+  padding: 0.875rem 1.5rem;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+.button--primary {
+  background: #3b49e6;
+  color: white;
+}
+
+.button--primary:hover {
+  background: #3240d3;
+}
+
+.button--primary:active {
+  opacity: 0.85;
+}

@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="/styles/partials/errors.css" />
+<% if (locals.fieldErrors) {%>
+<div class="test-div">
+  <ul>
+    <% fieldErrors.forEach(function(error) { %>
+    <li><%= error.msg %></li>
+    <% }); %>
+  </ul>
+</div>
+<% } %> 

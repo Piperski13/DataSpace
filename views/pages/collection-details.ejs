@@ -14,7 +14,7 @@
 
     <!-- Local Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/recordView.css" />
+    <link rel="stylesheet" href="/styles/table.css" />
 
     <title>Collection details</title>
   </head>
@@ -40,12 +40,14 @@
 
             <span> <%= collection.name %> </span>
           </nav>
-          <section class="workspace-details">
+          <section class="entity-details">
             <h2><%= collection.name %></h2>
 
-            <p><%= collection.description %></p>
+            <p class="entity-details__description">
+              <%= collection.description %>
+            </p>
 
-            <dl>
+            <dl class="entity-details__meta">
               <dt>Created</dt>
               <dd><%= collection.created_at %></dd>
 
@@ -82,8 +84,7 @@
               </form>
             </div>
 
-            
-            <div class="collection-actions">
+            <div class="entity-actions">
               <form
                 action="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>/records/new"
                 method="GET"
@@ -93,7 +94,6 @@
                 </button>
               </form>
             </div>
-            
 
             <table id="big-table">
               <caption>
@@ -171,7 +171,7 @@
               </tbody>
             </table>
           </div>
-          <div class="collection-navigation">
+          <div class="back-navigation">
             <a
               href="/workspaces/<%= workspace.id %>"
               class="button button--secondary"

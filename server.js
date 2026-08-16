@@ -1,6 +1,6 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { handleNewMessage } = require("./services/chatService.js");
+const { handleNewMessage } = require("./services/chat/socket.service.js");
 const app = require("./app.js");
 
 require("dotenv").config("./env");

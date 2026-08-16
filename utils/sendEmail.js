@@ -12,20 +12,15 @@ const sendOTPEmail = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Your OTP Code",
-    text: `Your OTP code is ${otp}`,
-    html: `
-        <img src="cid:logo" alt="Powerplant Logo" style="width: 150px; margin-bottom: 15px;">
-        <h1 style="color: #2c3e50;">Welcome to Powerplant Dashboard!</h1>
-        <p>Dear Valued User,</p>
-        <p>Thank you for signing up with <strong>Powerplant Dashboard</strong>. We are thrilled to have you join our community and look forward to supporting you in achieving your goals.</p>
-        <p>Here is your one-time OTP code for verification:</p>
-        <p style="font-size: 20px; font-weight: bold; color: #0ea5e9;">${otp}</p>
-        <p>Please use this code to complete your registration/login. If you have any questions or need assistance, feel free to reach out to our support team.</p>
-        <p>We are excited to have you on board!</p>
-        <p>Warm regards,</p>
-        <p><strong>Powerplant Dashboard Team</strong></p>
-        `,
+    subject: "Your Verification Code",
+    text: `Your verification code is ${otp}. This code will expire in 5 minutes.`,
+    html: ` <div style="font-family: Arial, sans-serif; max-width: 500px;"> 
+    <h1 style="color: #2c3e50;">Verify Your Account</h1> 
+    <p>Thank you for creating an account.</p> <p>Use the verification code below to complete your registration:</p>
+    <p style=" font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #0ea5e9; "> ${otp} </p> 
+    <p>This code will expire in 5 minutes.</p> 
+    <p>If you did not request this code, you can safely ignore this email.</p>
+    <p> Best regards,<br> <strong>Support Team</strong> </p> </div> `,
     attachments: [
       {
         filename: "logo.png",

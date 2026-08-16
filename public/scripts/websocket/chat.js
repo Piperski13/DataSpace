@@ -75,7 +75,9 @@ if (buttonDeleteAll) {
     if (!confirm("Are you sure you want to clear all messages?")) return;
 
     try {
-      const response = await fetch("/chat/deleteAll");
+      const response = await fetch("/chat/messages", {
+        method: "POST",
+      });
 
       if (response.ok) {
         socket.emit("DeleteAllMessages");
@@ -112,7 +114,7 @@ socket.on("recieved-message", (data) => {
 
   const usernameSpan = document.createElement("span");
   usernameSpan.classList.add("username");
-  usernameSpan.textContent = `${data.first_name}: `;
+  usernameSpan.textContent = `${data.username}: `;
 
   div.appendChild(usernameSpan);
   div.append(`${data.message} (${formattedTime})`);

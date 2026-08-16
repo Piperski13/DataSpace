@@ -6,20 +6,16 @@ const passport = require("passport");
 const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
-const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
-const usersRouter = require("./routes/usersRoutes.js");
-const loginRouter = require("./routes/loginRoutes.js");
-const otpRouter = require("./routes/otpRoutes.js");
-const forgotPassword = require("./routes/forgotPassword.js");
-const chatRouter = require("./routes/chatRoutes.js");
-
-const errorHandler = require("./middleware/errors/errorHandler.js");
+const usersRouter = require("./routes/user.routes.js");
+const authRouter = require("./routes/auth.routes.js");
+const chatRouter = require("./routes/chat.routes.js");
 
 const workspaceRouter = require("./routes/workspace.routes.js");
 const collectionRouter = require("./routes/collection.routes.js");
 const recordRouter = require("./routes/record.routes.js");
 
-const viewRouter = require("./routes/viewRoutes.js");
+const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
+const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
 require("dotenv").config("./.env");
@@ -73,7 +69,7 @@ app.set("views", path.join(__dirname, "views/pages"));
 app.set("view engine", "ejs");
 
 // Routes
-app.use("/", loginRouter);
+app.use("/auth", authRouter);
 
 app.use("/workspaces", isAuthenticated, workspaceRouter);
 
@@ -85,12 +81,9 @@ app.use(
   recordRouter,
 );
 
-app.use("/viewPage", isAuthenticated, viewRouter); //refactor needed - users , chat View
+app.use("/users", isAuthenticated, usersRouter);
 
-app.use("/users", isAuthenticated, usersRouter); // user update, user delete
-app.use("/otp", otpRouter); // acc creation, sends email otp code
-app.use("/forgot", forgotPassword); // forgot password link is sent for reset
-app.use("/chat", isAuthenticated, chatRouter); // chat removal for adming
+app.use("/chat", isAuthenticated, chatRouter);
 
 app.use(errorHandler);
 

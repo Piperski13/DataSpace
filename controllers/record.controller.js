@@ -10,7 +10,7 @@ const show = asyncHandler(async (req, res) => {
   const name = req.query.name || "";
   const { workspaceId, collectionId, recordId } = req.params;
 
-  const workspace = WorkspaceService.requireViewableWorkspace({
+  const workspace = await WorkspaceService.requireViewableWorkspace({
     workspaceId,
     user,
   });
@@ -50,7 +50,7 @@ const newRecord = asyncHandler(async (req, res) => {
     collection,
     record: null,
     files: null,
-    errors: [],
+    fieldErrors: [],
   });
 });
 
@@ -102,7 +102,7 @@ const edit = asyncHandler(async (req, res) => {
     workspace,
     record: details.record,
     files: null,
-    errors: [],
+    fieldErrors: [],
   });
 });
 

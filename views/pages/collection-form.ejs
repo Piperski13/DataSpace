@@ -14,7 +14,7 @@
 
     <!-- Local Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/addRecord.css" />
+    <link rel="stylesheet" href="/styles/form-styles.css" />
 
     <title><%= collection ? "Update Collection" : "Add Collection" %></title>
   </head>
@@ -25,7 +25,7 @@
       </aside>
 
       <div class="app-main">
-        <main class="app-content add-record-page">
+        <main class="app-content form-page">
           <section class="form-header">
             <h2><%= collection ? "Update Collection" : "Add Collection" %></h2>
             <form
@@ -42,7 +42,7 @@
                 name="name"
                 placeholder="Business Logic"
                 value="<%= collection ? collection.name : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
 
@@ -50,17 +50,24 @@
               <textarea
                 name="description"
                 placeholder="Short description about this workspace..."
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-              >
-              <%= collection ? collection.description : '' %></textarea>
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
+              ><%= collection ? collection.description : '' %></textarea>
 
               <div class="submit-row">
-                <%- include("../partials/errors.ejs") %>
+                <%- include("../partials/field-errors.ejs") %>
                 <button type="submit" class="button button--primary">
                   <%= collection ? "Update Collection" : "Create Collection" %>
                 </button>
               </div>
             </form>
+            <div class="back-navigation">
+              <a
+                href="/workspaces/<%= workspace.id %>"
+                class="button button--secondary"
+              >
+                ← Back to Workspace
+              </a>
+            </div>
           </section>
         </main>
       </div>

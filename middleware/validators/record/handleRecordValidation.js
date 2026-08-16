@@ -19,7 +19,7 @@ const handleRecordValidation = (req, res, next) => {
         id: req.params.collectionId,
       },
       record,
-      errors: errors.array(),
+      fieldErrors: errors.array(),
       user: req.user,
     });
   }

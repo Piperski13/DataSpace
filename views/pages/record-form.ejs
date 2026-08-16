@@ -14,7 +14,7 @@
 
     <!-- Local Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/addRecord.css" />
+    <link rel="stylesheet" href="/styles/form-styles.css" />
 
     <title><%= record ? "Update Record" : "Create Record" %></title>
   </head>
@@ -25,7 +25,7 @@
       </aside>
 
       <div class="app-main">
-        <main class="app-content add-record-page">
+        <main class="app-content form-page">
           <section class="form-header">
             <h2><%= record ? "Update Record" : "Create Record" %></h2>
             <form
@@ -42,7 +42,7 @@
                 name="title"
                 placeholder="Saturday discounts"
                 value="<%= record ? record.title : '' %>"
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
                 required
               />
 
@@ -50,9 +50,8 @@
               <textarea
                 name="description"
                 placeholder="Short description about this record..."
-                class="<%= locals.errors.length>0 ? 'input-error' : '' %>"
-              >
-              <%= record ? record.description : '' %></textarea>
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
+              ><%= record ? record.description : '' %></textarea>
 
               <input
                 type="hidden"
@@ -85,12 +84,20 @@
               <input type="file" id="file-input" name="files" multiple hidden />
 
               <div class="submit-row">
-                <%- include("../partials/errors.ejs") %>
+                <%- include("../partials/field-errors.ejs") %>
                 <button type="submit" class="button button--primary">
                   <%= record ? "Update Record" : "Create Record" %>
                 </button>
               </div>
             </form>
+            <div class="back-navigation">
+              <a
+                href="/workspaces/<%= workspace.id %>/collections/<%= collection.id %>"
+                class="button button--secondary"
+              >
+                ← Back to Collection
+              </a>
+            </div>
           </section>
         </main>
       </div>

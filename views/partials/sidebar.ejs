@@ -5,10 +5,10 @@
     <a href="/workspaces/dashboard">Dashboard</a>
     <a href="/workspaces">Workspaces</a>
 
-    <a href="/viewPage/chat">Global Chat</a>
+    <a href="/chat/">Global Chat</a>
 
     <% if (user.is_admin) { %>
-    <a href="/viewPage/users">Users</a>
+    <a href="/users/">Users</a>
     <% } %>
   </div>
 
@@ -23,7 +23,7 @@
     </button>
 
     <div class="user-menu-dropdown">
-      <a href="/logout">Logout</a>
+      <a href="/auth/logout">Logout</a>
     </div>
   </div>
 </aside>
