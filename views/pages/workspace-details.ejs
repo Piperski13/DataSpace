@@ -79,7 +79,7 @@
             </div>
 
             <% if (user.id === workspace.owner_id) { %>
-            <div class="workspace-actions">
+            <div class="entity-actions">
               <form
                 action="/workspaces/<%= workspace.id %>/collections/new"
                 method="GET"
