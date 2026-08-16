@@ -1,5 +1,4 @@
-.add-record-page,
-.update-user-page {
+.form-page {
   display: flex;
   justify-content: center;
   align-items: center;
