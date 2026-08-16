@@ -1,10 +1,10 @@
-.welcome-page {
+.dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.welcome-card {
+.dashboard-card {
   text-align: center;
   padding: 32px;
 
@@ -14,7 +14,7 @@
   min-width: 320px;
 }
 
-.welcome-actions {
+.dashboard-actions {
   margin-top: 20px;
 
   display: flex;
