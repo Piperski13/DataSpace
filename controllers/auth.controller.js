@@ -9,7 +9,7 @@ require("dotenv").config("../.env");
 const showLogin = async (req, res) => {
   const successMessage = req.session.successMessage;
   delete req.session.successMessage;
-  res.render("login", {
+  res.render("login-form", {
     appError: "",
     user: req.user,
     successMessage,
@@ -21,7 +21,7 @@ const login = async (req, res, next) => {
     if (err) return next(err);
 
     if (!user) {
-      return res.render("login", {
+      return res.render("login-form", {
         appError: info.message,
         user: null,
         successMessage: "",
