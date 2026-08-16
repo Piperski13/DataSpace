@@ -2,7 +2,7 @@ const express = require("express");
 const {
   showChat,
   deleteAllMessages,
-} = require("../controllers/chatController");
+} = require("../controllers/chat.controller");
 const isAdmin = require("../middleware/auth/isAdmin");
 
 const router = express.Router();

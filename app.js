@@ -8,7 +8,7 @@ const { createClient } = require("redis");
 
 const usersRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
-const chatRouter = require("./routes/chatRoutes.js");
+const chatRouter = require("./routes/chat.routes.js");
 
 const workspaceRouter = require("./routes/workspace.routes.js");
 const collectionRouter = require("./routes/collection.routes.js");
