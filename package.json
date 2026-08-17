@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --inspect server.js"
+    "dev": "nodemon --inspect server.js",
+    "db:create": "node db/createDatabase.js",
+    "db:migrate": "node-pg-migrate -m db/migrations up",
+    "db:seed": "node db/seed.js"
   },
   "keywords": [],
   "author": "",
