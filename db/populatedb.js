@@ -5,56 +5,101 @@ require("dotenv").config();
 const SQL = `
 -- Create tables
 
-CREATE TABLE IF NOT EXISTS Korisnici (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, 
-    email VARCHAR(100) NOT NULL UNIQUE, 
-    password VARCHAR(100) NOT NULL,
-    surname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL ,
-    is_admin BOOLEAN DEFAULT FALSE
+CREATE TABLE IF NOT EXISTS users (
+
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
 
-CREATE TABLE IF NOT EXISTS VrstaPogona (
-  sifra INTEGER PRIMARY KEY,
-  naziv VARCHAR(100) NOT NULL,
-  ukupanbrojelektrana INTEGER NOT NULL
+CREATE TABLE IF NOT EXISTS workspaces (
+
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    owner_id INTEGER NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    visibility VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_workspace_owner
+
+        FOREIGN KEY(owner_id)
+
+        REFERENCES users(id)
+
+        ON DELETE CASCADE
+
 );
 
-CREATE TABLE IF NOT EXISTS EvidencijaElektrana (
-  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  nazivelektrane VARCHAR(100) NOT NULL,
-  mesto VARCHAR(100) NOT NULL,
-  adresa VARCHAR(50) NOT NULL,
-  datumpustanjaurad DATE NOT NULL,
-  sifravrstepogona INTEGER NOT NULL,
-  user_id INTEGER NOT NULL,
-  CONSTRAINT fk_pripada FOREIGN KEY (sifravrstepogona)
-    REFERENCES VrstaPogona (sifra)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  CONSTRAINT fk_user FOREIGN KEY (user_id)
-    REFERENCES Korisnici (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+CREATE TABLE IF NOT EXISTS collections (
+
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    workspace_id INTEGER NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_collection_workspace
+
+        FOREIGN KEY(workspace_id)
+
+        REFERENCES workspaces(id)
+
+        ON DELETE CASCADE
+
 );
 
-CREATE TABLE IF NOT EXISTS Files (
-  id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS records (
 
-  user_id INTEGER REFERENCES Korisnici(id) ON DELETE CASCADE,
-  record_id INTEGER REFERENCES EvidencijaElektrana(id) ON DELETE CASCADE,
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    collection_id INTEGER NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-  filename TEXT NOT NULL,         
-  original_name TEXT NOT NULL, 
-  path TEXT NOT NULL,        
-  mimetype TEXT NOT NULL,
-  size INTEGER NOT NULL,
+    CONSTRAINT fk_record_collection
 
-  created_at TIMESTAMP DEFAULT NOW()
+        FOREIGN KEY(collection_id)
+
+        REFERENCES collections(id)
+
+        ON DELETE CASCADE
+
+);
+
+CREATE TABLE IF NOT EXISTS files (
+
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    record_id INTEGER NOT NULL,
+    filename TEXT NOT NULL,
+    original_name TEXT NOT NULL,
+    path TEXT NOT NULL,
+    mimetype TEXT NOT NULL,
+    size INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_file_record
+
+        FOREIGN KEY(record_id)
+
+        REFERENCES records(id)
+
+        ON DELETE CASCADE
+
 );
 
 CREATE TABLE IF NOT EXISTS chat_messages (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INT NOT NULL,
     username VARCHAR(50) NOT NULL,
     message TEXT NOT NULL,
@@ -62,7 +107,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 );
 
 CREATE TABLE IF NOT EXISTS otps (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   email VARCHAR(255) NOT NULL,
   otp VARCHAR(255) NOT NULL, -- hash will be longer
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -71,10 +116,10 @@ CREATE TABLE IF NOT EXISTS otps (
 CREATE INDEX IF NOT EXISTS idx_otps_email ON otps(email);
 
 CREATE TABLE IF NOT EXISTS password_resets (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   email VARCHAR(255) NOT NULL,
   selector VARCHAR(32) NOT NULL UNIQUE,
-  token_hash VARCHAR(255) NOT NULL, 
+  token VARCHAR(255) NOT NULL, 
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -84,15 +129,6 @@ CREATE INDEX IF NOT EXISTS idx_password_resets_selector
 
 CREATE INDEX IF NOT EXISTS idx_password_resets_email 
   ON password_resets(email);
-    
--- Insert default data
-
-INSERT INTO VrstaPogona (sifra, naziv, ukupanbrojelektrana)
-VALUES
-  (0, 'Voda', 0),
-  (1, 'Vetar', 0),
-  (2, 'Ugalj', 0)
-ON CONFLICT (sifra) DO NOTHING;
 `;
 
 async function main() {
@@ -108,22 +144,22 @@ async function main() {
 
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminExists = await client.query(
-      "SELECT * FROM Korisnici WHERE email = $1",
-      [adminEmail]
+      "SELECT * FROM Users WHERE email = $1",
+      [adminEmail],
     );
 
     if (adminExists.rows.length === 0) {
       const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
       await client.query(
-        `INSERT INTO Korisnici (email, password, surname, lastname, is_admin)
-         VALUES ($1, $2, $3, $4, TRUE)`,
+        `INSERT INTO Users (email, password, first_name, last_name, is_admin, created_at)
+         VALUES ($1, $2, $3, $4, TRUE, NOW())`,
         [
           adminEmail,
           hashedPassword,
-          process.env.ADMIN_SURNAME,
-          process.env.ADMIN_LASTNAME,
-        ]
+          process.env.ADMIN_FIRST_NAME,
+          process.env.ADMIN_LAST_NAME,
+        ],
       );
 
       console.log("✅ Admin user created successfully!");

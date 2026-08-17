@@ -6,14 +6,16 @@ const passport = require("passport");
 const { RedisStore } = require("connect-redis");
 const { createClient } = require("redis");
 
-const isAuthenticated = require("./middleware/isAuthenticated.js");
-const recordRouter = require("./routes/recordRoutes.js");
-const usersRouter = require("./routes/usersRoutes.js");
-const loginRouter = require("./routes/loginRoutes.js");
-const viewRouter = require("./routes/viewRoutes.js");
-const otpRouter = require("./routes/otpRoutes.js");
-const forgotPassword = require("./routes/forgotPassword.js");
-const chatRouter = require("./routes/chatRoutes.js");
+const usersRouter = require("./routes/user.routes.js");
+const authRouter = require("./routes/auth.routes.js");
+const chatRouter = require("./routes/chat.routes.js");
+
+const workspaceRouter = require("./routes/workspace.routes.js");
+const collectionRouter = require("./routes/collection.routes.js");
+const recordRouter = require("./routes/record.routes.js");
+
+const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
+const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
 require("dotenv").config("./.env");
@@ -45,7 +47,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60, // 1 hour
     },
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -57,21 +59,32 @@ app.use(express.static(path.join(__dirname, "public")));
 // Serve uploaded files from disk
 app.use(process.env.UPLOADS_URL, express.static(process.env.UPLOADS_PATH));
 
+app.use((req, res, next) => {
+  res.locals.uploadsUrl = process.env.UPLOADS_URL;
+  next();
+});
+
 // EJS setup
 app.set("views", path.join(__dirname, "views/pages"));
 app.set("view engine", "ejs");
 
 // Routes
-app.use("/", loginRouter);
-app.use("/viewPage", isAuthenticated, viewRouter);
-app.use("/records", isAuthenticated, recordRouter);
+app.use("/auth", authRouter);
+
+app.use("/workspaces", isAuthenticated, workspaceRouter);
+
+app.use("/workspaces/:workspaceId", isAuthenticated, collectionRouter);
+
+app.use(
+  "/workspaces/:workspaceId/collections/:collectionId",
+  isAuthenticated,
+  recordRouter,
+);
+
 app.use("/users", isAuthenticated, usersRouter);
-app.use("/otp", otpRouter);
-app.use("/forgot", forgotPassword);
+
 app.use("/chat", isAuthenticated, chatRouter);
 
-app.use((req, res) => {
-  res.status(404).render("404");
-});
+app.use(errorHandler);
 
 module.exports = app;

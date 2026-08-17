@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/styles/partials/sidebar.css" />
+<span class="material-symbols-outlined hamburger">menu</span>
+<aside class="sidebar">
+  <div id="menu" class="menu">
+    <a href="/workspaces/dashboard">Dashboard</a>
+    <a href="/workspaces">Workspaces</a>
+
+    <a href="/chat/">Global Chat</a>
+
+    <% if (user.is_admin) { %>
+    <a href="/users/">Users</a>
+    <% } %>
+  </div>
+
+  <div class="user-menu">
+    <button class="user-menu-trigger" type="button">
+      <span class="material-symbols-outlined icon user-menu-icon"
+        >account_circle</span
+      >
+      <span class="user-menu-username">
+        <%= `${user.first_name} ${user.last_name}` %>
+      </span>
+    </button>
+
+    <div class="user-menu-dropdown">
+      <a href="/auth/logout">Logout</a>
+    </div>
+  </div>
+</aside>
+<script src="/scripts/hamburger_menu/toggleMenu.js"></script>

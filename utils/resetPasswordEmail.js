@@ -12,38 +12,19 @@ const sendResetPasswordEmail = async (email, resetLink) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Power Plant Password Reset",
-    text: `Reset Link Inside`,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 500px;">
-        <img src="cid:logo" 
-             alt="Powerplant Logo" 
-             style="width: 150px; margin-bottom: 15px;">
-
-        <h1 style="color: #2c3e50;">Password Reset</h1>
-
-        <p>You requested to reset your password.</p>
-
-        <p>Click the link below to set a new password:</p>
-
-        <a href="${resetLink}"
-           style="display:inline-block;
-                  padding:10px 20px;
-                  background:#0ea5e9;
-                  color:white;
-                  text-decoration:none;
-                  font-weight:bold;
-                  border-radius:5px;">
-          Reset Password
-        </a>
-
-        <p style="margin-top:15px">
-          If you didn’t request this, please ignore this email.
-        </p>
-
-        <p>Best regards,<br><strong>Powerplant Dashboard Team</strong></p>
-      </div>
-    `,
+    subject: "Reset Your Password",
+    text: `You requested a password reset. Use the following link to set a new password: ${resetLink}`,
+    html: ` 
+    <div style="font-family: Arial, sans-serif; max-width: 500px;"> 
+    <h1 style="color: #2c3e50;">Reset Your Password</h1> 
+    <p>We received a request to reset the password for your account.</p>
+    <p>Click the button below to choose a new password:</p> 
+    <a href="${resetLink}" style=" display: inline-block; padding: 10px 20px; background: #0ea5e9; 
+    color: white; text-decoration: none; font-weight: bold; border-radius: 5px; " > Reset Password </a>
+    <p style="margin-top: 15px;"> This link will expire in 15 minutes. </p>
+    <p> If you did not request a password reset, you can safely ignore this email. </p>
+    <p> Best regards,<br> <strong>Support Team</strong> </p> 
+    </div> `,
     attachments: [
       {
         filename: "logo.png",

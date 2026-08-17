@@ -1,0 +1,638 @@
+{
+  "info": {
+    "_postman_id": "66880912-9db7-4060-85aa-6aff81c689d0",
+    "name": "Saas Workspace",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "35037047"
+  },
+  "item": [
+    {
+      "name": "Workspaces",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "{{email}}",
+                  "type": "text",
+                  "uuid": "49e1ee0a-99cc-4c79-b10a-b7e545f20cd5"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "text",
+                  "uuid": "23616e32-0708-45fb-8157-59193f4f21b7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3000/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Index",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "newWorkspace",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/new",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "new"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "edit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/edit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}", "edit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{newWorkspaceName}}\",\r\n  \"description\": \"{{newWorkspaceDesc}}\",\r\n  \"visibility\": \"{{newWorkspaceVisibility}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/create",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{updateWorkspaceName}}\",\r\n  \"description\": \"{{updateWorkspaceDesc}}\",\r\n  \"visibility\": \"{{updateWorkspaceVisibility}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/update",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}", "update"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Collections",
+      "item": [
+        {
+          "name": "new",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/new",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}", "collections", "new"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"postmanPub\",\r\n  \"description\": \"Testing\",\r\n  \"visibility\": \"public\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "edit",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"postmanPub\",\r\n  \"description\": \"Testing\",\r\n  \"visibility\": \"public\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/edit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "edit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{newCollectionName}}\",\r\n  \"description\": \"{{newCollectionDesc}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/create",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}", "collections", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"{{updateCollectionName}}\",\r\n  \"description\": \"{{updateCollectionDesc}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/update",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Records",
+      "item": [
+        {
+          "name": "newRecord",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/new",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "new"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/{{recordId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "{{recordId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "edit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/{{recordId}}/edit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "{{recordId}}",
+                "edit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "{{newRecordTitle}}",
+                  "type": "text",
+                  "uuid": "11454508-9e51-491d-98f7-908286d9d470"
+                },
+                {
+                  "key": "description",
+                  "value": "{{newRecordDesc}}",
+                  "type": "text",
+                  "uuid": "093ae37d-8fe3-4d2d-8e33-828db26d6191"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "d818989b-f512-49ec-b215-bb26a7e30524",
+                  "src": "/C:/Users/aleks/Desktop/bodybuilding-PDFS/Golden Warrior_ Legendary Adaptive Hypertrophy Program.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/create",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "{{updateRecordTitle}}",
+                  "type": "text",
+                  "uuid": "11454508-9e51-491d-98f7-908286d9d470"
+                },
+                {
+                  "key": "description",
+                  "value": "{{updateRecordDesc}}",
+                  "type": "text",
+                  "uuid": "093ae37d-8fe3-4d2d-8e33-828db26d6191"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "d818989b-f512-49ec-b215-bb26a7e30524",
+                  "src": "/C:/Users/aleks/Desktop/bodybuilding-PDFS/Natural Hypertrophy Compendium Nov 2023 2.2.pdf"
+                },
+                {
+                  "key": "deletedFiles",
+                  "value": "{{DeleteFiles}}",
+                  "type": "text",
+                  "uuid": "81bfde27-2d45-4fd2-83b6-d03dba212e05"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/{{recordId}}/update",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "{{recordId}}",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Delete",
+      "item": [
+        {
+          "name": "deleteRecord",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/records/{{recordId}}/delete",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "records",
+                "{{recordId}}",
+                "delete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteCollection",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/collections/{{collectionId}}/delete",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "workspaces",
+                "{{workspaceId}}",
+                "collections",
+                "{{collectionId}}",
+                "delete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteWorkspace",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "d47a86ce-93c0-4d10-b0d1-dc6c5cc42bd0"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "f6f8e853-8759-434c-91a0-0fef912fcf21"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3000/workspaces/{{workspaceId}}/delete",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["workspaces", "{{workspaceId}}", "delete"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "console.log(\"--------------------------------\");\r",
+          "console.log(\"REQUEST:\", pm.request.method, pm.request.url.toString());\r",
+          "console.log(\"STATUS:\", pm.response.code);\r",
+          "\r",
+          "\r",
+          "if(pm.response.code >= 400){\r",
+          "\r",
+          "    console.log(\"FAILED RESPONSE:\");\r",
+          "    console.log(pm.response.text());\r",
+          "\r",
+          "}\r",
+          "\r",
+          "\r",
+          "pm.test(\"No server error\", function(){\r",
+          "\r",
+          "    pm.expect(pm.response.code)\r",
+          "    .to.be.below(500);\r",
+          "\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

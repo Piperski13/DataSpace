@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- account,menu icon bellow -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,menu"
+    />
+
+    <link rel="icon" href="/assets/icons/favicon.png" type="image/svg+xml" />
+
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
+    <link rel="stylesheet" href="/styles/form-styles.css" />
+
+    <title><%= collection ? "Update Collection" : "Add Collection" %></title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <%- include("../partials/sidebar.ejs") %>
+      </aside>
+
+      <div class="app-main">
+        <main class="app-content form-page">
+          <section class="form-header">
+            <h2><%= collection ? "Update Collection" : "Add Collection" %></h2>
+            <form
+              action="<%= collection 
+                ? '/workspaces/' + workspace.id + '/collections/' + collection.id + '/update'
+                : '/workspaces/' + workspace.id + '/collections/create' %>"
+              method="POST"
+              class="form"
+            >
+              <label for="name">Collection name</label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Business Logic"
+                value="<%= collection ? collection.name : '' %>"
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
+                required
+              />
+
+              <label for="description">Description : </label>
+              <textarea
+                name="description"
+                placeholder="Short description about this workspace..."
+                class="<%= locals.fieldErrors.length>0 ? 'input-error' : '' %>"
+              ><%= collection ? collection.description : '' %></textarea>
+
+              <div class="submit-row">
+                <%- include("../partials/field-errors.ejs") %>
+                <button type="submit" class="button button--primary">
+                  <%= collection ? "Update Collection" : "Create Collection" %>
+                </button>
+              </div>
+            </form>
+            <div class="back-navigation">
+              <a
+                href="/workspaces/<%= workspace.id %>"
+                class="button button--secondary"
+              >
+                ← Back to Workspace
+              </a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

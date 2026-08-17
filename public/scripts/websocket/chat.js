@@ -18,12 +18,12 @@ function isUserNearBottom(threshold = 50) {
 function sendingMessage(buttonElement) {
   if (!message.value.trim()) return;
 
-  const surname = buttonElement.dataset.surname;
+  const first_name = buttonElement.dataset.first_name;
   const userId = buttonElement.dataset.id;
 
   socket.emit("newMessage", {
     userId: userId,
-    user: surname,
+    user: first_name,
     text: message.value,
   });
   message.value = "";
@@ -75,13 +75,15 @@ if (buttonDeleteAll) {
     if (!confirm("Are you sure you want to clear all messages?")) return;
 
     try {
-      const response = await fetch("/chat/deleteAll");
+      const response = await fetch("/chat/messages", {
+        method: "POST",
+      });
 
       if (response.ok) {
         socket.emit("DeleteAllMessages");
       } else {
         console.error(
-          `Server Error: ${response.status} ${response.statusText}`
+          `Server Error: ${response.status} ${response.statusText}`,
         );
         alert("Failed to delete messages.");
       }
