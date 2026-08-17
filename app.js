@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const { RedisStore } = require("connect-redis");
-const { createClient } = require("redis");
+const redisClient = require("./config/redisClient");
 
 const usersRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
@@ -18,16 +18,11 @@ const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
-require("dotenv").config("./.env");
+require("dotenv").config();
 
-// Initialize client.
-let redisClient = createClient();
-redisClient.connect().catch(console.error);
-
-// Initialize store.
-let redisStore = new RedisStore({
+const redisStore = new RedisStore({
   client: redisClient,
-  prefix: "myapp:",
+  prefix: "dataspace:",
 });
 
 const app = express();
@@ -45,7 +40,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60, // 1 hour
+      maxAge: 1000 * 60 * 60,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     },
   }),
 );
