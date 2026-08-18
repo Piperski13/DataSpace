@@ -1,5 +1,5 @@
 const Chat = require("../../model/chat.repository.js");
-const redisClient = require("../../config/redisClient.js");
+const { redisClient } = require("../../config/redisClient.js");
 
 class ChatService {
   static async getMessages() {

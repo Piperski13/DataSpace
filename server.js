@@ -1,12 +1,14 @@
+require("dotenv").config();
+
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { handleNewMessage } = require("./services/chat/socket.service.js");
-const app = require("./app.js");
 
-require("dotenv").config("./env");
+const app = require("./app.js");
+const { connectRedis } = require("./config/redisClient");
+const { handleNewMessage } = require("./services/chat/socket.service.js");
 
 const httpServer = createServer(app);
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 const io = new Server(httpServer, {});
 
@@ -19,6 +21,12 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
+const startServer = async () => {
+  await connectRedis();
+
+  httpServer.listen(port, () => {
+    console.log(`App running on port ${port}`);
+  });
+};
+
+startServer();

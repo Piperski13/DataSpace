@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const { RedisStore } = require("connect-redis");
-const redisClient = require("./config/redisClient");
+const { redisClient } = require("./config/redisClient");
 const { uploadsPath } = require("./config/uploads.js");
 
 const usersRouter = require("./routes/user.routes.js");
@@ -19,7 +19,6 @@ const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
-require("dotenv").config();
 
 const redisStore = new RedisStore({
   client: redisClient,
