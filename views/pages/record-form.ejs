@@ -66,7 +66,7 @@
                 <% record.files.forEach(file => { %>
                 <li class="file-list__item" data-file-id="<%= file.id %>">
                   <a
-                    href="<%= process.env.UPLOADS_URL %>/<%= file.filename %>"
+                    href="<%= uploadsUrl %>/<%= file.filename %>"
                     target="_blank"
                   >
                     <%= file.original_name %>
