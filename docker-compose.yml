@@ -9,17 +9,26 @@ services:
     environment:
       DB_HOST: postgres
       REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_DATABASE}
 
     ports:
       - "3000:3000"
 
     depends_on:
-      - redis
-      - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   redis:
     image: redis:7
     container_name: dataspace-redis
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   postgres:
     image: postgres:16
@@ -29,3 +38,9 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
