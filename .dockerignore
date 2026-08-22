@@ -1,0 +1,11 @@
+node_modules
+.env
+pssql.txt
+ejs.txt
+.vscode
+dump.rdb
+command.txt
+uploads
+.git
+.gitignore
+npm-debug.log
