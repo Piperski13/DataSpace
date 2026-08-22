@@ -6,3 +6,6 @@ ejs.txt
 dump.rdb
 command.txt
 uploads
+.git
+.gitignore
+npm-debug.log

@@ -6,20 +6,22 @@ The project focuses on practical backend engineering concepts including layered 
 
 ## Features
 
-* User registration and authentication
-* Email OTP verification
-* Password reset via email
-* Session-based authentication
-* Workspace management
-* Public/private workspace visibility
-* Collection management
-* Record management
-* File uploads
-* User administration
-* Real-time global chat
-* Redis-backed chat rate limiting
-* Server-side validation and authorization
-* Centralized error handling
+- User registration and authentication
+- Email OTP verification
+- Password reset via email
+- Session-based authentication
+- Workspace management
+- Public/private workspace visibility
+- Collection management
+- Record management
+- File uploads
+- User administration
+- Real-time global chat
+- Redis-backed chat rate limiting
+- Server-side validation and authorization
+- Centralized error handling
+- Database migrations and seeding
+- Dockerized development environment
 
 ## Architecture
 
@@ -37,11 +39,11 @@ Repositories
 PostgreSQL
 ```
 
-* **Routes** handle routing and middleware.
-* **Controllers** handle HTTP requests and responses.
-* **Services** contain business logic and domain rules.
-* **Repositories** handle database access.
-* **PostgreSQL** provides persistent storage.
+- **Routes** handle routing and middleware.
+- **Controllers** handle HTTP requests and responses.
+- **Services** contain business logic and domain rules.
+- **Repositories** handle database access.
+- **PostgreSQL** provides persistent storage.
 
 Expected application errors are represented by custom error classes and handled consistently through centralized error middleware.
 
@@ -59,103 +61,146 @@ User
 
 ### Backend
 
-* Node.js
-* Express
-* Passport.js
-* bcrypt
-* Nodemailer
-* Multer
-* Socket.IO
+- Node.js
+- Express
+- Passport.js
+- bcrypt
+- Nodemailer
+- Multer
+- Socket.IO
 
 ### Database & Infrastructure
 
-* PostgreSQL
-* `pg`
-* Redis
+- PostgreSQL 16
+- `pg`
+- Redis 7
+- Docker
+- Docker Compose
 
 ### Frontend
 
-* EJS
-* Vanilla JavaScript
-* HTML
-* CSS
+- EJS
+- Vanilla JavaScript
+- HTML
+- CSS
 
 ### Testing
 
-* Postman
-* Newman
+- Postman
+- Newman
 
 ## Project Structure
 
 ```text
-src/
+DataSpace/
+├── config/
 ├── controllers/
-├── services/
-├── repositories/
-├── routes/
-├── middleware/
+├── db/
 ├── errors/
-├── views/
+├── middleware/
+├── model/
 ├── public/
-└── ...
-
-db/
-├── populatedb.js
-└── ...
-
-tests/
-└── ...
-
-server.js
-package.json
+├── routes/
+├── services/
+├── tests/
+├── utils/
+├── views/
+├── app.js
+├── server.js
+├── Dockerfile
+├── docker-compose.yml
+├── docker-entrypoint.sh
+├── .dockerignore
+├── .env.example
+├── package.json
+└── package-lock.json
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-The application currently requires:
+The recommended development setup requires:
 
-* Node.js
-* PostgreSQL
-* Redis
+- Docker Desktop
+- Git
+
+Node.js, PostgreSQL, and Redis do not need to be installed separately when using Docker Compose.
 
 ### Installation
 
-Clone the repository and install dependencies:
+Clone the repository and create the environment file:
 
 ```bash
-npm install
+cp .env.example .env
 ```
 
-Create a PostgreSQL database and configure the application using the required environment variables.
+Configure the required environment variables in .env.
 
-The current local development setup also requires Redis to be running.
+### Run with Docker Compose
 
-Initialize the database:
+Build the application image and start all required services:
 
 ```bash
-node db/populatedb
+docker compose up --build
 ```
 
-Start the development server:
+Docker Compose starts:
+
+DataSpace application
+PostgreSQL database
+Redis
+
+The services communicate with each other through the Docker Compose network using their service names.
+
+The application is available at:
+
+http://localhost:3000
+Database Initialization
+
+When the application container starts, the Docker entrypoint automatically:
+
+Runs pending database migrations.
+Seeds the initial administrator account.
+Starts the DataSpace application.
+
+Therefore, a fresh environment can be initialized with:
 
 ```bash
-npm run dev
+docker compose up --build
 ```
 
-> **Note:** The current development setup requires manual configuration of PostgreSQL, Redis, and environment variables. This setup will be simplified as the application is prepared for deployment.
+without manually installing or configuring PostgreSQL or Redis.
+
+Stop the Application
+
+```bash
+docker compose down
+```
 
 ## Environment Variables
 
 The application uses environment variables for configuration and secrets, including:
 
-* PostgreSQL connection details
-* Session configuration
-* Redis configuration
-* Email configuration
-* Password reset configuration
-* Authentication secrets
+- PostgreSQL connection details
+- Session configuration
+- Redis configuration
+- Email configuration
+- Password reset configuration
+- Authentication secrets
+
+```text
+When running with Docker Compose, the application connects to PostgreSQL and Redis using their Docker Compose service names rather than `localhost`.
+```
+
+For example:
+
+```bash
+DB_HOST=postgres
+REDIS_URL=redis://redis:6379
+```
+
+**localhost** refers to the current container, while postgres and redis resolve to the corresponding services on the Docker Compose network.
 
 See the example environment configuration for the required variables.
 
@@ -169,8 +214,29 @@ Run the automated test suite with the project's configured Newman command.
 
 ## Current Status
 
-DataSpace is currently running as a server-rendered full-stack application using Express and EJS.
+DataSpace is currently running as a Dockerized, server-rendered full-stack application using Express and EJS.
 
-The application has completed its major backend refactor and currently includes authentication, authorization, workspace/collection/record management, file uploads, real-time chat, Redis rate limiting, and automated API testing.
+The application has completed its major backend refactor and currently includes:
 
-The next focus is making the application easier to configure, run, and deploy in a production environment.
+- Authentication and authorization
+- Workspace, collection, and record management
+- File uploads
+- Real-time global chat
+- Redis-backed chat rate limiting
+- PostgreSQL database migrations
+- Database seeding
+- Dockerized application environment
+- Dockerized PostgreSQL and Redis
+- Automated API testing
+
+### Next Steps
+
+The next phase focuses on:
+
+- CI/CD
+- Cloud deployment
+- Production configuration
+- Security hardening
+- Expanded automated testing
+- API development
+- React + TypeScript frontend

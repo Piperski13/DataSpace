@@ -4,7 +4,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const { RedisStore } = require("connect-redis");
-const { createClient } = require("redis");
+const { redisClient } = require("./config/redisClient");
+const { uploadsPath } = require("./config/uploads.js");
 
 const usersRouter = require("./routes/user.routes.js");
 const authRouter = require("./routes/auth.routes.js");
@@ -18,16 +19,10 @@ const isAuthenticated = require("./middleware/auth/isAuthenticated.js");
 const errorHandler = require("./middleware/errors/errorHandler.js");
 
 require("./config/passportConfig");
-require("dotenv").config("./.env");
 
-// Initialize client.
-let redisClient = createClient();
-redisClient.connect().catch(console.error);
-
-// Initialize store.
-let redisStore = new RedisStore({
+const redisStore = new RedisStore({
   client: redisClient,
-  prefix: "myapp:",
+  prefix: "dataspace:",
 });
 
 const app = express();
@@ -45,7 +40,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60, // 1 hour
+      maxAge: 1000 * 60 * 60,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     },
   }),
 );
@@ -57,7 +55,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Serve uploaded files from disk
-app.use(process.env.UPLOADS_URL, express.static(process.env.UPLOADS_PATH));
+app.use(process.env.UPLOADS_URL, express.static(uploadsPath));
 
 app.use((req, res, next) => {
   res.locals.uploadsUrl = process.env.UPLOADS_URL;

@@ -1,10 +1,3 @@
-const { Client } = require("pg");
-const bcrypt = require("bcryptjs");
-require("dotenv").config();
-
-const SQL = `
--- Create tables
-
 CREATE TABLE IF NOT EXISTS users (
 
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -129,50 +122,3 @@ CREATE INDEX IF NOT EXISTS idx_password_resets_selector
 
 CREATE INDEX IF NOT EXISTS idx_password_resets_email 
   ON password_resets(email);
-`;
-
-async function main() {
-  console.log("Seeding database...");
-
-  const client = new Client({
-    connectionString: process.env.DB_CONNECTION_STRING,
-  });
-
-  try {
-    await client.connect();
-    await client.query(SQL);
-
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminExists = await client.query(
-      "SELECT * FROM Users WHERE email = $1",
-      [adminEmail],
-    );
-
-    if (adminExists.rows.length === 0) {
-      const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-
-      await client.query(
-        `INSERT INTO Users (email, password, first_name, last_name, is_admin, created_at)
-         VALUES ($1, $2, $3, $4, TRUE, NOW())`,
-        [
-          adminEmail,
-          hashedPassword,
-          process.env.ADMIN_FIRST_NAME,
-          process.env.ADMIN_LAST_NAME,
-        ],
-      );
-
-      console.log("✅ Admin user created successfully!");
-    } else {
-      console.log("ℹ️ Admin user already exists, skipping creation.");
-    }
-
-    console.log("Database seeded successfully.");
-  } catch (err) {
-    console.error("Error seeding database: ", err);
-  } finally {
-    await client.end();
-  }
-}
-
-main();
