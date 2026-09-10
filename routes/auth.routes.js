@@ -23,6 +23,7 @@ const {
   requestPasswordReset,
   showResetForm,
   handleResetPassword,
+  authStatus,
 } = require("../controllers/auth.controller");
 
 const router = express.Router();
@@ -30,6 +31,8 @@ const router = express.Router();
 router.route("/login").get(showLogin);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
+
+router.get("/status", authStatus);
 
 router.route("/register").get(showRegister);
 router.post(
