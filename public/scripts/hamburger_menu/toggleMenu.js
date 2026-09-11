@@ -1,11 +1,24 @@
+//sidebar navigation
 const hamburgerIcon = document.querySelector(".hamburger");
-let sidebar = document.querySelector(".sidebar");
+const sidebar = document.querySelector(".sidebar");
 
-hamburgerIcon.addEventListener("click", () => {
-  hamburgerIcon.classList.toggle("active");
-  sidebar.classList.toggle("is-open");
-});
+if (hamburgerIcon && sidebar) {
+  hamburgerIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
 
+    hamburgerIcon.classList.toggle("active");
+    sidebar.classList.toggle("is-open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (sidebar.classList.contains("is-open") && !sidebar.contains(e.target)) {
+      sidebar.classList.remove("is-open");
+      hamburgerIcon.classList.remove("active");
+    }
+  });
+}
+
+//user menu - logout button sidebar
 const userMenu = document.querySelector(".user-menu");
 const trigger = document.querySelector(".user-menu-trigger");
 
