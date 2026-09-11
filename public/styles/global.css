@@ -73,3 +73,26 @@ body {
   background: #f3f4f6;
 }
 /* Back navigation end*/
+
+/* Mobile */
+@media (max-width: 768px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .app-main {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .app-content {
+    overflow-y: visible;
+  }
+}

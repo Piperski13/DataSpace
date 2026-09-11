@@ -171,6 +171,13 @@ const handleResetPassword = asyncHandler(async (req, res) => {
   return res.redirect("/auth/login");
 });
 
+const authStatus = asyncHandler(async (req, res) => {
+  res.set("Cache-Control", "no-store");
+  return res.json({
+    authenticated: req.isAuthenticated(),
+  });
+});
+
 module.exports = {
   showLogin,
   login,
@@ -182,4 +189,5 @@ module.exports = {
   showResetForm,
   showForgotPage,
   handleResetPassword,
+  authStatus,
 };
