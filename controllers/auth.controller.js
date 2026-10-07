@@ -111,7 +111,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
         appError: error.message,
       });
     }
-    next(err);
+    next(error);
   }
 });
 

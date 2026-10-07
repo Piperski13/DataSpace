@@ -1,4 +1,4 @@
-const { formatDate } = require("../utils/formatDate.js");
+const { formatDate } = require("../../utils/formatDate.js");
 
 describe("formatDate", () => {
   it("should format a date", () => {
