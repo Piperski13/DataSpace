@@ -2,7 +2,6 @@ const pool = require("../db/pool");
 
 class Collection {
   static async create({ workspaceId, name, description }) {
-    //done
     try {
       const query = `INSERT INTO collections (workspace_id, name, description) VALUES ($1,$2,$3) RETURNING *`;
 
@@ -21,7 +20,6 @@ class Collection {
   }
 
   static async findOne({ workspaceId, collectionId }) {
-    //done
     try {
       const query = `SELECT * FROM collections WHERE workspace_id=$1 AND id=$2;`;
       const value = [workspaceId, collectionId];
@@ -38,7 +36,6 @@ class Collection {
   }
 
   static async findMany({ workspaceId, filter }) {
-    //done
     try {
       const query = `
        SELECT c.*,
@@ -64,7 +61,6 @@ class Collection {
   }
 
   static async update({ name, description, workspaceId, collectionId }) {
-    //done
     try {
       const query =
         "UPDATE collections Set name = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE workspace_id = $3 AND id=$4 RETURNING *";
@@ -81,7 +77,6 @@ class Collection {
     }
   }
   static async remove({ workspaceId, collectionId }) {
-    //done
     try {
       const query =
         "DELETE FROM collections WHERE workspace_id=$1 AND id=$2 RETURNING *";

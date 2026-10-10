@@ -1,0 +1,119 @@
+const request = require("supertest");
+const bcrypt = require("bcryptjs");
+const app = require("../../app");
+const User = require("../../model/user.repository");
+const Workspace = require("../../model/workspace.repository");
+
+describe("POST /workspaces/:workspaceId/delete", () => {
+  const ownerEmail = "workspace-delete-owner@example.com";
+  const otherUserEmail = "workspace-delete-other@example.com";
+
+  let owner;
+  let otherUser;
+  let workspaceId;
+
+  const login = async (email, password) => {
+    const agent = request.agent(app);
+
+    const response = await agent.post("/auth/login").send({
+      email,
+      password,
+    });
+
+    expect(response.statusCode).toBe(302);
+
+    return agent;
+  };
+
+  beforeAll(async () => {
+    owner = await User.findByEmail(ownerEmail);
+
+    if (!owner) {
+      const password = await bcrypt.hash("owner-password", 10);
+
+      await User.create({
+        email: ownerEmail,
+        password,
+        first_name: "Delete",
+        last_name: "Owner",
+      });
+
+      owner = await User.findByEmail(ownerEmail);
+    }
+
+    otherUser = await User.findByEmail(otherUserEmail);
+
+    if (!otherUser) {
+      const password = await bcrypt.hash("other-password", 10);
+
+      await User.create({
+        email: otherUserEmail,
+        password,
+        first_name: "Delete",
+        last_name: "Other",
+      });
+
+      otherUser = await User.findByEmail(otherUserEmail);
+    }
+
+    const workspace = await Workspace.create({
+      name: `Delete Test ${Date.now()}`,
+      description: "Workspace for deletion tests",
+      visibility: "private",
+      user: owner,
+    });
+
+    workspaceId = workspace.id;
+  });
+
+  afterAll(async () => {
+    // The successful deletion test may already have removed it.
+    if (workspaceId) {
+      await Workspace.remove({ workspaceId });
+    }
+
+    if (owner) {
+      await User.deleteById(owner.id);
+    }
+
+    if (otherUser) {
+      await User.deleteById(otherUser.id);
+    }
+  });
+
+  it("redirects unauthenticated users to login", async () => {
+    const response = await request(app).post(
+      `/workspaces/${workspaceId}/delete`,
+    );
+
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe("/auth/login");
+
+    const workspace = await Workspace.get({ workspaceId });
+    expect(workspace).not.toBeNull();
+  });
+
+  it("denies another user permission to delete the workspace", async () => {
+    const agent = await login(otherUserEmail, "other-password");
+
+    const response = await agent.post(`/workspaces/${workspaceId}/delete`);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.text).toContain("Workspace not found");
+
+    const workspace = await Workspace.get({ workspaceId });
+    expect(workspace).not.toBeNull();
+  });
+
+  it("deletes the workspace for its owner", async () => {
+    const agent = await login(ownerEmail, "owner-password");
+
+    const response = await agent.post(`/workspaces/${workspaceId}/delete`);
+
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe("/workspaces");
+
+    const workspace = await Workspace.get({ workspaceId });
+    expect(workspace).toBeNull();
+  });
+});
