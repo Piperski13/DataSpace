@@ -4,6 +4,8 @@ const app = require("../../app");
 const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
+const cleanupTestData = require("../helpers/cleanupTestData");
+
 describe("GET /workspaces/:workspaceId/edit", () => {
   const ownerEmail = "workspace-edit-owner@example.com";
   const otherUserEmail = "workspace-edit-other@example.com";
@@ -54,17 +56,7 @@ describe("GET /workspaces/:workspaceId/edit", () => {
   });
 
   afterAll(async () => {
-    if (workspaceId) {
-      await Workspace.remove({ workspaceId });
-    }
-
-    if (owner) {
-      await User.deleteById(owner.id);
-    }
-
-    if (otherUser) {
-      await User.deleteById(otherUser.id);
-    }
+    await cleanupTestData({ workspaceId, owner, otherUser });
   });
 
   it("redirects unauthenticated users to login", async () => {
