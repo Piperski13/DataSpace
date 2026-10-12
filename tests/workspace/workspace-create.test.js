@@ -13,7 +13,7 @@ describe("POST /workspaces/create", () => {
 
   beforeAll(async () => {
     testUser = await createTestUser({
-      email: "correct@example.com",
+      email: "wscreate@example.com",
       password: "correct-password",
     });
   });
@@ -22,7 +22,7 @@ describe("POST /workspaces/create", () => {
     const agent = request.agent(app);
 
     const response = await agent.post("/auth/login").send({
-      email: "correct@example.com",
+      email: "wscreate@example.com",
       password: "correct-password",
     });
 
@@ -86,7 +86,7 @@ describe("POST /workspaces/create", () => {
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe("/workspaces");
 
-    const testUser = await User.findByEmail("correct@example.com");
+    const testUser = await User.findByEmail("wscreate@example.com");
 
     const result = await pool.query(
       `

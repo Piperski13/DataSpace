@@ -76,9 +76,6 @@ describe("POST /auth/reset-password/:selector/:token", () => {
         password: newPassword,
       });
 
-    console.log("Reset status:", response.statusCode);
-    console.log("Reset response:", response.text);
-
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe("/auth/login");
 
