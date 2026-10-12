@@ -4,46 +4,32 @@ const app = require("../../app");
 const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
+const createTestUser = require("../helpers/createTestUser");
 const cleanupTestData = require("../helpers/cleanupTestData");
 
 describe("GET /workspaces/:workspaceId/edit", () => {
   const ownerEmail = "workspace-edit-owner@example.com";
   const otherUserEmail = "workspace-edit-other@example.com";
+  const password = "secret123";
 
   let owner;
   let otherUser;
   let workspaceId;
 
   beforeAll(async () => {
-    owner = await User.findByEmail(ownerEmail);
+    owner = await createTestUser({
+      email: ownerEmail,
+      password,
+      first_name: "Edit",
+      last_name: "Owner",
+    });
 
-    if (!owner) {
-      const password = await bcrypt.hash("owner-password", 10);
-
-      await User.create({
-        email: ownerEmail,
-        password,
-        first_name: "Edit",
-        last_name: "Owner",
-      });
-
-      owner = await User.findByEmail(ownerEmail);
-    }
-
-    otherUser = await User.findByEmail(otherUserEmail);
-
-    if (!otherUser) {
-      const password = await bcrypt.hash("other-password", 10);
-
-      await User.create({
-        email: otherUserEmail,
-        password,
-        first_name: "Edit",
-        last_name: "Other",
-      });
-
-      otherUser = await User.findByEmail(otherUserEmail);
-    }
+    otherUser = await createTestUser({
+      email: otherUserEmail,
+      password,
+      first_name: "Edit",
+      last_name: "Other",
+    });
 
     const workspace = await Workspace.create({
       name: `Edit Test ${Date.now()}`,
@@ -71,7 +57,7 @@ describe("GET /workspaces/:workspaceId/edit", () => {
 
     const loginResponse = await agent.post("/auth/login").send({
       email: ownerEmail,
-      password: "owner-password",
+      password,
     });
 
     expect(loginResponse.statusCode).toBe(302);
@@ -88,7 +74,7 @@ describe("GET /workspaces/:workspaceId/edit", () => {
 
     const loginResponse = await agent.post("/auth/login").send({
       email: otherUserEmail,
-      password: "other-password",
+      password,
     });
 
     expect(loginResponse.statusCode).toBe(302);

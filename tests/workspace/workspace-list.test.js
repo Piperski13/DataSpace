@@ -2,7 +2,23 @@ const request = require("supertest");
 
 const app = require("../../app");
 
+const createTestUser = require("../helpers/createTestUser");
+const cleanupTestData = require("../helpers/cleanupTestData");
+
 describe("GET /workspaces/", () => {
+  let testUser;
+
+  beforeAll(async () => {
+    testUser = await createTestUser({
+      email: "correct@example.com",
+      password: "correct-password",
+    });
+  });
+
+  afterAll(async () => {
+    await cleanupTestData({ otherUser: testUser });
+  });
+
   it("renders the workspace list", async () => {
     const response = await request(app).get("/workspaces/");
 

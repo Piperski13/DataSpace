@@ -4,11 +4,13 @@ const app = require("../../app");
 const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
+const createTestUser = require("../helpers/createTestUser");
 const cleanupTestData = require("../helpers/cleanupTestData");
 
 describe("POST /workspaces/:workspaceId/update", () => {
   const ownerEmail = "workspace-update-owner@example.com";
   const otherUserEmail = "workspace-update-other@example.com";
+  const password = "secert123";
 
   let owner;
   let otherUser;
@@ -28,35 +30,19 @@ describe("POST /workspaces/:workspaceId/update", () => {
   };
 
   beforeAll(async () => {
-    owner = await User.findByEmail(ownerEmail);
+    owner = await createTestUser({
+      email: ownerEmail,
+      password,
+      first_name: "Update",
+      last_name: "Owner",
+    });
 
-    if (!owner) {
-      const password = await bcrypt.hash("owner-password", 10);
-
-      await User.create({
-        email: ownerEmail,
-        password,
-        first_name: "Update",
-        last_name: "Owner",
-      });
-
-      owner = await User.findByEmail(ownerEmail);
-    }
-
-    otherUser = await User.findByEmail(otherUserEmail);
-
-    if (!otherUser) {
-      const password = await bcrypt.hash("other-password", 10);
-
-      await User.create({
-        email: otherUserEmail,
-        password,
-        first_name: "Update",
-        last_name: "Other",
-      });
-
-      otherUser = await User.findByEmail(otherUserEmail);
-    }
+    otherUser = await createTestUser({
+      email: otherUserEmail,
+      password,
+      first_name: "Update",
+      last_name: "Other",
+    });
 
     const workspace = await Workspace.create({
       name: `Original ${Date.now()}`,
@@ -86,7 +72,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
   });
 
   it("rejects an invalid workspace ID", async () => {
-    const agent = await login(ownerEmail, "owner-password");
+    const agent = await login(ownerEmail, password);
 
     const response = await agent.post("/workspaces/not-a-number/update").send({
       name: "Updated Workspace",
@@ -99,7 +85,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
   });
 
   it("rejects invalid workspace data", async () => {
-    const agent = await login(ownerEmail, "owner-password");
+    const agent = await login(ownerEmail, password);
 
     const response = await agent
       .post(`/workspaces/${workspaceId}/update`)
@@ -120,7 +106,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
   });
 
   it("denies another user permission to update the workspace", async () => {
-    const agent = await login(otherUserEmail, "other-password");
+    const agent = await login(otherUserEmail, password);
 
     const response = await agent
       .post(`/workspaces/${workspaceId}/update`)
@@ -140,7 +126,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
   });
 
   it("updates the workspace for its owner", async () => {
-    const agent = await login(ownerEmail, "owner-password");
+    const agent = await login(ownerEmail, password);
 
     const response = await agent
       .post(`/workspaces/${workspaceId}/update`)
