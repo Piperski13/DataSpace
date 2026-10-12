@@ -52,13 +52,11 @@ describe("GET /workspaces/:workspaceId", () => {
   afterAll(async () => {
     await cleanupTestData({
       workspaceId: publicWorkspaceId,
-      owner: owner.id,
+      owner,
       otherUser,
     });
     await cleanupTestData({
       workspaceId: privateWorkspaceId,
-      owner: otherUser.id,
-      otherUser,
     });
   });
 

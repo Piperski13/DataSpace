@@ -5,6 +5,9 @@ const app = require("../../../app");
 const User = require("../../../model/user.repository");
 const ForgotPassword = require("../../../model/forgotPassword.repository");
 
+const createTestUser = require("../../helpers/createTestUser");
+const cleanupTestData = require("../../helpers/cleanupTestData");
+
 describe("GET /auth/reset-password/:selector/:token", () => {
   it("rejects an invalid password reset link", async () => {
     const response = await request(app).get(
@@ -17,8 +20,10 @@ describe("GET /auth/reset-password/:selector/:token", () => {
 });
 
 describe("POST /auth/reset-password/:selector/:token", () => {
+  let testUser;
   const email = "reset-test@example.com";
-  const password = "new-password";
+  const newPassword = "new-password";
+  const oldPassword = "old-password";
 
   const createResetToken = async ({
     selector,
@@ -33,18 +38,16 @@ describe("POST /auth/reset-password/:selector/:token", () => {
   };
 
   beforeAll(async () => {
-    const existingUser = await User.findByEmail(email);
+    testUser = await createTestUser({
+      email,
+      password: oldPassword,
+      first_name: "Reset",
+      last_name: "Test",
+    });
+  });
 
-    if (!existingUser) {
-      const hashedPassword = await bcrypt.hash("old-password", 10);
-
-      await User.create({
-        email,
-        password: hashedPassword,
-        first_name: "Reset",
-        last_name: "Test",
-      });
-    }
+  afterAll(async () => {
+    await cleanupTestData({ otherUser: testUser });
   });
 
   it("rejects a password that is too short", async () => {
@@ -70,8 +73,11 @@ describe("POST /auth/reset-password/:selector/:token", () => {
     const response = await request(app)
       .post(`/auth/reset-password/${selector}/${token}`)
       .send({
-        password,
+        password: newPassword,
       });
+
+    console.log("Reset status:", response.statusCode);
+    console.log("Reset response:", response.text);
 
     expect(response.statusCode).toBe(302);
     expect(response.headers.location).toBe("/auth/login");
@@ -79,7 +85,7 @@ describe("POST /auth/reset-password/:selector/:token", () => {
     const updatedUser = await User.findByEmail(email);
 
     const passwordMatches = await bcrypt.compare(
-      password,
+      newPassword,
       updatedUser.password,
     );
 

@@ -1,8 +1,9 @@
 const request = require("supertest");
-const bcrypt = require("bcryptjs");
 
 const app = require("../../../app");
-const User = require("../../../model/user.repository");
+
+const createTestUser = require("../../helpers/createTestUser");
+const cleanupTestData = require("../../helpers/cleanupTestData");
 
 jest.mock("../../../utils/resetPasswordEmail.js", () => {
   return jest.fn().mockResolvedValue({ id: "test-email-id" });
@@ -18,19 +19,19 @@ describe("GET /auth/forgot-password", () => {
 });
 
 describe("POST /auth/forgot-password", () => {
+  let testUser;
+
   beforeAll(async () => {
-    const existingUser = await User.findByEmail("reset@example.com");
+    testUser = await createTestUser({
+      email: "reset@example.com",
+      password: "correct-password",
+      first_name: "Reset",
+      last_name: "User",
+    });
+  });
 
-    if (!existingUser) {
-      const password = await bcrypt.hash("test-password", 10);
-
-      await User.create({
-        email: "reset@example.com",
-        password,
-        first_name: "Reset",
-        last_name: "User",
-      });
-    }
+  afterAll(async () => {
+    await cleanupTestData({ otherUser: testUser });
   });
 
   it("rejects a non-existent email", async () => {
