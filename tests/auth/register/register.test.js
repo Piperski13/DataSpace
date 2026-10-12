@@ -1,7 +1,6 @@
 const request = require("supertest");
 
 const app = require("../../../app");
-const User = require("../../../model/user.repository");
 
 const createTestUser = require("../../helpers/createTestUser");
 const cleanupTestData = require("../../helpers/cleanupTestData");

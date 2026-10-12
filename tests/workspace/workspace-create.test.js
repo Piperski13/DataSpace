@@ -3,7 +3,6 @@ const request = require("supertest");
 const app = require("../../app");
 const pool = require("../../db/pool");
 const User = require("../../model/user.repository");
-const Workspace = require("../../model/workspace.repository");
 
 const createTestUser = require("../helpers/createTestUser");
 const cleanupTestData = require("../helpers/cleanupTestData");

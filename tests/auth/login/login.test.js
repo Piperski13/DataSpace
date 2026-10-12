@@ -1,8 +1,6 @@
 const request = require("supertest");
-const bcrypt = require("bcryptjs");
 
 const app = require("../../../app");
-const User = require("../../../model/user.repository");
 
 const createTestUser = require("../../helpers/createTestUser");
 const cleanupTestData = require("../../helpers/cleanupTestData");

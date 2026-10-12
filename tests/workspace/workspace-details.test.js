@@ -1,12 +1,14 @@
 const request = require("supertest");
-const bcrypt = require("bcryptjs");
 const app = require("../../app");
-const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
+
+const createTestUser = require("../helpers/createTestUser");
+const cleanupTestData = require("../helpers/cleanupTestData");
 
 describe("GET /workspaces/:workspaceId", () => {
   const ownerEmail = "workspace-owner@example.com";
   const otherUserEmail = "workspace-other@example.com";
+  const password = "secret123!";
 
   let owner;
   let otherUser;
@@ -14,35 +16,19 @@ describe("GET /workspaces/:workspaceId", () => {
   let privateWorkspaceId;
 
   beforeAll(async () => {
-    owner = await User.findByEmail(ownerEmail);
+    owner = await createTestUser({
+      email: ownerEmail,
+      password,
+      first_name: "Workspace",
+      last_name: "Owner",
+    });
 
-    if (!owner) {
-      const password = await bcrypt.hash("owner-password", 10);
-
-      await User.create({
-        email: ownerEmail,
-        password,
-        first_name: "Workspace",
-        last_name: "Owner",
-      });
-
-      owner = await User.findByEmail(ownerEmail);
-    }
-
-    otherUser = await User.findByEmail(otherUserEmail);
-
-    if (!otherUser) {
-      const password = await bcrypt.hash("other-password", 10);
-
-      await User.create({
-        email: otherUserEmail,
-        password,
-        first_name: "Other",
-        last_name: "User",
-      });
-
-      otherUser = await User.findByEmail(otherUserEmail);
-    }
+    otherUser = await createTestUser({
+      email: otherUserEmail,
+      password,
+      first_name: "Other",
+      last_name: "User",
+    });
 
     const publicWorkspace = await Workspace.create({
       name: `Public Test ${Date.now()}`,
@@ -64,16 +50,16 @@ describe("GET /workspaces/:workspaceId", () => {
   });
 
   afterAll(async () => {
-    if (publicWorkspaceId) {
-      await Workspace.remove({ workspaceId: publicWorkspaceId });
-    }
-
-    if (privateWorkspaceId) {
-      await Workspace.remove({ workspaceId: privateWorkspaceId });
-    }
-
-    await User.deleteById(owner.id);
-    await User.deleteById(otherUser.id);
+    await cleanupTestData({
+      workspaceId: publicWorkspaceId,
+      owner: owner.id,
+      otherUser,
+    });
+    await cleanupTestData({
+      workspaceId: privateWorkspaceId,
+      owner: otherUser.id,
+      otherUser,
+    });
   });
 
   it("rejects an invalid workspace ID", async () => {
@@ -95,7 +81,7 @@ describe("GET /workspaces/:workspaceId", () => {
 
     const loginResponse = await agent.post("/auth/login").send({
       email: ownerEmail,
-      password: "owner-password",
+      password: password,
     });
 
     expect(loginResponse.statusCode).toBe(302);
@@ -120,7 +106,7 @@ describe("GET /workspaces/:workspaceId", () => {
 
     const loginResponse = await agent.post("/auth/login").send({
       email: otherUserEmail,
-      password: "other-password",
+      password: password,
     });
 
     expect(loginResponse.statusCode).toBe(302);
