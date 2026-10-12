@@ -4,6 +4,9 @@ const bcrypt = require("bcryptjs");
 const app = require("../../../app");
 const User = require("../../../model/user.repository");
 
+const createTestUser = require("../../helpers/createTestUser");
+const cleanupTestData = require("../../helpers/cleanupTestData");
+
 describe("GET /auth/login", () => {
   it("should render the login page", async () => {
     const response = await request(app).get("/auth/login");
@@ -14,19 +17,19 @@ describe("GET /auth/login", () => {
 });
 
 describe("POST /auth/login", () => {
+  let testUser;
+
   beforeAll(async () => {
-    const existingUser = await User.findByEmail("correct@example.com");
+    testUser = await createTestUser({
+      email: "correct@example.com",
+      password: "correct-password",
+      first_name: "Test",
+      last_name: "User",
+    });
+  });
 
-    if (!existingUser) {
-      const password = await bcrypt.hash("correct-password", 10);
-
-      await User.create({
-        email: "correct@example.com",
-        password,
-        first_name: "Test",
-        last_name: "User",
-      });
-    }
+  afterAll(async () => {
+    await cleanupTestData({ owner: testUser });
   });
 
   it("rejects a non-existent user", async () => {

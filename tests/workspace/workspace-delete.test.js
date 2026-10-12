@@ -4,11 +4,13 @@ const app = require("../../app");
 const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
+const createTestUser = require("../helpers/createTestUser");
 const cleanupTestData = require("../helpers/cleanupTestData");
 
 describe("POST /workspaces/:workspaceId/delete", () => {
   const ownerEmail = "workspace-delete-owner@example.com";
   const otherUserEmail = "workspace-delete-other@example.com";
+  const password = "correct-password";
 
   let owner;
   let otherUser;
@@ -28,35 +30,19 @@ describe("POST /workspaces/:workspaceId/delete", () => {
   };
 
   beforeAll(async () => {
-    owner = await User.findByEmail(ownerEmail);
+    owner = await createTestUser({
+      email: ownerEmail,
+      password,
+      first_name: "Delete",
+      last_name: "Owner",
+    });
 
-    if (!owner) {
-      const password = await bcrypt.hash("owner-password", 10);
-
-      await User.create({
-        email: ownerEmail,
-        password,
-        first_name: "Delete",
-        last_name: "Owner",
-      });
-
-      owner = await User.findByEmail(ownerEmail);
-    }
-
-    otherUser = await User.findByEmail(otherUserEmail);
-
-    if (!otherUser) {
-      const password = await bcrypt.hash("other-password", 10);
-
-      await User.create({
-        email: otherUserEmail,
-        password,
-        first_name: "Delete",
-        last_name: "Other",
-      });
-
-      otherUser = await User.findByEmail(otherUserEmail);
-    }
+    otherUser = await createTestUser({
+      email: otherUserEmail,
+      password,
+      first_name: "Delete",
+      last_name: "Other",
+    });
 
     const workspace = await Workspace.create({
       name: `Delete Test ${Date.now()}`,
@@ -85,7 +71,7 @@ describe("POST /workspaces/:workspaceId/delete", () => {
   });
 
   it("denies another user permission to delete the workspace", async () => {
-    const agent = await login(otherUserEmail, "other-password");
+    const agent = await login(otherUserEmail, password);
 
     const response = await agent.post(`/workspaces/${workspaceId}/delete`);
 
@@ -97,7 +83,7 @@ describe("POST /workspaces/:workspaceId/delete", () => {
   });
 
   it("deletes the workspace for its owner", async () => {
-    const agent = await login(ownerEmail, "owner-password");
+    const agent = await login(ownerEmail, password);
 
     const response = await agent.post(`/workspaces/${workspaceId}/delete`);
 

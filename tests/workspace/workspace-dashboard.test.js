@@ -1,8 +1,25 @@
 const request = require("supertest");
 
 const app = require("../../app");
+const User = require("../../model/user.repository");
+
+const createTestUser = require("../helpers/createTestUser");
+const cleanupTestData = require("../helpers/cleanupTestData");
 
 describe("GET /workspaces/dashboard", () => {
+  let testUser;
+
+  beforeAll(async () => {
+    testUser = await createTestUser({
+      email: "correct@example.com",
+      password: "correct-password",
+    });
+  });
+
+  afterAll(async () => {
+    await cleanupTestData({ owner: testUser });
+  });
+
   it("redirects unauthenticated users to login", async () => {
     const response = await request(app).get("/workspaces/dashboard");
 

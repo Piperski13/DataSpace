@@ -3,6 +3,9 @@ const request = require("supertest");
 const app = require("../../../app");
 const User = require("../../../model/user.repository");
 
+const createTestUser = require("../../helpers/createTestUser");
+const cleanupTestData = require("../../helpers/cleanupTestData");
+
 jest.mock("../../../utils/sendEmail.js", () => {
   return jest.fn().mockResolvedValue({ id: "test-email-id" });
 });
@@ -17,17 +20,19 @@ describe("GET /auth/register", () => {
 });
 
 describe("POST /auth/register/otp", () => {
-  beforeAll(async () => {
-    const existingUser = await User.findByEmail("registered@example.com");
+  let registeredUser;
 
-    if (!existingUser) {
-      await User.create({
-        email: "registered@example.com",
-        password: "test-password",
-        first_name: "Registered",
-        last_name: "User",
-      });
-    }
+  beforeAll(async () => {
+    registeredUser = await createTestUser({
+      email: "registered@example.com",
+      password: "test-password",
+      first_name: "Registered",
+      last_name: "User",
+    });
+  });
+
+  afterAll(async () => {
+    await cleanupTestData({ owner: registeredUser });
   });
 
   it("rejects invalid registration data", async () => {

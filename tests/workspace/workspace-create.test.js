@@ -5,8 +5,19 @@ const pool = require("../../db/pool");
 const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
+const createTestUser = require("../helpers/createTestUser");
+const cleanupTestData = require("../helpers/cleanupTestData");
+
 describe("POST /workspaces/create", () => {
   let createdWorkspaceId;
+  let testUser;
+
+  beforeAll(async () => {
+    testUser = await createTestUser({
+      email: "correct@example.com",
+      password: "correct-password",
+    });
+  });
 
   const login = async () => {
     const agent = request.agent(app);
@@ -22,9 +33,7 @@ describe("POST /workspaces/create", () => {
   };
 
   afterAll(async () => {
-    if (createdWorkspaceId) {
-      await Workspace.remove(createdWorkspaceId);
-    }
+    await cleanupTestData({ workspaceId: createdWorkspaceId, owner: testUser });
   });
 
   it("redirects unauthenticated users to login", async () => {
