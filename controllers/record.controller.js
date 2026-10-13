@@ -4,7 +4,7 @@ const RecordService = require("../services/record/record.service.js");
 const FileService = require("../services/record/file.service.js");
 
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
-const { formatDate } = require("../public/scripts/formatDate.js");
+const { formatDate } = require("../utils/formatDate.js");
 
 const show = asyncHandler(async (req, res) => {
   const user = req.user;

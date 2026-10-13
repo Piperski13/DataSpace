@@ -3,10 +3,13 @@ const pool = require("../db/pool");
 class User {
   static async create({ email, password, first_name, last_name }) {
     try {
-      await pool.query(
-        "INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4)",
-        [email, password, first_name, last_name],
-      );
+      const query = `INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *`;
+
+      const value = [email, password, first_name, last_name];
+
+      const { rows } = await pool.query(query, value);
+
+      return rows[0];
     } catch (err) {
       throw err;
     }

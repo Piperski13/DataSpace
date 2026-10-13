@@ -1,6 +1,6 @@
 const WorkspaceService = require("../services/workspace/workspace.service.js");
 const asyncHandler = require("../middleware/errors/asyncHandler.js");
-const { formatDate } = require("../public/scripts/formatDate.js");
+const { formatDate } = require("../utils/formatDate.js");
 
 const index = asyncHandler(async (req, res) => {
   const name = req.query.name || "";

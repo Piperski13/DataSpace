@@ -1,4 +1,4 @@
-export function formatDate(date) {
+function formatDate(date) {
   return new Date(date).toLocaleString("en-GB", {
     day: "numeric",
     month: "short",
@@ -7,3 +7,5 @@ export function formatDate(date) {
     minute: "2-digit",
   });
 }
+
+module.exports = { formatDate };
