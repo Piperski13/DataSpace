@@ -38,6 +38,9 @@ jobs:
           EMAIL_PASS=ci-password
           EMAIL_FROM=ci@example.com
 
+          RESEND_API_KEY=re_ci_dummy_key
+          EMAIL_FROM=ci@example.com
+
           RESET_LINK_HOST=http://localhost:3000
 
           SUPABASE_URL=https://example.supabase.co
