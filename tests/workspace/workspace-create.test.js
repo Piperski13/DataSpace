@@ -75,7 +75,7 @@ describe("POST /workspaces/create", () => {
   it("creates a workspace for the authenticated user", async () => {
     const agent = await login();
 
-    const workspaceName = `Test ${Date.now()}`;
+    const workspaceName = `Test WS`;
 
     const response = await agent.post("/workspaces/create").send({
       name: workspaceName,

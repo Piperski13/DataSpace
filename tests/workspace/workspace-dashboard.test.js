@@ -10,7 +10,7 @@ describe("GET /workspaces/dashboard", () => {
 
   beforeAll(async () => {
     testUser = await createTestUser({
-      email: "correct@example.com",
+      email: "correct-dashboard@example.com",
       password: "correct-password",
     });
   });
@@ -30,7 +30,7 @@ describe("GET /workspaces/dashboard", () => {
     const agent = request.agent(app);
 
     const loginResponse = await agent.post("/auth/login").send({
-      email: "correct@example.com",
+      email: "correct-dashboard@example.com",
       password: "correct-password",
     });
 

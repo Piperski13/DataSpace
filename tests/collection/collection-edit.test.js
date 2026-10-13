@@ -59,7 +59,7 @@ describe("GET /workspaces/:workspaceId/collections/:collectionId/edit", () => {
     privateCollectionId = privateCollection.id;
 
     const publicWorkspace = await Workspace.create({
-      name: "Public Edit Workspace",
+      name: "Public Workspace",
       description: "Public workspace for collection edit tests",
       visibility: "public",
       user: owner,
@@ -69,7 +69,7 @@ describe("GET /workspaces/:workspaceId/collections/:collectionId/edit", () => {
 
     const publicCollection = await Collection.create({
       workspaceId: publicWorkspaceId,
-      name: "Public Edit Collection",
+      name: "Public Collection",
       description: "Public collection for edit tests",
     });
 

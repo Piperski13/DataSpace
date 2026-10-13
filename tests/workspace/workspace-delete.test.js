@@ -43,7 +43,7 @@ describe("POST /workspaces/:workspaceId/delete", () => {
     });
 
     const workspace = await Workspace.create({
-      name: `Delete Test ${Date.now()}`,
+      name: `Delete Test`,
       description: "Workspace for deletion tests",
       visibility: "private",
       user: owner,

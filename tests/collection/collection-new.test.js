@@ -43,7 +43,7 @@ describe("GET /workspaces/:workspaceId/collections/new", () => {
     });
 
     const workspace = await Workspace.create({
-      name: `Collection Test ${Date.now()}`,
+      name: `Collection Test`,
       description: "Workspace for collection route tests",
       visibility: "private",
       user: owner,

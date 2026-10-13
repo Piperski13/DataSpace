@@ -1,7 +1,5 @@
 const request = require("supertest");
-const bcrypt = require("bcryptjs");
 const app = require("../../app");
-const User = require("../../model/user.repository");
 const Workspace = require("../../model/workspace.repository");
 
 const createTestUser = require("../helpers/createTestUser");
@@ -45,7 +43,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
     });
 
     const workspace = await Workspace.create({
-      name: `Original ${Date.now()}`,
+      name: `Original WS`,
       description: "Original description",
       visibility: "private",
       user: owner,
@@ -111,7 +109,7 @@ describe("POST /workspaces/:workspaceId/update", () => {
     const response = await agent
       .post(`/workspaces/${workspaceId}/update`)
       .send({
-        name: "Unauthorized Update",
+        name: "UnauthorizedUpdate",
         description: "Should not be saved",
         visibility: "public",
       });

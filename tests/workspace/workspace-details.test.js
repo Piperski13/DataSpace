@@ -31,7 +31,7 @@ describe("GET /workspaces/:workspaceId", () => {
     });
 
     const publicWorkspace = await Workspace.create({
-      name: `Public Test ${Date.now()}`,
+      name: `Public Test`,
       description: "Public workspace for integration tests",
       visibility: "public",
       user: owner,
@@ -40,7 +40,7 @@ describe("GET /workspaces/:workspaceId", () => {
     publicWorkspaceId = publicWorkspace.id;
 
     const privateWorkspace = await Workspace.create({
-      name: `Private Test ${Date.now()}`,
+      name: `Private Test`,
       description: "Private workspace for integration tests",
       visibility: "private",
       user: owner,

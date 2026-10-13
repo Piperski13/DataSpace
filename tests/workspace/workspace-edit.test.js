@@ -32,7 +32,7 @@ describe("GET /workspaces/:workspaceId/edit", () => {
     });
 
     const workspace = await Workspace.create({
-      name: `Edit Test ${Date.now()}`,
+      name: `Edit Test `,
       description: "Workspace for edit route tests",
       visibility: "private",
       user: owner,

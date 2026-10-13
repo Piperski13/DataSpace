@@ -60,7 +60,7 @@ describe("POST /workspaces/:workspaceId/collections/:collectionId/update", () =>
     privateCollectionId = privateCollection.id;
 
     const publicWorkspace = await Workspace.create({
-      name: "Public Update Workspace",
+      name: "Public Update",
       description: "Public workspace for collection update tests",
       visibility: "public",
       user: owner,
@@ -70,7 +70,7 @@ describe("POST /workspaces/:workspaceId/collections/:collectionId/update", () =>
 
     const publicCollection = await Collection.create({
       workspaceId: publicWorkspaceId,
-      name: "Original Public Collection",
+      name: "Original Public",
       description: "Original public description",
     });
 

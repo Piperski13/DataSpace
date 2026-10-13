@@ -39,7 +39,7 @@ describe("POST /workspaces/:workspaceId/collections/create", () => {
     });
 
     const workspace = await Workspace.create({
-      name: "Collection Test Workspace",
+      name: "Collection Test",
       description: "Workspace for collection creation tests",
       visibility: "private",
       user: owner,
