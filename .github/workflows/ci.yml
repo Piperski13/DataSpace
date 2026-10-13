@@ -1,0 +1,61 @@
+name: DataSpace CI
+
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+
+jobs:
+  test:
+    name: Run Jest tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create CI environment
+        run: |
+          cat > .env <<'EOF'
+          PORT=3000
+          NODE_ENV=test
+
+          DB_USER=postgres
+          DB_HOST=postgres
+          DB_DATABASE=dataspace
+          DB_PASSWORD=ci-password
+          DB_PORT=5432
+          DATABASE_URL=postgresql://postgres:ci-password@postgres:5432/dataspace
+
+          AUTH_SECRET=ci-only-secret-not-for-production
+          ADMIN_EMAIL=ci-admin@example.com
+          ADMIN_PASSWORD=ci-admin-password
+          ADMIN_FIRST_NAME=CI
+          ADMIN_LAST_NAME=Admin
+
+          EMAIL_USER=ci@example.com
+          EMAIL_PASS=ci-password
+          EMAIL_FROM=ci@example.com
+
+          RESET_LINK_HOST=http://localhost:3000
+
+          SUPABASE_URL=https://example.supabase.co
+          SUPABASE_SECRET_KEY=ci-dummy-key
+          BUCKET_NAME=ci-test-bucket
+
+          REDIS_URL=redis://redis:6379
+          MESSAGE_LIMIT=5
+          TIME_WINDOW=5
+          EOF
+
+      - name: Build and run tests
+        run: docker compose run --build --rm app npm test -- --runInBand
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Clean up containers and volumes
+        if: always()
+        run: docker compose down --volumes --remove-orphans
