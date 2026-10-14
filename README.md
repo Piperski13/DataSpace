@@ -1,4 +1,5 @@
 # DataSpace
+[![DataSpace CI](https://github.com/Piperski13/DataSpace/actions/workflows/ci.yml/badge.svg)](https://github.com/Piperski13/DataSpace/actions/workflows/ci.yml)
 
 DataSpace is a full-stack SaaS-style application for managing workspaces, collections, records, and files.
 
